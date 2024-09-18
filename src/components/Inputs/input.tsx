@@ -1,4 +1,5 @@
-import React, { InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes } from "react";
+import { Label, Input as AriaInput} from 'react-aria-components';
 
 interface InputProps
 extends InputHTMLAttributes<HTMLInputElement> {
@@ -8,8 +9,8 @@ extends InputHTMLAttributes<HTMLInputElement> {
 export const Input: React.FC<InputProps> = ({ label, ...props }) => {
   return (
     <div className="min-h-full flex flex-col space-y-2">
-      {label && <label className="text-gray-700 font-medium">{label}</label>}
-      <input
+      {label && <Label className="text-gray-700 font-medium">{label}</Label>}
+      <AriaInput
         {...props}
         className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none focus:border-indigo-500 transition-all ease-in-out duration-200"
       />
