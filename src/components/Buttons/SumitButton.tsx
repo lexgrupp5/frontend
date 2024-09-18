@@ -1,4 +1,4 @@
-import { Button } from 'react-aria-components';
+import { Button } from "react-aria-components";
 
 interface Props {
   label: string;
