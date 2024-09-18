@@ -1,9 +1,10 @@
 import { MainLayout } from "@/components/Layouts/MainLayout";
+import { Outlet } from "react-router-dom";
 
-export const HomePage = (): React.ReactElement => {
+export const MainPage = (): React.ReactElement => {
 	return (
 		<MainLayout>
-			<p className="text-white my-6 mr-2">Welcome</p>
+			<Outlet />
 		</MainLayout>
 	);
 };
