@@ -4,11 +4,13 @@ import { useLocalStorage } from "usehooks-ts";
 import { ITokenContainer } from "@/types";
 import { Storage } from "@/constants";
 
-interface IAuthProviderProps {
+interface Props {
   children: ReactNode;
 }
 
-export function AuthProvider({ children }: IAuthProviderProps): ReactElement {
+export const AuthProvider: React.FC<Props> = ({
+  children
+}): ReactElement => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [tokens, setTokens, clearTokens] = useLocalStorage<
   ITokenContainer | null>(Storage.TOKEN, null);
@@ -31,16 +33,16 @@ export function AuthProvider({ children }: IAuthProviderProps): ReactElement {
       refreshToken: "refreshToken" 
     }
     setTokens(mockToken);
-  }
+  };
 
   const register = async (username: string, password: string) => {
     // TODO Implement Register logic
-  }
+  };
 
   const logout = () => {
     // TODO Implement register logic
     clearTokens();
-  }
+  };
 
   const constructAuthContextValues = (): IAuthContext => {
     return { isLoggedIn, login, register, logout }
