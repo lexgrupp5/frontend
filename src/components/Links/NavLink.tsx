@@ -1,8 +1,9 @@
+import { Path, PathType } from "@/constants";
 import { ReactElement } from "react";
 import { NavLink as NavLinkPlain } from "react-router-dom";
 
 interface Props {
-	to: string;
+	to: PathType;
 	label: string;
 }
 
@@ -13,7 +14,7 @@ export const NavLink: React.FC<Props> = ({
 
 	return (
 		<NavLinkPlain
-			to={to}
+			to={to === Path.INDEX ? Path.INDEX : `/${to}`}
 			className={({ isActive }) => (
 				isActive 
 					? "text-blue-500 font-bold"

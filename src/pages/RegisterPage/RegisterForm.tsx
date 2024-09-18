@@ -43,7 +43,7 @@ export const RegisterForm = (): ReactElement => {
 			</fieldset>
 			<div className="flex items-center">
 				<p className="text-gray-600 my-6 mr-2">Registered?</p>
-				<NavLink to={`/${Path.LOGIN}`} label="Login" />
+				<NavLink to={Path.LOGIN} label="Login" />
 			</div>
 		</form>
 	);
