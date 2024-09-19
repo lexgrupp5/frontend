@@ -1,0 +1,1 @@
+export { CurrentCoursePage } from "./CurrentCoursePage";
