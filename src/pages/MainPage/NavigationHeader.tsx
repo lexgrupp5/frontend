@@ -12,6 +12,7 @@ export const NavigationHeader = () => {
   const linkClass = `text-gray-300 cursor-pointer
     hover:text-white
     hover:underline
+    hover:underline-offset-4
     transition-all duration-300`;
   const iconClass = `${linkClass} w-10 h-10 p-2 rounded-full hover:bg-indigo-900`;
   
