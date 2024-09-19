@@ -7,8 +7,10 @@ export const useNavigateToPath = () => {
   const navigate = useNavigate();
 
   return (path: PathType) => {
-    path === Path.INDEX
-      ? navigate(Path.INDEX)
-      : navigate(`/${path}`);
+    if (path === Path.INDEX) {
+      navigate(Path.INDEX);
+    } else {
+      navigate(`/${path}`);
+    }
   };
 };

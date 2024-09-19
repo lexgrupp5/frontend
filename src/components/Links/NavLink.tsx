@@ -8,19 +8,19 @@ interface Props {
 }
 
 export const NavLink: React.FC<Props> = ({
-	to,
-	label
+  to,
+  label
 }): ReactElement => {
 
-	return (
-		<NavLinkPlain
-			to={to === Path.INDEX ? Path.INDEX : `/${to}`}
-			className={({ isActive }) => (
-				isActive 
-					? "text-blue-500 font-bold"
-					: "text-gray-500"
-			)}>
-			{label}
-		</NavLinkPlain>
-	);
+  return (
+    <NavLinkPlain
+      to={to === Path.INDEX ? Path.INDEX : `/${to}`}
+      className={({ isActive }) => (
+        isActive 
+          ? "text-blue-500 font-bold"
+          : "text-gray-500"
+      )}>
+      {label}
+    </NavLinkPlain>
+  );
 };

@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const AuthGuard: React.FC<Props> = ({
-    children
+  children
 }): ReactElement => {
   const { isLoggedIn } = useAuthContext();
 
@@ -17,4 +17,4 @@ export const AuthGuard: React.FC<Props> = ({
   }
 
   return children;
-}
+};

@@ -1,11 +1,11 @@
 export function getAPI (): string {
-	return import.meta.env.VITE_API;
+  return import.meta.env.VITE_API;
 }
 
 export function isDevelopment (): boolean {
-	return !isProduction();
+  return !isProduction();
 }
 
 export function isProduction (): boolean {
-	return import.meta.env.PROD;
+  return import.meta.env.PROD;
 }

@@ -31,7 +31,7 @@ export const AuthProvider: React.FC<Props> = ({
     const mockToken: ITokenContainer = {
       accessToken: "accessToken",
       refreshToken: "refreshToken" 
-    }
+    };
     setTokens(mockToken);
   };
 
@@ -45,8 +45,8 @@ export const AuthProvider: React.FC<Props> = ({
   };
 
   const constructAuthContextValues = (): IAuthContext => {
-    return { isLoggedIn, login, register, logout }
-  }
+    return { isLoggedIn, login, register, logout };
+  };
 
   return (
     <AuthContext.Provider value={constructAuthContextValues()}>
