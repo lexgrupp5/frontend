@@ -1,6 +1,6 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 
-import { Input, SubmitButton, NavLink, NavigateToPath, H, TextColor, P } from "@/components";
+import { Input, SubmitButton, NavLink, NavigateToPath, H, TextColor, P, SecretInput } from "@/components";
 import { Path } from "@/constants";
 import { useAuthContext, useNavigateToPath } from "@/hooks";
 import { getDefaultPwd, getDefaultUsername } from "@/utils";
@@ -37,8 +37,7 @@ export const LoginForm = (): ReactElement => {
           required
           value={username}
           onChange={e => { setUsername(e.target.value); }}/>
-        <Input
-          type="password"
+        <SecretInput
           label="Password"
           required
           value={password}
