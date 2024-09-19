@@ -1,7 +1,8 @@
 import { ReactNode } from "react";
-import { Button as AriaButton, PressEvent } from "react-aria-components";
+import { Button as AriaButton, ButtonProps, PressEvent } from "react-aria-components";
 
-interface Props {
+interface Props
+extends ButtonProps {
   children?: ReactNode
   color?: string;
   className?: string;
@@ -11,11 +12,12 @@ interface Props {
 export const Button: React.FC<Props> = ({
   children,
   className,
-  onPress
+  onPress,
+  ...props
 }) => {
 
   return (
-    <AriaButton
+    <AriaButton {...props}
       type="button"
       onPress={onPress}
       className={className != null

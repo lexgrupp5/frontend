@@ -1,9 +1,9 @@
+import { useState } from "react";
 import { FaHome, FaUser } from "react-icons/fa";
 
 import { Button, IconContainer, Link, NavLink } from "@/components";
 import { Path } from "@/constants";
 import ProfileMenu from "./ProfileMenu";
-import { useState } from "react";
 import { useAuthContext } from "@/hooks";
 
 export const NavigationHeader = () => {

@@ -1,12 +1,15 @@
 import { InputHTMLAttributes } from "react";
 import { Label, Input as AriaInput} from "react-aria-components";
 
-interface Props
+export interface InputProps
 extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
 }
 
-export const Input: React.FC<Props> = ({ label, ...props }) => {
+export const Input: React.FC<InputProps> = ({
+  label,
+  ...props
+}) => {
   return (
     <div className="min-h-full flex flex-col space-y-2">
       {label && <Label className="text-gray-800 font-medium">{label}</Label>}
@@ -25,5 +28,3 @@ export const Input: React.FC<Props> = ({ label, ...props }) => {
     </div>
   );
 };
-
-export default Input;
