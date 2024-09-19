@@ -23,9 +23,13 @@ export const RegisterForm = (): ReactElement => {
 
   return (
     <form onSubmit={submit}
-      className=" bg-indigo-100 px-8 pt-4 rounded-lg shadow-lg max-w-lg w-full">
+      className=" w-full pt-4 px-8 
+      bg-indigo-100
+      rounded-lg shadow-lg max-w-lg">
       <h1 className="text-2xl font-bold mb-4">Register</h1>
-      <p className="text-gray-600 mb-6">Please enter your registration details below</p>
+      <p className="text-gray-600 mb-6">
+        Please enter your registration details below
+      </p>
       <fieldset className="flex flex-col gap-6">
         <Input
           type="text"
@@ -39,11 +43,14 @@ export const RegisterForm = (): ReactElement => {
           required
           value={password}
           onChange={e => { setPassword(e.target.value); }}/>
-        <SubmitButton label="Register" />
+        <SubmitButton>Register</SubmitButton>
       </fieldset>
       <div className="flex items-center">
         <p className="text-gray-600 my-6 mr-2">Registered?</p>
-        <NavLink to={Path.LOGIN} label="Login" />
+        <NavLink to={Path.LOGIN}
+          className="text-indigo-600 hover:underline">
+          Login
+        </NavLink>
       </div>
     </form>
   );

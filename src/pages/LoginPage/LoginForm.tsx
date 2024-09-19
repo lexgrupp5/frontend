@@ -5,7 +5,6 @@ import { Path } from "@/constants";
 import { useAuthContext, useNavigateToPath } from "@/hooks";
 import { getDefaultPwd, getDefaultUsername } from "@/utils";
 
-
 export const LoginForm = (): ReactElement => {
   const [username, setUsername] = useState(getDefaultUsername());
   const [password, setPassword] = useState(getDefaultPwd());
@@ -24,9 +23,13 @@ export const LoginForm = (): ReactElement => {
 
   return (
     <form onSubmit={submit}
-      className=" bg-indigo-100 px-8 pt-4 rounded-lg shadow-lg max-w-lg w-full">
+      className=" w-full pt-4 px-8 
+      bg-indigo-100
+      rounded-lg shadow-lg max-w-lg">
       <h1 className="text-2xl font-bold mb-4">Login</h1>
-      <p className="text-gray-600 mb-6">Please enter your login details below</p>
+      <p className="text-gray-600 mb-6">
+        Please enter your login details below
+      </p>
       <fieldset className="flex flex-col gap-6">
         <Input
           type="text"
@@ -40,11 +43,14 @@ export const LoginForm = (): ReactElement => {
           required
           value={password}
           onChange={e => { setPassword(e.target.value); }}/>
-        <SubmitButton label="Login" />
+        <SubmitButton>Login</SubmitButton>
       </fieldset>
       <div className="flex items-center">
         <p className="text-gray-600 my-6 mr-2">No account?</p>
-        <NavLink to={Path.REGISTER} label="Register" />
+        <NavLink to={Path.REGISTER}
+          className="text-indigo-600 hover:underline">
+          Register
+        </NavLink>
       </div>
     </form>
   );

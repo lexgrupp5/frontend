@@ -1,2 +1,2 @@
 export { SubmitButton } from "./SumitButton";
-export { Button as OkButton } from "./OkButton";
+export { Button } from "./Button";
