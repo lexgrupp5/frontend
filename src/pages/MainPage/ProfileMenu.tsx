@@ -1,8 +1,9 @@
-import { Button, IconContainer } from '@/components';
-import { NavLink } from '@/components/Links';
-import { Path } from '@/constants';
-import React, { useRef, useEffect, ReactElement } from 'react';
-import { FaUser, FaSignOutAlt } from 'react-icons/fa';
+import React, { useRef, useEffect, ReactElement } from "react";
+import { FaUser, FaSignOutAlt } from "react-icons/fa";
+
+import { Button, IconContainer } from "@/components";
+import { NavLink } from "@/components/Links";
+import { Path } from "@/constants";
 
 interface Props {
   open: boolean;
@@ -25,15 +26,15 @@ const ProfileMenu: React.FC<Props> = ({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [updateOpen]);
 
   return (
     <>{open && (
-      <div ref={menuRef}
+      <article ref={menuRef}
         className="absolute top-10 right-3 
           w-48 p-2 
           flex flex-col gap-2
@@ -56,7 +57,7 @@ const ProfileMenu: React.FC<Props> = ({
           <IconContainer><FaSignOutAlt /></IconContainer>
           Logout
         </Button>
-      </div>
+      </article>
     )}</>
   );
 };

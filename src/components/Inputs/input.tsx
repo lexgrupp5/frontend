@@ -9,7 +9,7 @@ extends InputHTMLAttributes<HTMLInputElement> {
 export const Input: React.FC<Props> = ({ label, ...props }) => {
   return (
     <div className="min-h-full flex flex-col space-y-2">
-      {label && <Label className="text-gray-700 font-medium">{label}</Label>}
+      {label && <Label className="text-gray-800 font-medium">{label}</Label>}
       <AriaInput
         {...props}
         className="px-4 py-2 
@@ -20,7 +20,7 @@ export const Input: React.FC<Props> = ({ label, ...props }) => {
           focus:ring-indigo-500 
           focus:outline-none 
           focus:border-indigo-500
-          transition-all ease-in-out duration-300"
+          transition-all duration-300"
       />
     </div>
   );

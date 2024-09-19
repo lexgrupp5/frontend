@@ -1,5 +1,5 @@
 import { ReactElement, ReactNode } from "react";
-import { IconContext } from 'react-icons';
+import { IconContext } from "react-icons";
 
 interface Props {
   children: ReactNode;
