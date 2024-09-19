@@ -19,11 +19,17 @@ export const NavLink: React.FC<Props> = ({
   return (
     <NavLinkPlain
       to={to === Path.INDEX ? Path.INDEX : `/${to}`}
-      className={({ isActive }) => (
-        isActive
-          ? activeClassName != null ? activeClassName : "text-white underline"
-          : className != null ? className : "text-indigo-200 hover:text-white"
-      )}>
+      className={({ isActive: isActiveLink }) => {
+        if (isActiveLink) {
+          return activeClassName != null 
+            ? activeClassName
+            : "text-white underline";
+        } else {
+          return className != null
+            ? className
+            : "text-indigo-200 hover:text-white";
+        }
+      }}>
       {children}
     </NavLinkPlain>
   );

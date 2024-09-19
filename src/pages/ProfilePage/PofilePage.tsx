@@ -1,7 +1,7 @@
 export const ProfilePage = (): React.ReactElement => {
   return (
     <>
-      <p>Profile page</p>
+      <p className="text-white">Profile page</p>
     </>
   );
 };

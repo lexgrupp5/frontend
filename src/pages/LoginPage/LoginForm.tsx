@@ -1,6 +1,6 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 
-import { Input, SubmitButton, NavLink, NavigateToPath } from "@/components";
+import { Input, SubmitButton, NavLink, NavigateToPath, H, TextColor, P } from "@/components";
 import { Path } from "@/constants";
 import { useAuthContext, useNavigateToPath } from "@/hooks";
 import { getDefaultPwd, getDefaultUsername } from "@/utils";
@@ -26,10 +26,10 @@ export const LoginForm = (): ReactElement => {
       className=" w-full pt-4 px-8 
       bg-indigo-100
       rounded-lg shadow-lg max-w-lg">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
-      <p className="text-gray-600 mb-6">
+      <H size={1} color={TextColor.DARK_X} className="mb-2">Login</H>
+      <P color={TextColor.DARK} className="mb-6">
         Please enter your login details below
-      </p>
+      </P>
       <fieldset className="flex flex-col gap-6">
         <Input
           type="text"
@@ -46,7 +46,7 @@ export const LoginForm = (): ReactElement => {
         <SubmitButton>Login</SubmitButton>
       </fieldset>
       <div className="flex items-center">
-        <p className="text-gray-600 my-6 mr-2">No account?</p>
+        <P color={TextColor.DARK} className= "my-6 mr-2">No account?</P>
         <NavLink to={Path.REGISTER}
           className="text-indigo-600 hover:underline">
           Register

@@ -8,7 +8,10 @@ extends NavigateProps {
 }
 
 export const NavigateToPath: React.FC<Props> = ({
-  to
+  to,
+  ...props
 }): ReactElement => {
-  return <Navigate to={to === Path.INDEX ? Path.INDEX : `/${to}`}/>;
+  return <Navigate
+    {...props} 
+    to={to === Path.INDEX ? Path.INDEX : `/${to}`}/>;
 };

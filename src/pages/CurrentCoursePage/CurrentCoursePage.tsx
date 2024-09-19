@@ -1,7 +1,9 @@
+import { P } from "@/components";
+
 export const CurrentCoursePage = (): React.ReactElement => {
   return (
     <>
-      <p>Current Course Page</p>
+      <P>Current Course Page</P>
     </>
   );
 };
