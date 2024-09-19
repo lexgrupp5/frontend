@@ -23,7 +23,7 @@ export const NavLink: React.FC<Props> = ({
         if (isActiveLink) {
           return activeClassName != null 
             ? activeClassName
-            : "text-white underline";
+            : "text-white underline underline-offset-4";
         } else {
           return className != null
             ? className
