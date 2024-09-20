@@ -26,7 +26,7 @@ export const NavigationHeader = () => {
   
   return (
     <header className="fixed
-    top-0 left-0 right-0 p-4 
+    top-0 left-0 w-full p-4
     bg-indigo-950
     shadow-md z-50">
       <div className="flex justify-between items-center">
