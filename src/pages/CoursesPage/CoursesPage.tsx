@@ -1,9 +1,9 @@
-import { P } from "@/components";
+import { CourseList } from "./CourseList";
 
 export const CoursesPage = (): React.ReactElement => {
   return (
     <>
-      <P>Courses page</P>
+      <CourseList />
     </>
   );
 };

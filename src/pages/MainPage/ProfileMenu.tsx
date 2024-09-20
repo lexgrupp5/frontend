@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, ReactElement } from "react";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 
-import { Button, IconContainer } from "@/components";
+import { IconContainer } from "@/components";
 import { NavLink } from "@/components/Links";
 import { Path } from "@/constants";
 
@@ -50,13 +50,13 @@ const ProfileMenu: React.FC<Props> = ({
           Profile
         </NavLink>
         <hr className="border-solid border-1 border-indigo-100" />
-        <Button
+        <div
           className="flex justify-between items-center 
           p-2 text-indigo-100 hover:bg-indigo-900"
-          onPress={logout}>
+          onClick={logout}>
           <IconContainer><FaSignOutAlt /></IconContainer>
           Logout
-        </Button>
+        </div>
       </article>
     )}</>
   );
