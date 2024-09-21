@@ -1,26 +1,21 @@
 import { ReactElement, useEffect, useState } from "react";
 
-import { CourseDto, validateCourseDto } from "@/dtos";
-import { getAPI } from "@/config";
-import { isType } from "@/utils";
+import { Client, CourseDto } from "@/api";
+
 import { CourseItem } from "./CourseItem";
+import { getAPI } from "@/config";
 
 export const CourseList = (): ReactElement => {
   const [courses, setCourses] = useState<CourseDto[]>([]);
 
-  // TODO Use generated models, app, and cutom hooks.
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${getAPI()}/courses`);
-        const courses = await res.json();
-        if (Array.isArray(courses) &&
-          courses.every(obj => isType(obj, validateCourseDto))) {
-          setCourses(courses);
-        } else {
-          setCourses([]);
-        }
+        const api = new Client(getAPI());
+        const result = await api.courses();
+        setCourses(result);
       } catch (e) {
+        setCourses([]);
         console.log(e);
       }
     })();
