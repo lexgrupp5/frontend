@@ -1,6 +1,7 @@
-import { H, P } from "@/components";
-import { CourseDto } from "@/dtos";
 import { ReactElement } from "react";
+
+import { H, P } from "@/components";
+import { CourseDto } from "@/api";
 
 interface Props {
   course: CourseDto
