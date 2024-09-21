@@ -4,6 +4,8 @@
 
 - Install NSwag.ConsoleCore: `dotnet tool install --global NSwag.ConsoleCore`
 
+- Start backend
+
 - Generate API:
   `nswag.exe run generated-ts-client.nswag` or
   `npm run generate:api`
