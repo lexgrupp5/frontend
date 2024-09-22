@@ -5,3 +5,5 @@ export * from "./Links";
 export * from "./Utility";
 export * from "./Icons";
 export * from "./Text";
+export * from "./Modals";
+export * from "./Loaders";

@@ -12,7 +12,7 @@ export const SubmitButton: React.FC<Props> = ({
     <Button
       type="submit"
       className="w-full 
-        bg-indigo-500 
+        bg-indigo-700 
         text-white font-semibold 
         py-3 rounded-lg shadow-md 
         hover:bg-indigo-600 

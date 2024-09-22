@@ -1,4 +1,4 @@
-export const Path = {
+const StaticPath = {
   INDEX: "/",
   LOGIN: "login",
   REGISTER: "register",
@@ -8,6 +8,18 @@ export const Path = {
   UNKNOWN: "*",
 } as const;
 
-export type PathType = typeof Path[
-	keyof typeof Path
-];
+type StaticPathType = typeof StaticPath[keyof typeof StaticPath];
+
+type DynamicPathType = `${typeof StaticPath.COURSES}/${string}`;
+
+const DynamicPath = {
+  constructSelectedCoursePath: (id: string | number):DynamicPathType => 
+    `${StaticPath.COURSES}/${id}`,
+} as const;
+
+export const Path = {
+  ...StaticPath,
+  ...DynamicPath
+} as const;
+
+export type PathType = StaticPathType | DynamicPathType;

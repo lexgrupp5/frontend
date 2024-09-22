@@ -14,7 +14,9 @@ export const NavigationHeader = () => {
     hover:underline
     hover:underline-offset-4
     transition-all duration-300`;
-  const iconClass = `${linkClass} w-10 h-10 p-2 rounded-full hover:bg-indigo-900`;
+  const iconClass = `w-10 h-10 p-2 rounded-full
+    text-gray-300 cursor-pointer
+    hover:bg-indigo-900`;
   
   const toggleMenu = () => {
     setMenuOpen(prev => !prev);
@@ -25,7 +27,7 @@ export const NavigationHeader = () => {
   };
   
   return (
-    <header className="fixed
+    <header className="fixed h-16
     top-0 left-0 w-full p-4
     bg-indigo-950
     shadow-md z-50">
