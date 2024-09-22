@@ -27,7 +27,7 @@ export const NavigationHeader = () => {
   };
   
   return (
-    <header className="fixed
+    <header className="fixed h-18
     top-0 left-0 w-full p-4
     bg-indigo-950
     shadow-md z-50">

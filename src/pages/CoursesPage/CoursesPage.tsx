@@ -1,9 +1,12 @@
+import { ReactElement } from "react";
+
+import { useCoursePageContext } from "@/hooks";
 import { CourseList } from "./CourseList";
 
-export const CoursesPage = (): React.ReactElement => {
+export const CoursesPage = (): ReactElement => {
+  const { courses } = useCoursePageContext();
+
   return (
-    <>
-      <CourseList />
-    </>
+    <CourseList courses={courses}/>
   );
 };

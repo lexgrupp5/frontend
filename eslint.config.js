@@ -25,7 +25,8 @@ export default tseslint.config(
       ],
       semi: ["warn", "always"],
       indent: ["warn", 2],
-      quotes: ["warn", "double"]
+      quotes: ["warn", "double"],
+      "@typescript-eslint/no-unused-vars": ["warn"] 
     },
   },
 )

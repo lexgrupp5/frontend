@@ -19,14 +19,12 @@ export const DarkModal: React.FC<Props> = ({
     <article
       className="fixed inset-0 z-50
       flex items-center justify-center 
-      bg-black bg-opacity-90"
-      onClick={e => e.stopPropagation()}>
-      <div className="max-h-[80vh] max-w-[90vw] lg:max-w-[50vw] z-50
+      bg-black bg-opacity-90">
+      <div className="max-h-[80vh] max-w-[90vw] lg:max-w-[50vw]
       bg-indigo-950
       rounded-lg
       border border-indigo-50
-      overflow-y-auto"
-      onClick={e => e.stopPropagation()}>
+      overflow-y-auto">
         <div className="sticky top-2 pr-2 flex flex-row-reverse w-full">
           <NativeButton className=" focus:outline-none"
             onClick={onClose}>
@@ -39,13 +37,8 @@ export const DarkModal: React.FC<Props> = ({
           </NativeButton>
         </div>
 
-        <div className="px-16">
+        <div className="px-16 pb-8">
           {children}
-        </div>
-        <div className="w-48 m-auto py-4"> 
-          <NativeButton onClick={onClose}>
-            Close
-          </NativeButton>
         </div>
       </div>
     </article>

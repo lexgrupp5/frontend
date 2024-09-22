@@ -4,8 +4,7 @@ interface Props {
 
 export const MainLayout: React.FC<Props> = ({ children }) => {
   return (
-    <div className="min-h-screen pt-32 
-      flex items-center justify-center 
+    <div className="min-h-screen pt-20
       bg-indigo-900">
       {children}
     </div>

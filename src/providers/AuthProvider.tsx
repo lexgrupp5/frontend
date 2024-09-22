@@ -19,7 +19,7 @@ export const AuthProvider: React.FC<Props> = ({
     if (tokens === null) {
       setIsLoggedIn(false);
     } else {
-      // Todo Check Validation
+      // Todo Check Validation, e.g., expire time.
       // Todo Check Role
       setIsLoggedIn(true);
     }
