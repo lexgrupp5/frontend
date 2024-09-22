@@ -63,5 +63,9 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     }
   };
 
-  return { data, pending, error, fetchData, fetchAuthData };
+  const clearError = () => {
+    setError(null);
+  };
+
+  return { data, pending, error, fetchData, fetchAuthData, clearError };
 };

@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-import { H, P, TextColor, DarkModal, SubmitButton } from "@/components";
+import { H, P, TextColor, DarkModal, Button } from "@/components";
 import { ICourseDto } from "@/api";
 
 interface Props {
@@ -28,7 +28,7 @@ export const CourseModal: React.FC<Props> = ({
         <br />
         <P>{course.description}</P>
         {canSignUp && <div className="w-28 pt-12 m-auto">
-          <SubmitButton>Sign up</SubmitButton>
+          <Button onPress={onClose}>Sign up</Button>
         </div>}
       </div>
     </DarkModal>

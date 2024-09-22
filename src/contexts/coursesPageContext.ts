@@ -1,9 +1,10 @@
-import { ICourseDto } from "@/api";
+import { ApiException, ICourseDto } from "@/api";
 
 export interface ICoursesPageContext {
   pending: boolean
-  errorMsg: string;  
+  error: ApiException | null;  
   courses: ICourseDto[];
   selectedCourse: ICourseDto | null;
+  clearError: () => void;
   updateSelectedCourse: (course: ICourseDto) => void;
 }
