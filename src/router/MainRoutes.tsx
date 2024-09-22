@@ -9,7 +9,7 @@ import { CoursesPageProvider } from "@/providers";
 export const MainRoutes = (): ReactElement => {
   return (
     <>
-      <Route element={<AuthGuard><Pages.MainPage /></AuthGuard>} path={Path.INDEX}>
+      <Route element={<AuthGuard><Pages.MainPage /></AuthGuard>}>
         <Route index element={<Pages.HomePage />} />
         <Route path={Path.COURSES} element={<CoursesPageProvider />} >
           <Route index element={<Pages.CoursesPage />} />

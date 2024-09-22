@@ -15,7 +15,7 @@ export const SelectedCoursePage = (): ReactElement => {
     <article className="w-full h-full px-4">
       <UnstyledButton onPress={() => { navigate(Path.COURSES); }}>
         <IconContainer className="p-2 size-9 text-gray-200
-              rounded-full hover:bg-indigo-950">
+          rounded-full hover:bg-indigo-950">
           <FaChevronLeft />
         </IconContainer></UnstyledButton>
       <div className="p-8">

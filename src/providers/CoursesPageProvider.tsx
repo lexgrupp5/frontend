@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import { Client, ICourseDto } from "@/api";
-import { getAPI } from "@/config";
+import { api, ICourseDto } from "@/api";
 import { ICoursesPageContext } from "@/contexts";
+import { useApi } from "@/hooks/useApi";
 
 export const CoursesPageProvider = (): React.ReactElement => {
-  const [courses, setCourses] = useState<ICourseDto[]>([]);
+  const { data, pending, error, fetchData } = useApi(api.courses);
   const [selectedCourse, setSelectedCourse] = useState<ICourseDto | null>(null);
 
   useEffect(() => {
     (async () => {
       try {
-        const api = new Client(getAPI());
-        const result = await api.courses();
-        setCourses(result);
+        await fetchData();
+
       } catch (e) {
-        setCourses([]);
         console.log(e);
       }
     })();
@@ -27,7 +25,9 @@ export const CoursesPageProvider = (): React.ReactElement => {
   };
 
   const constructCoursesPageContext = (): ICoursesPageContext => ({
-    courses,
+    courses: data ?? [],
+    pending,
+    errorMsg: error ? error.message : "",
     selectedCourse,
     updateSelectedCourse
   });
