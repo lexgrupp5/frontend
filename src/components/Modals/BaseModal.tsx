@@ -6,9 +6,9 @@ interface BaseModalProps {
   isOpen: boolean;
   children?: ReactNode;
   onClose: () => void;
-  bgColor: string; // Background color
-  iconColor: string; // Close icon color
-  iconBgHoverColor: string; // Close icon hover color
+  bgColor: string;
+  iconColor: string;
+  iconBgHoverColor: string;
 }
 
 export const BaseModal: React.FC<BaseModalProps> = ({
