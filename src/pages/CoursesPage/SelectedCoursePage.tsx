@@ -1,24 +1,30 @@
 import { ReactElement } from "react";
+import { FaChevronLeft } from "react-icons/fa6";
 
 import { H, IconContainer, P, TextColor, UnstyledButton } from "@/components";
 import { useCoursePageContext, useNavigateToPath } from "@/hooks";
-import { FaChevronLeft } from "react-icons/fa6";
 import { Path } from "@/constants";
 
 export const SelectedCoursePage = (): ReactElement => {
   const { selectedCourse } = useCoursePageContext();
   const navigate = useNavigateToPath();
 
+  const handleNavigateBack = () => {
+    navigate(Path.COURSES);
+  };
+
   if (selectedCourse == null) { return <></>; }
 
   return (
     <article className="w-full h-full px-4">
-      <UnstyledButton onPress={() => { navigate(Path.COURSES); }}>
+      <UnstyledButton onPress={handleNavigateBack}>
         <IconContainer className="p-2 size-9 text-gray-200
           rounded-full hover:bg-indigo-950">
           <FaChevronLeft />
         </IconContainer></UnstyledButton>
       <div className="p-8">
+        <H size={2}>Use this page to update and edit course: '{selectedCourse.name}'</H>
+        <br />
         <H size={4}>{selectedCourse.name}</H>
         <div>
           <P color={TextColor.MEDIUM}>Start: {selectedCourse.startDate?.toDateString()}</P>
