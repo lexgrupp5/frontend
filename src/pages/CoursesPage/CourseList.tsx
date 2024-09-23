@@ -46,7 +46,7 @@ export const CourseList = (): ReactElement => {
       </article>
       <article className="flex flex-wrap p-4 max-w-7xl m-auto">
         {courses.length === 0 && <div className="w-full flex justify-center p-8">
-          <P>No courses find!</P>
+          <P>No courses were found!</P>
         </div>}
         {courses.length !== 0 &&
           courses.map((course) => (
