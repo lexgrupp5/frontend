@@ -12,8 +12,6 @@ interface Props {
 }
 
 export const CourseItem: React.FC<Props> = ({ course }): ReactElement => {
-  const isTeacher = true;
-  const canSignUp = true;
   const [viewCourse, setViewCourse] = useState(false);
   const { updateSelectedCourse } = useCoursePageContext();
   const navigate = useNavigateToPath();
@@ -28,7 +26,6 @@ export const CourseItem: React.FC<Props> = ({ course }): ReactElement => {
     <>
       {viewCourse && <CourseModal isOpen={viewCourse}
         course={course}
-        canSignUp={canSignUp}
         onClose={() => { setViewCourse(false); }}/>}
       <article
         className="flex h-full flex-col justify-between
@@ -44,12 +41,12 @@ export const CourseItem: React.FC<Props> = ({ course }): ReactElement => {
             <P color={TextColor.MEDIUM}>Start: {course.startDate?.toDateString()}</P>
             <P color={TextColor.MEDIUM}>End: {course.endDate?.toDateString()}</P>
           </div>
-          {isTeacher && <UnstyledButton onPress={navigateToSelectedCoursePage}> 
+          <UnstyledButton onPress={navigateToSelectedCoursePage}> 
             <IconContainer className="flex items-center justify-center
               p-2 size-9 text-gray-200
               rounded-full hover:bg-indigo-950">
               <FaEdit />
-            </IconContainer></UnstyledButton>}
+            </IconContainer></UnstyledButton>
         </div>
       </article>
     </>

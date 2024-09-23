@@ -20,7 +20,7 @@ export const SecretInput: React.FC<InputProps> = ({
           type="password"
           label={label}
           icon={<FaEye />}
-          onPressIcon={toggleHide}
+          onSelectIcon={toggleHide}
           {...props}
         />
       ) : (
@@ -28,7 +28,7 @@ export const SecretInput: React.FC<InputProps> = ({
           type="text"
           label={label}
           icon={<FaEyeSlash />}
-          onPressIcon={toggleHide}
+          onSelectIcon={toggleHide}
           {...props}
         />
       )}

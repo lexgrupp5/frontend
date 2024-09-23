@@ -15,8 +15,6 @@ export const CourseList = (): ReactElement => {
   } = useCoursePageContext();
 
   const handleSearch = () => {
-    if (searchAndFilterDTO.searchText != null &&
-      searchAndFilterDTO.searchText.length === 0) { return; }
     fetchCourses(searchAndFilterDTO);
   };
 
@@ -44,7 +42,7 @@ export const CourseList = (): ReactElement => {
           maxLength={100}
           onChange={e => { updateSearchText(e.target.value); }}
           icon={<FaSearch />}
-          onPressIcon={handleSearch}
+          onSelectIcon={handleSearch}
           value={searchAndFilterDTO.searchText} /> 
         <Input icon={<MdFilterList />} />
       </article>
