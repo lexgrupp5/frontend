@@ -3,7 +3,7 @@ import { MdFilterList, MdLibraryAdd } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 
 import { CourseItem } from "./CourseItem";
-import { IconContainer, Input, UnstyledButton } from "@/components";
+import { IconContainer, Input, P, UnstyledButton } from "@/components";
 import { useCoursePageContext } from "@/hooks";
 
 export const CourseList = (): ReactElement => {
@@ -15,16 +15,12 @@ export const CourseList = (): ReactElement => {
   } = useCoursePageContext();
 
   const handleSearch = () => {
-    if (searchAndFilterDTO.searchText != null &&
-      searchAndFilterDTO.searchText.length === 0) { return; }
     fetchCourses(searchAndFilterDTO);
   };
 
   const updateSearchText = (searchText: string) => {
     updateSearchAndFilterDTO({ ...searchAndFilterDTO, searchText });
   };
-
-  if (courses.length === 0) { return <></>; }
 
   return (
     <article>
@@ -44,11 +40,14 @@ export const CourseList = (): ReactElement => {
           maxLength={100}
           onChange={e => { updateSearchText(e.target.value); }}
           icon={<FaSearch />}
-          onPressIcon={handleSearch}
+          onSelectIcon={handleSearch}
           value={searchAndFilterDTO.searchText} /> 
         <Input icon={<MdFilterList />} />
       </article>
       <article className="flex flex-wrap p-4 max-w-7xl m-auto">
+        {courses.length === 0 && <div className="w-full flex justify-center p-8">
+          <P>No courses find!</P>
+        </div>}
         {courses.length !== 0 &&
           courses.map((course) => (
             <div key={course.id}

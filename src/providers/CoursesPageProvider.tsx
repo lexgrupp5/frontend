@@ -29,7 +29,11 @@ export const CoursesPageProvider = (): React.ReactElement => {
   };
 
   const fetchCourses = (dto: ISearchAndFilterDTO) => {
-    fetchAuthData(dto.searchText);
+    if (dto.searchText === "" || dto.searchText == null) {
+      fetchAuthData();
+    } else {
+      fetchAuthData(dto.searchText);
+    }
   };
 
   const constructCoursesPageContext = (): ICoursesPageContext => ({
