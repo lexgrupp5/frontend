@@ -5,6 +5,15 @@ export interface ICoursesPageContext {
   error: ApiException | null;  
   courses: ICourseDto[];
   selectedCourse: ICourseDto | null;
-  clearError: () => void;
+  searchAndFilterDTO: ISearchAndFilterDTO;
+  updateSearchAndFilterDTO: (dto: ISearchAndFilterDTO) => void; 
+  fetchCourses: (dto: ISearchAndFilterDTO) => void;
   updateSelectedCourse: (course: ICourseDto) => void;
+  clearError: () => void;
+}
+
+export interface ISearchAndFilterDTO {
+  searchText?: string;
+  startDate?: Date;
+  endDate?: Date;
 }

@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import { api, ICourseDto } from "@/api";
-import { ICoursesPageContext } from "@/contexts";
+import { ICoursesPageContext, ISearchAndFilterDTO } from "@/contexts";
 import { useApi } from "@/hooks/useApi";
 
 export const CoursesPageProvider = (): React.ReactElement => {
   const { data, pending, error, fetchAuthData, clearError } = useApi(api.courses);
   const [selectedCourse, setSelectedCourse] = useState<ICourseDto | null>(null);
+  const [ searchAndFilterDTO, setSearchAndFIlterDTO ] = useState<ISearchAndFilterDTO>({});
 
   useEffect(() => {
     (async () => {
@@ -23,11 +24,22 @@ export const CoursesPageProvider = (): React.ReactElement => {
     setSelectedCourse(course);
   };
 
+  const updateSearchAndFilterDTO = (dto: ISearchAndFilterDTO) => {
+    setSearchAndFIlterDTO(dto);
+  };
+
+  const fetchCourses = (dto: ISearchAndFilterDTO) => {
+    fetchAuthData(dto.searchText);
+  };
+
   const constructCoursesPageContext = (): ICoursesPageContext => ({
     courses: data ?? [],
     pending,
     error,
     selectedCourse,
+    searchAndFilterDTO,
+    updateSearchAndFilterDTO,
+    fetchCourses,
     clearError,
     updateSelectedCourse
   });
