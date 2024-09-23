@@ -31,7 +31,7 @@ export const CourseList: React.FC<Props> = ({
         <Input icon={<FaSearch />} onPressIcon={() => { }}></Input>
         <Input icon={<MdFilterList />} onPressIcon={() => { }}></Input>
       </article>
-      <article className="flex flex-wrap p-4 max-w-7xl">
+      <article className="flex flex-wrap p-4 max-w-7xl m-auto">
         {courses.length !== 0 &&
           courses.map((course) => (
             <div key={course.id}
