@@ -1,0 +1,46 @@
+import { IconContainer, NativeButton } from "@/components";
+import { ReactNode } from "react";
+import { FaTimes } from "react-icons/fa";
+
+interface BaseModalProps {
+  isOpen: boolean;
+  children?: ReactNode;
+  onClose: () => void;
+  bgColor: string;
+  iconColor: string;
+  iconBgHoverColor: string;
+}
+
+export const BaseModal: React.FC<BaseModalProps> = ({
+  isOpen,
+  children,
+  onClose,
+  bgColor,
+  iconColor,
+  iconBgHoverColor,
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <article
+      className="fixed inset-0 z-50
+      flex items-center justify-center 
+      bg-black bg-opacity-90">
+      <div className={`max-h-[80vh] max-w-[90vw] lg:max-w-[50vw]
+      ${bgColor} rounded-lg
+      border border-indigo-50
+      overflow-y-auto`}>
+        <div className="sticky top-2 pr-2 flex flex-row-reverse w-full">
+          <NativeButton className="focus:outline-none" onClick={onClose}>
+            <IconContainer
+              className={`w-12 h-12 p-2 rounded-full ${iconColor}
+              cursor-pointer hover:${iconBgHoverColor}`}>
+              <FaTimes />
+            </IconContainer>
+          </NativeButton>
+        </div>
+        <div className="px-16 pb-8">{children}</div>
+      </div>
+    </article>
+  );
+};

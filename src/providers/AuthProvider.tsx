@@ -1,6 +1,7 @@
 import { ReactElement, ReactNode, useEffect, useState } from "react";
-import { AuthContext, IAuthContext } from "@/contexts";
 import { useLocalStorage } from "usehooks-ts";
+
+import { AuthContext, IAuthContext } from "@/contexts";
 import { ITokenContainer } from "@/types";
 import { Storage } from "@/constants";
 

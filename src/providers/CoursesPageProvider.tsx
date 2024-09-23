@@ -6,14 +6,13 @@ import { ICoursesPageContext } from "@/contexts";
 import { useApi } from "@/hooks/useApi";
 
 export const CoursesPageProvider = (): React.ReactElement => {
-  const { data, pending, error, fetchData } = useApi(api.courses);
+  const { data, pending, error, fetchAuthData, clearError } = useApi(api.courses);
   const [selectedCourse, setSelectedCourse] = useState<ICourseDto | null>(null);
 
   useEffect(() => {
     (async () => {
       try {
-        await fetchData();
-
+        await fetchAuthData();
       } catch (e) {
         console.log(e);
       }
@@ -27,8 +26,9 @@ export const CoursesPageProvider = (): React.ReactElement => {
   const constructCoursesPageContext = (): ICoursesPageContext => ({
     courses: data ?? [],
     pending,
-    errorMsg: error ? error.message : "",
+    error,
     selectedCourse,
+    clearError,
     updateSelectedCourse
   });
   

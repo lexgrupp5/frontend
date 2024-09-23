@@ -7,7 +7,7 @@ import { axiosInstance } from "./axiosInstance";
 
 /**
  * Used to wrap generated api calls
- * to handle different configurations
+ * and to handle different configurations
  * for different calls.
  */
 class Client extends Generated.Client {
@@ -35,7 +35,7 @@ class Client extends Generated.Client {
  * Used to bind this context to the api wrapper instance 
  * for all generated api methods.
  */
-function createApiProxy<ApiTarget extends object>(target: ApiTarget) {
+function createApiProxy<ApiTarget extends object>(target: ApiTarget): ApiTarget {
   return new Proxy(target, {
     get: (target: ApiTarget, propertyKey: string, receiver: unknown) => {
       const targetProperty = Reflect.get(target, propertyKey, receiver);

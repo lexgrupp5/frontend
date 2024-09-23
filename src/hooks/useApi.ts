@@ -1,6 +1,10 @@
+import { useLocalStorage } from "usehooks-ts";
+
 import { ApiException } from "@/api";
 import { useState } from "react";
 import { api } from "@/api";
+import { Storage } from "@/constants";
+import { ITokenContainer } from "@/types";
 
 export type IApiHook = ReturnType<typeof useApi>;
 
@@ -14,6 +18,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   const [data, setData] = useState<ApiReturnType | null>(null);
   const [pending, setPending] = useState<boolean>(true);
   const [error, setError] = useState<ApiException | null>(null);
+  const [tokens, setTokens] = useLocalStorage<ITokenContainer | null>(Storage.TOKEN, null);
 
   /** Api call used when no authorization is needed */
   const fetchData = async (
@@ -44,11 +49,14 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   ) => {
     try {
       setPending(true);
-      const tokenContainer = { accessToken: "accessToen", refreshToken: "refreshToken" };
+      
+      if (tokens === null) {
+        throw new ApiException("Token have not been set", 0, "", [], null);
+      }
 
       const result = await api.makeApiRequest<ApiReturnType, ApiArgs>(
         apiCall,
-        tokenContainer,
+        tokens,
         ...args
       );
       setData(result);
@@ -63,5 +71,9 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     }
   };
 
-  return { data, pending, error, fetchData, fetchAuthData };
+  const clearError = () => {
+    setError(null);
+  };
+
+  return { data, pending, error, fetchData, fetchAuthData, clearError };
 };

@@ -69,8 +69,6 @@ export class Client implements IClient {
      */
     courses(signal?: AbortSignal): Promise<CourseDto[]> {
         let url_ = this.baseUrl + "/api/courses";
-
-        console.log('url_', url_)
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
