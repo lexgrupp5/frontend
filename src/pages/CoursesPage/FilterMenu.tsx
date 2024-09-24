@@ -31,7 +31,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, Props>(
     return (
       <div ref={ref} className="absolute top-full left-0 right-0 
         rounded-b-lg p-2 bg-white
-        hidden ">
+        z-10 hidden">
         <div className="w-full flex justify-center underline">
           <P color={TextColor.DARK_X}>Filter your search</P>
         </div>
