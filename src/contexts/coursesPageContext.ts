@@ -1,8 +1,8 @@
-import { ApiException, ICourseDto } from "@/api";
+import { CustomApiException, ICourseDto } from "@/api";
 
 export interface ICoursesPageContext {
   pending: boolean
-  error: ApiException | null;  
+  error: CustomApiException | null;  
   courses: ICourseDto[];
   selectedCourse: ICourseDto | null;
   searchAndFilterDTO: ISearchAndFilterDTO;
