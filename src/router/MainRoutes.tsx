@@ -17,6 +17,9 @@ export const MainRoutes = (): ReactElement => {
         </Route>
         <Route path={Path.CURRENT_COURSE} element={<Pages.CurrentCoursePage />} />
         <Route path={Path.PROFILE} element={<Pages.ProfilePage />} />
+        <Route path={`${Path.STUDENTHOME}/:username`} element={<Pages.StudentLandingPage />}>
+
+        </Route>
       </Route>
       <Route path={Path.UNKNOWN} element={<NavigateToPath to={Path.INDEX} />} />
     </>
