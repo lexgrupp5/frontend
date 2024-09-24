@@ -6,15 +6,16 @@ import { Button } from "../Buttons";
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   icon?: ReactNode;
-  onPressIcon?: () => void;
+  onSelectIcon?: () => void;
 }
 
 export const Input: React.FC<InputProps> = ({
   label,
   icon,
-  onPressIcon = () => {},
+  onSelectIcon = () => {},
   ...props
 }) => {
+
   return (
     <div className="realtive min-h-full flex flex-col space-y-2">
       {label && <Label className="font-medium text-gray-800">{label}</Label>}
@@ -30,9 +31,10 @@ export const Input: React.FC<InputProps> = ({
         />
         {icon != null && (
           <Button
-            className="absolute bottom-2 right-6 cursor-pointer outline-none"
-            onPress={onPressIcon}
-          >
+            className="absolute bottom-2 right-6 cursor-pointer
+              outline-none focus:outline-indigo-500"
+            onPress={onSelectIcon}
+            onKeyDown={e => { if (e.key === "Enter") { onSelectIcon(); }}}>
             <IconContainer className="h-6 w-6 text-gray-600">
               {icon}
             </IconContainer>

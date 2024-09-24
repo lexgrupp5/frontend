@@ -1,6 +1,6 @@
 import { useLocalStorage } from "usehooks-ts";
 
-import { ApiException } from "@/api";
+import { CustomApiException } from "@/api";
 import { useState } from "react";
 import { api } from "@/api";
 import { Storage } from "@/constants";
@@ -17,7 +17,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
 ) => {
   const [data, setData] = useState<ApiReturnType | null>(null);
   const [pending, setPending] = useState<boolean>(true);
-  const [error, setError] = useState<ApiException | null>(null);
+  const [error, setError] = useState<CustomApiException | null>(null);
   const [tokens, setTokens] = useLocalStorage<ITokenContainer | null>(Storage.TOKEN, null);
 
   /** Api call used when no authorization is needed */
@@ -33,10 +33,10 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
       );
       setData(result);
     } catch (err) {
-      if (err instanceof ApiException) {
+      if (err instanceof CustomApiException) {
         setError(err);
       } else {
-        setError(new ApiException("Unknown error", 0, "", [], null));
+        setError(new CustomApiException("Unknown error"));
       }
     } finally {
       setPending(false);
@@ -51,7 +51,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
       setPending(true);
       
       if (tokens === null) {
-        throw new ApiException("Token have not been set", 0, "", [], null);
+        throw new CustomApiException("Token have not been set");
       }
 
       const result = await api.makeApiRequest<ApiReturnType, ApiArgs>(
@@ -61,10 +61,10 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
       );
       setData(result);
     } catch (err) {
-      if (err instanceof ApiException) {
+      if (err instanceof CustomApiException) {
         setError(err);
       } else {
-        setError(new ApiException("Unknown error", 0, "", [], null));
+        setError(new CustomApiException("Unknown error"));
       }
     } finally {
       setPending(false);
