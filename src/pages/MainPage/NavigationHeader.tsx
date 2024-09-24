@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaHome, FaUser } from "react-icons/fa";
 
 import { Button, IconContainer, Link, NavLink } from "@/components";
-import { Path } from "@/constants";
+import { Path, StudentPath } from "@/constants";
 import ProfileMenu from "./ProfileMenu";
 import { useAuthContext } from "@/hooks";
 
@@ -17,7 +17,7 @@ export const NavigationHeader = () => {
   const iconClass = `w-10 h-10 p-2 rounded-full
     text-gray-300 cursor-pointer
     hover:bg-indigo-900`;
-  
+
   const toggleMenu = () => {
     setMenuOpen(prev => !prev);
   };
@@ -25,7 +25,9 @@ export const NavigationHeader = () => {
   const updateMenuOpen = (open: boolean) => {
     setMenuOpen(open);
   };
-  
+
+  const username = "Peter62"; //PLACEHOLDER STRING, USERNAME TO BE FETCHED FROM LOGIN
+
   return (
     <header className="fixed h-16
     top-0 left-0 w-full p-4
@@ -36,13 +38,16 @@ export const NavigationHeader = () => {
           <FaHome />
         </IconContainer></Link>
         <nav className="flex justify-between items-center gap-3 dura">
+          <NavLink to={StudentPath.constructStudentHomePath(username)} className={linkClass}>
+            StudentLanding
+          </NavLink>
           <NavLink to={Path.CURRENT_COURSE} className={linkClass}>
             Current
           </NavLink>
           <NavLink to={Path.COURSES} className={linkClass}>
             Courses
           </NavLink>
-          <Button className="relative focus:outline-none" 
+          <Button className="relative focus:outline-none"
             onPress={() => { toggleMenu(); }}>
             <IconContainer className={iconClass}>
               <FaUser />
