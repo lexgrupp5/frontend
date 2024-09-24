@@ -19,7 +19,7 @@ export const UnstyledButton: React.FC<Props> = ({
     <AriaButton {...props}
       type="button"
       onPress={onPress}
-      className={className ? className : ""}>
+      className={className ? className : "focus:outline-none"}>
       {children}
     </AriaButton>
   );

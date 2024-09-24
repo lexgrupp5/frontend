@@ -6,12 +6,15 @@ import { Button } from "../Buttons";
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   icon?: ReactNode;
+  className?: string;
+  rowStyle?: boolean
   onSelectIcon?: () => void;
 }
 
 export const Input: React.FC<InputProps> = ({
   label,
   icon,
+  className,
   onSelectIcon = () => {},
   ...props
 }) => {
@@ -22,12 +25,12 @@ export const Input: React.FC<InputProps> = ({
       <div className="relative">
         <AriaInput
           {...props}
-          className="w-full rounded-lg border 
+          className={className != null ? className : `w-full rounded-lg border 
           border-gray-300 px-4 py-2 shadow-sm
           transition-all duration-300 
           focus:border-indigo-500
           focus:outline-none focus:ring-2
-          focus:ring-indigo-500"
+          focus:ring-indigo-500`}
         />
         {icon != null && (
           <Button

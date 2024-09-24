@@ -1,6 +1,6 @@
 # Frontend - Lexicon LMS
 
-## Generate API
+## Generate API using NSwag tools [https://github.com/RicoSuter/NSwag](https://github.com/RicoSuter/NSwag)
 
 - Install NSwag.ConsoleCore: `dotnet tool install --global NSwag.ConsoleCore`
 
