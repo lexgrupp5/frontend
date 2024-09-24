@@ -4,6 +4,7 @@ import { useCoursePageContext } from "@/hooks";
 import { CourseList } from "./CourseList";
 import { P, Spinner, ErrorModal } from "@/components";
 import { getAPI } from "@/config";
+import { CoursesController } from "./CoursesController";
 
 export const CoursesPage = (): ReactElement => {
   const { pending, error, clearError } = useCoursePageContext();
@@ -21,6 +22,9 @@ export const CoursesPage = (): ReactElement => {
   }
 
   return (
-    <CourseList />
+    <>
+      <CoursesController />
+      <CourseList />
+    </>
   );
 };

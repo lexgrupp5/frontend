@@ -30,9 +30,9 @@ export const CoursesPageProvider = (): React.ReactElement => {
 
   const fetchCourses = (dto: ISearchAndFilterDTO) => {
     if (dto.searchText === "" || dto.searchText == null) {
-      fetchAuthData();
+      fetchAuthData(undefined, dto.endDate, dto.startDate);
     } else {
-      fetchAuthData(dto.searchText);
+      fetchAuthData(dto.searchText, dto.endDate, dto.startDate);
     }
   };
 
