@@ -30,7 +30,7 @@ export interface IClient {
     /**
      * @return Success
      */
-    activities(id: number): Promise<ModuleDto>;
+    activitiesOfCourse(id: number): Promise<ActivityDto[]>;
     /**
      * @return Success
      */
@@ -259,7 +259,7 @@ export class Client implements IClient {
      * @return Success
      */
     //GET: All activities of a module by Module ID
-    activities(id: number, signal?: AbortSignal): Promise<ModuleDto> {
+    activitiesOfCourse(id: number, signal?: AbortSignal): Promise<ActivityDto[]> {
         let url_ = this.baseUrl + "/api/modules/activities/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -286,7 +286,7 @@ export class Client implements IClient {
         });
     }
 
-    protected processActivities(response: AxiosResponse): Promise<ModuleDto> {
+    protected processActivities(response: AxiosResponse): Promise<ActivityDto[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -301,13 +301,13 @@ export class Client implements IClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = ModuleDto.fromJS(resultData200);
-            return Promise.resolve<ModuleDto>(result200);
+            return Promise.resolve<ActivityDto[]>(result200);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<ModuleDto>(null as any);
+        return Promise.resolve<ActivityDto[]>(null as any);
     }
 
     /**

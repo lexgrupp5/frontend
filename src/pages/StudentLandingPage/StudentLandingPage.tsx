@@ -2,13 +2,12 @@ import { ReactElement } from "react";
 import { StudentLandingDesk } from "./StudentLandingDesk";
 import { useStudentPageContext } from "@/hooks";
 import { useParams } from "react-router-dom";
-import { IActivityDto} from "@/api";
 import { getAPI } from "@/config";
 import { Spinner, ErrorModal, P } from "@/components";
 import { CurrentCourseComponent, RelevantActivitiesComponent, CurrentModulesComponent } from "../SharedComponents/index.ts";
 
 export const StudentLandingPage = (): ReactElement => {
-    const { pending, error, clearError, course, modules } = useStudentPageContext();
+    const { pending, error, clearError, course, modules, activities } = useStudentPageContext();
     const { username } = useParams();
 
     if (pending) {
@@ -32,32 +31,32 @@ export const StudentLandingPage = (): ReactElement => {
     }
 
     //PLACEHOLDER ACTIVIITES, API FETCH TO GET THE CURRENT RELEVANT ACTIVITIES GOES HERE
-    const activities: IActivityDto[] = [
-        {
-            id: 1,
-            description: "Seminar day",
-            startDate: new Date(2024, 9, 1),
-            endDate: new Date(2024, 9, 1),
-        },
-        {
-            id: 2,
-            description: "Group assignment",
-            startDate: new Date(2024, 9, 2),
-            endDate: new Date(2024, 9, 7),
-        },
-        {
-            id: 3,
-            description: "Group review day",
-            startDate: new Date(2024, 9, 8),
-            endDate: new Date(2024, 9, 8),
-        },
-        {
-            id: 4,
-            description: "Final presentation",
-            startDate: new Date(2024, 9, 9),
-            endDate: new Date(2024, 9, 9),
-        }
-    ];
+    // const activities: IActivityDto[] = [
+    //     {
+    //         id: 1,
+    //         description: "Seminar day",
+    //         startDate: new Date(2024, 9, 1),
+    //         endDate: new Date(2024, 9, 1),
+    //     },
+    //     {
+    //         id: 2,
+    //         description: "Group assignment",
+    //         startDate: new Date(2024, 9, 2),
+    //         endDate: new Date(2024, 9, 7),
+    //     },
+    //     {
+    //         id: 3,
+    //         description: "Group review day",
+    //         startDate: new Date(2024, 9, 8),
+    //         endDate: new Date(2024, 9, 8),
+    //     },
+    //     {
+    //         id: 4,
+    //         description: "Final presentation",
+    //         startDate: new Date(2024, 9, 9),
+    //         endDate: new Date(2024, 9, 9),
+    //     }
+    // ];
 
     return (
         <>
