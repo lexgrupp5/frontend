@@ -1,10 +1,12 @@
 import { ReactElement, useRef } from "react";
 import { MdFilterList } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
+import { MdOutlineAdd } from "react-icons/md";
 
-import { IconContainer, Input, UnstyledButton } from "@/components";
-import { useCoursePageContext } from "@/hooks";
+import { IconContainer, Input, P, TextColor, UnstyledButton } from "@/components";
+import { useCoursePageContext, useNavigateToPath } from "@/hooks";
 import { FilterMenu } from "./FilterMenu";
+import { Path } from "@/constants";
 
 export const CoursesController = (): ReactElement => {
   const filterMenuRef = useRef<HTMLDivElement>(null);
@@ -34,8 +36,14 @@ export const CoursesController = (): ReactElement => {
     inputContainerRef.current?.classList.add("rounded-b-lg");
   };
 
+  const navigate = useNavigateToPath();
+
+  const navigateToSelectedCoursePage = () => {
+    navigate(Path.constructSelectedCoursePath("new"));
+  };
+
   return (
-    <article className="flex flex-row mt-4 justify-center">
+    <article className="flex flex-row pt-16 justify-center items-center gap-6">
       <div ref={inputContainerRef}
         className="relative flex items-cente p-2 rounded-t-lg rounded-b-lg bg-white">
         <Input type="text"
@@ -49,11 +57,23 @@ export const CoursesController = (): ReactElement => {
           onChange={e => { updateSearchText(e.target.value); }} />
         <UnstyledButton className="focus:outline-indigo-500"
           onPress={handleSearch}>
-          <IconContainer className="size-10 p-2 border-none focus:outline-none"><FaSearch /></IconContainer>
+          <IconContainer className="size-10 p-2 border-none focus:outline-none">
+            <FaSearch />
+          </IconContainer>
         </UnstyledButton>
         <FilterMenu ref={filterMenuRef} 
           searchAndFilterDTO={searchAndFilterDTO}
           updateSearchAndFilterDTO={updateSearchAndFilterDTO}/>
+      </div>
+      <div>
+        <UnstyledButton className="display flex items-center 
+        py-2 px-4 rounded-t-lg rounded-b-lg bg-white"
+        onPress={navigateToSelectedCoursePage}>
+          <P color={TextColor.DARK}>Create new course</P>
+          <IconContainer className="size-10 p-2 border-none focus:outline-none">
+            <MdOutlineAdd />
+          </IconContainer>
+        </UnstyledButton>
       </div>
     </article>
   );

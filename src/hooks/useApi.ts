@@ -16,7 +16,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   apiCall: (...args: [...ApiArgs, AbortSignal?]) => Promise<ApiReturnType>,
 ) => {
   const [data, setData] = useState<ApiReturnType | null>(null);
-  const [pending, setPending] = useState<boolean>(true);
+  const [pending, setPending] = useState<boolean>(false);
   const [error, setError] = useState<CustomApiException | null>(null);
   const [tokens, setTokens] = useLocalStorage<ITokenContainer | null>(Storage.TOKEN, null);
 
@@ -49,11 +49,9 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   ) => {
     try {
       setPending(true);
-      
       if (tokens === null) {
         throw new CustomApiException("Token have not been set");
       }
-
       const result = await api.makeApiRequest<ApiReturnType, ApiArgs>(
         apiCall,
         tokens,

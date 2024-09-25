@@ -18,11 +18,21 @@ export interface IClient {
      * @param startDate (optional) 
      * @return Success
      */
-    courses(searchText?: string | undefined, endDate?: Date | undefined, startDate?: Date | undefined): Promise<CourseDto[]>;
+    coursesAll(searchText?: string | undefined, endDate?: Date | undefined, startDate?: Date | undefined): Promise<CourseDto[]>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createCourse(body?: CourseCreateDto | undefined): Promise<CourseDto>;
     /**
      * @return Success
      */
     getCourse(id: number): Promise<CourseDto>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    courses(id: number, body?: Operation[] | undefined): Promise<void>;
     /**
      * @return Success
      */
@@ -70,7 +80,7 @@ export class Client implements IClient {
      * @param startDate (optional) 
      * @return Success
      */
-    courses(searchText?: string | undefined, endDate?: Date | undefined, startDate?: Date | undefined, signal?: AbortSignal): Promise<CourseDto[]> {
+    coursesAll(searchText?: string | undefined, endDate?: Date | undefined, startDate?: Date | undefined, signal?: AbortSignal): Promise<CourseDto[]> {
         let url_ = this.baseUrl + "/api/courses?";
         if (searchText === null)
             throw new Error("The parameter 'searchText' cannot be null.");
@@ -102,11 +112,11 @@ export class Client implements IClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCourses(_response);
+            return this.processCoursesAll(_response);
         });
     }
 
-    protected processCourses(response: AxiosResponse): Promise<CourseDto[]> {
+    protected processCoursesAll(response: AxiosResponse): Promise<CourseDto[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -135,6 +145,62 @@ export class Client implements IClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<CourseDto[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createCourse(body?: CourseCreateDto | undefined, signal?: AbortSignal): Promise<CourseDto> {
+        let url_ = this.baseUrl + "/api/courses";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            },
+            signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateCourse(_response);
+        });
+    }
+
+    protected processCreateCourse(response: AxiosResponse): Promise<CourseDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = CourseDto.fromJS(resultData200);
+            return Promise.resolve<CourseDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<CourseDto>(null as any);
     }
 
     /**
@@ -189,6 +255,61 @@ export class Client implements IClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<CourseDto>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    courses(id: number, body?: Operation[] | undefined, signal?: AbortSignal): Promise<void> {
+        let url_ = this.baseUrl + "/api/courses/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+            },
+            signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCourses(_response);
+        });
+    }
+
+    protected processCourses(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
     }
 
     /**
@@ -580,6 +701,54 @@ export class ActivityDto implements IActivityDto {
 
 export interface IActivityDto {
     id?: number;
+    description?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
+}
+
+export class CourseCreateDto implements ICourseCreateDto {
+    name?: string | undefined;
+    description?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
+
+    constructor(data?: ICourseCreateDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CourseCreateDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CourseCreateDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ICourseCreateDto {
+    name?: string | undefined;
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
