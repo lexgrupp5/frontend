@@ -8,12 +8,13 @@ import { useApi } from "@/hooks/useApi";
 export const CoursesPageProvider = (): React.ReactElement => {
   const { data, pending, error, fetchAuthData, clearError } = useApi(api.courses);
   const [selectedCourse, setSelectedCourse] = useState<ICourseDto | null>(null);
-  const [ searchAndFilterDTO, setSearchAndFIlterDTO ] = useState<ISearchAndFilterDTO>({});
+  const [searchAndFilterDTO, setSearchAndFIlterDTO] = useState<ISearchAndFilterDTO>({});
 
   useEffect(() => {
     (async () => {
       try {
         await fetchAuthData();
+        console.log(data);
       } catch (e) {
         console.log(e);
       }
@@ -47,10 +48,10 @@ export const CoursesPageProvider = (): React.ReactElement => {
     clearError,
     updateSelectedCourse
   });
-  
+
   return (
     <>
-      <Outlet context={constructCoursesPageContext()}/>
+      <Outlet context={constructCoursesPageContext()} />
     </>
   );
 };

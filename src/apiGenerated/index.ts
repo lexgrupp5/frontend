@@ -26,7 +26,7 @@ export interface IClient {
     /**
      * @return Success
      */
-    course(id: number): Promise<ModuleDto[]>;
+    modulesOfCourse(id: number): Promise<ModuleDto[]>;
     /**
      * @return Success
      */
@@ -70,6 +70,7 @@ export class Client implements IClient {
      * @param startDate (optional) 
      * @return Success
      */
+    //GET: All courses
     courses(searchText?: string | undefined, endDate?: Date | undefined, startDate?: Date | undefined, signal?: AbortSignal): Promise<CourseDto[]> {
         let url_ = this.baseUrl + "/api/courses?";
         if (searchText === null)
@@ -119,7 +120,7 @@ export class Client implements IClient {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200  = _responseText;
+            let resultData200 = _responseText;
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
@@ -140,6 +141,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
+    //GET: A course by Course ID
     getCourse(id: number, signal?: AbortSignal): Promise<CourseDto> {
         let url_ = this.baseUrl + "/api/courses/{id}";
         if (id === undefined || id === null)
@@ -180,7 +182,7 @@ export class Client implements IClient {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200  = _responseText;
+            let resultData200 = _responseText;
             result200 = CourseDto.fromJS(resultData200);
             return Promise.resolve<CourseDto>(result200);
 
@@ -194,7 +196,8 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    course(id: number, signal?: AbortSignal): Promise<ModuleDto[]> {
+    //GET: All modules of a course by Course ID
+    modulesOfCourse(id: number, signal?: AbortSignal): Promise<ModuleDto[]> {
         let url_ = this.baseUrl + "/api/modules/course/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -234,7 +237,7 @@ export class Client implements IClient {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200  = _responseText;
+            let resultData200 = _responseText;
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
@@ -255,6 +258,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
+    //GET: All activities of a module by Module ID
     activities(id: number, signal?: AbortSignal): Promise<ModuleDto> {
         let url_ = this.baseUrl + "/api/modules/activities/{id}";
         if (id === undefined || id === null)
@@ -295,7 +299,7 @@ export class Client implements IClient {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200  = _responseText;
+            let resultData200 = _responseText;
             result200 = ModuleDto.fromJS(resultData200);
             return Promise.resolve<ModuleDto>(result200);
 
@@ -309,6 +313,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
+    //GET: All users of a course by Course ID
     course2(id: number, signal?: AbortSignal): Promise<UserDto[]> {
         let url_ = this.baseUrl + "/api/User/course/{id}";
         if (id === undefined || id === null)
@@ -349,7 +354,7 @@ export class Client implements IClient {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200  = _responseText;
+            let resultData200 = _responseText;
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
@@ -462,7 +467,7 @@ export class Client implements IClient {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200  = _responseText;
+            let resultData200 = _responseText;
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
@@ -525,7 +530,7 @@ export class Client implements IClient {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200  = _responseText;
+            let resultData200 = _responseText;
             result200 = UserDto.fromJS(resultData200);
             return Promise.resolve<UserDto>(result200);
 

@@ -49,7 +49,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   ) => {
     try {
       setPending(true);
-      
+
       if (tokens === null) {
         throw new CustomApiException("Token have not been set");
       }
