@@ -7,6 +7,7 @@ interface Props {
 }
 
 export function CurrentCourseComponent({ course }: Props): ReactElement {
+    console.log(course);
     if (course != null) {
         return (
             <article className="flex flex-col justify-center items-center 

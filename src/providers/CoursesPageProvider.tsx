@@ -6,7 +6,7 @@ import { ICoursesPageContext, ISearchAndFilterDTO } from "@/contexts";
 import { useApi } from "@/hooks/useApi";
 
 export const CoursesPageProvider = (): React.ReactElement => {
-  const { data, pending, error, fetchAuthData, clearError } = useApi(api.courses);
+  const { data, pending, error, fetchAuthData, clearError } = useApi(api.coursesAll);
   const [selectedCourse, setSelectedCourse] = useState<ICourseDto | null>(null);
   const [searchAndFilterDTO, setSearchAndFIlterDTO] = useState<ISearchAndFilterDTO>({});
 
