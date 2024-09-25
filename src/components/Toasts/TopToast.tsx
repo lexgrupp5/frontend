@@ -1,6 +1,7 @@
 import { ReactElement, ReactNode, useEffect } from "react";
 import { IconContainer } from "../Icons";
 import { FaTimes } from "react-icons/fa";
+import { MdOutlineNotificationsActive } from "react-icons/md";
 import { UnstyledButton } from "../Buttons";
 
 interface Props {
@@ -28,11 +29,15 @@ export const TopToast: React.FC<Props> = ({
 
   return (
     <div className="fixed top-[var(--header-height)] left-0 right-0 z-50">
-      <div className={`flex justify-between items-center gap-4 p-2
-        ${background != null ? background  : "bg-sky-500"}
-        md:relative md:justify-center`}>
+      <div className={`flex items-center
+        ${keepOpen ? "justify-between" : "justify-center"} 
+        gap-4 p-2
+        ${background != null ? background  : "bg-sky-500"}`}>
+        {keepOpen && <IconContainer className="size-6 flex-shrink-0">
+          <MdOutlineNotificationsActive />
+        </IconContainer>}
         {children}
-        {keepOpen && <UnstyledButton className="md:absolute right-2"
+        {keepOpen && <UnstyledButton className="size-6 flex-shrink-0"
           onPress={onClose}>
           <IconContainer>
             <FaTimes />

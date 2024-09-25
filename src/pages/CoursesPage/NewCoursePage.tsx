@@ -1,5 +1,5 @@
 import { api, CourseCreateDto, CourseDto } from "@/api";
-import { H, Input, P, Spinner, SubmitButton, TextColor, UnstyledButton, OkTopToast, ErrorTopToast } from "@/components";
+import { H, Input, P, SubmitButton, TextColor, UnstyledButton, OkTopToast, ErrorTopToast, FullPageSpinner } from "@/components";
 import { Path } from "@/constants";
 import { useCoursePageContext, useNavigateToPath } from "@/hooks";
 import { useApi } from "@/hooks/useApi";
@@ -16,8 +16,8 @@ export const NewCoursePage = (): ReactElement => {
   const [showResult, setShowResult] = useState(false);
 
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
-    handleCloseResult();
     e.preventDefault();
+    handleCloseResult();
     await createCourse.fetchAuthData(new CourseCreateDto({
       name,
       description,
@@ -40,19 +40,16 @@ export const NewCoursePage = (): ReactElement => {
     navigate(Path.constructSelectedCoursePath(`${createCourse.data?.id}`));
   };
 
-  if (createCourse.pending) {
-    return <div className="min-h-screen-header-center"><Spinner/></div>;
-  }
-
   return (
     <div className="min-h-screen-header-center">
+      {createCourse.pending && <FullPageSpinner />}
       <form onSubmit={submit}
         className="w-full p-8 
         bg-indigo-100
         rounded-lg shadow-lg max-w-lg">
         {showResult && createCourse.error == null && 
           <OkTopToast onClose={handleCloseResult} keepOpen={true}>
-            <UnstyledButton className="underline underline-offset-4" 
+            <UnstyledButton className="underline underline-offset-4 max-w-full" 
               onPress={() => { handleNavigateToNewCourse(createCourse.data); }}>
               New course '{createCourse.data?.name}' created
             </UnstyledButton>
