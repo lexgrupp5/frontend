@@ -1,5 +1,5 @@
-import { ReactElement, useState } from "react";
-import { H, P, TextColor } from "@/components";
+import { ReactElement } from "react";
+import { P, TextColor } from "@/components";
 import { UserDto } from "@/api";
 
 interface Props {
