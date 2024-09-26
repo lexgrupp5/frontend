@@ -6,6 +6,7 @@ const StaticPath = {
   CURRENT_COURSE: "current-course",
   PROFILE: "profile",
   STUDENTHOME: "student-homepage",
+  STUDENTCOURSE: "student-coursepage",
   UNKNOWN: "*",
 } as const;
 
@@ -15,6 +16,8 @@ type DynamicPathType = `${typeof StaticPath.COURSES}/${string}`;
 
 type StudentDynamicPathType = `${typeof StaticPath.STUDENTHOME}/${string}`;
 
+type StudentCourseDynamicPathType = `${typeof StaticPath.STUDENTCOURSE}/${number}`
+
 const DynamicPath = {
   constructSelectedCoursePath: (id: string | number): DynamicPathType =>
     `${StaticPath.COURSES}/${id}`,
@@ -23,6 +26,11 @@ const DynamicPath = {
 const StudentHomeDynamicPath = {
   constructStudentHomePath: (username: string): StudentDynamicPathType =>
     `${StaticPath.STUDENTHOME}/${username}`,
+} as const;
+
+const StudentCourseDynamicPath = {
+  constructStudentCoursePath: (id: number): StudentCourseDynamicPathType =>
+    `${StaticPath.STUDENTCOURSE}/${id}`
 } as const;
 
 export const Path = {
@@ -35,4 +43,9 @@ export const StudentPath = {
   ...StudentHomeDynamicPath,
 } as const;
 
-export type PathType = StaticPathType | DynamicPathType | StudentDynamicPathType;
+export const StudentCoursePath = {
+  ...StaticPath,
+  ...StudentCourseDynamicPath,
+} as const;
+
+export type PathType = StaticPathType | DynamicPathType | StudentDynamicPathType | StudentCourseDynamicPathType;

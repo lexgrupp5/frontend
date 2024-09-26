@@ -8,16 +8,15 @@ interface Props {
 }
 
 export function CurrentModulesComponent({ modules }: Props): ReactElement {
-    console.log(modules);
     return (
         <>
             <article className="flex flex-col justify-center items-center 
-                                h-96 w-full
+                                h-full w-full
                                 bg-indigo-600 p-3
                                 rounded border-2 border-black
                                 outline-offset-2 hover:outline-3
                                 hover:outline hover:outline-indigo-50
-                                cursor-pointer overflow-y-auto pt-[240px]">
+                                cursor-pointer overflow-y-auto">
                 <H size={4}>Modules of your course</H>
                 <div>
                     <article className="flex flex-wrap p-4 max-w-7xl m-auto">

@@ -1,5 +1,4 @@
 import { ReactElement, useState } from "react";
-
 import { H, P, TextColor } from "@/components";
 import { IModuleDto } from "@/api";
 import { ModuleModal } from "./ModuleModal";

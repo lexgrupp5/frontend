@@ -8,7 +8,6 @@ interface Props {
 }
 
 export function RelevantActivitiesComponent({ activities }: Props): ReactElement {
-    console.log(activities);
     if (activities != null) {
         return (
             <>
