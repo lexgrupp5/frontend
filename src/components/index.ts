@@ -7,3 +7,4 @@ export * from "./Icons";
 export * from "./Text";
 export * from "./Modals";
 export * from "./Loaders";
+export * from "./Toasts";

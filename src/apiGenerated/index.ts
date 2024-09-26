@@ -23,7 +23,7 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
-    createCourse(body?: CourseCreateDto | undefined): Promise<CourseCreateDto>;
+    createCourse(body?: CourseCreateDto | undefined): Promise<CourseDto>;
     /**
      * @return Success
      */
@@ -155,7 +155,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    createCourse(body?: CourseCreateDto | undefined, signal?: AbortSignal): Promise<CourseCreateDto> {
+    createCourse(body?: CourseCreateDto | undefined, signal?: AbortSignal): Promise<CourseDto> {
         let url_ = this.baseUrl + "/api/courses";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -183,7 +183,7 @@ export class Client implements IClient {
         });
     }
 
-    protected processCreateCourse(response: AxiosResponse): Promise<CourseCreateDto> {
+    protected processCreateCourse(response: AxiosResponse): Promise<CourseDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -197,14 +197,14 @@ export class Client implements IClient {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = CourseCreateDto.fromJS(resultData200);
-            return Promise.resolve<CourseCreateDto>(result200);
+            result200 = CourseDto.fromJS(resultData200);
+            return Promise.resolve<CourseDto>(result200);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<CourseCreateDto>(null as any);
+        return Promise.resolve<CourseDto>(null as any);
     }
 
     /**

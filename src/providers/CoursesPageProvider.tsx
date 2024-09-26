@@ -53,5 +53,5 @@ export const CoursesPageProvider = (): React.ReactElement => {
     <>
       <Outlet context={constructCoursesPageContext()} />
     </>
-  );
+  );  
 };

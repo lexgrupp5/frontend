@@ -13,6 +13,7 @@ export const MainRoutes = (): ReactElement => {
         <Route index element={<Pages.HomePage />} />
         <Route path={Path.COURSES} element={<CoursesPageProvider />} >
           <Route index element={<Pages.CoursesPage />} />
+          <Route path="new" element={<Pages.NewCoursePage />} />
           <Route path=":id" element={<Pages.SelectedCoursePage />} />
         </Route>
         <Route path={Path.CURRENT_COURSE} element={<Pages.CurrentCoursePage />} />
