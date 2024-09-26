@@ -4,7 +4,7 @@ import { Route } from "react-router-dom";
 import { AuthGuard, NavigateToPath } from "@/components";
 import * as Pages from "@/pages";
 import { Path } from "@/constants";
-import { CoursesPageProvider } from "@/providers";
+import { CoursesPageProvider, StudentPageProvider } from "@/providers";
 
 export const MainRoutes = (): ReactElement => {
   return (
@@ -13,10 +13,17 @@ export const MainRoutes = (): ReactElement => {
         <Route index element={<Pages.HomePage />} />
         <Route path={Path.COURSES} element={<CoursesPageProvider />} >
           <Route index element={<Pages.CoursesPage />} />
+          <Route path="new" element={<Pages.NewCoursePage />} />
           <Route path=":id" element={<Pages.SelectedCoursePage />} />
         </Route>
         <Route path={Path.CURRENT_COURSE} element={<Pages.CurrentCoursePage />} />
         <Route path={Path.PROFILE} element={<Pages.ProfilePage />} />
+        <Route path={Path.STUDENTHOME} element={<StudentPageProvider />}>
+          <Route path=":username" element={<Pages.StudentLandingPage />} />
+        </Route>
+        <Route path={Path.STUDENTCOURSE} element={<StudentPageProvider />}>
+          <Route path=":id" element={<Pages.StudentCoursePage />} />
+        </Route>
       </Route>
       <Route path={Path.UNKNOWN} element={<NavigateToPath to={Path.INDEX} />} />
     </>

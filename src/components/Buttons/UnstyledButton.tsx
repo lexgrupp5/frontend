@@ -14,12 +14,14 @@ export const UnstyledButton: React.FC<Props> = ({
   onPress,
   ...props
 }) => {
+  const derivedClassname = `text-ceneter overflow-hidden break-all
+  ${className ? className : "focus:outline-none"}`;
 
   return (
     <AriaButton {...props}
       type="button"
       onPress={onPress}
-      className={className ? className : ""}>
+      className={derivedClassname}>
       {children}
     </AriaButton>
   );

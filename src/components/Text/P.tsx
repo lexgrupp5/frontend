@@ -12,8 +12,9 @@ export const P: React.FC<Props> = ({
   children,
   color = TextColor.LIGHT,
   className = "" }): ReactElement => {
+  const derivedClassName = `text-${color} ${className ? className : ""}`;
   return (
-    <p className={`text-${color} ${className}`}>
+    <p className={derivedClassName}>
       {children}
     </p>
   );

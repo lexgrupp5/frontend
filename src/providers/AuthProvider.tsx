@@ -1,9 +1,11 @@
-import { ReactElement, ReactNode, useEffect, useState } from "react";
+import { ReactElement, ReactNode, useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 import { AuthContext, IAuthContext } from "@/contexts";
-import { ITokenContainer } from "@/types";
-import { Storage } from "@/constants";
+import { Role, Storage } from "@/constants";
+import { useApi } from "@/hooks";
+import { api, UserAuthModel } from "@/api";
+import * as Service from "@/services";
 
 interface Props {
   children: ReactNode;
@@ -12,41 +14,46 @@ interface Props {
 export const AuthProvider: React.FC<Props> = ({
   children
 }): ReactElement => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [tokens, setTokens, clearTokens] = useLocalStorage<
-  ITokenContainer | null>(Storage.TOKEN, null);
+  const loginApi = useApi(api.login);
+  const logoutApi = useApi(api.logout);
+  const [
+    token, setTokens, clearTokens
+  ] = useLocalStorage<string | null>(Storage.TOKEN, null);
+  const isLoggedIn = token != null;
 
   useEffect(() => {
-    if (tokens === null) {
-      setIsLoggedIn(false);
-    } else {
-      // Todo Check Validation, e.g., expire time.
-      // Todo Check Role
-      setIsLoggedIn(true);
-    }
-  }, [tokens]);
+    setTokens(loginApi.data);
+  }, [loginApi.data]);
 
-  const login = async (username: string, password: string) => {
-    // TODO Implement login logic
-    setIsLoggedIn(true);
-    const mockToken: ITokenContainer = {
-      accessToken: "accessToken",
-      refreshToken: "refreshToken" 
-    };
-    setTokens(mockToken);
+  const login = async (userName: string, password: string) => {
+    await loginApi.makeRequest(new UserAuthModel({userName, password}));
   };
 
-  const register = async (username: string, password: string) => {
+  const isTeacher = () => {
+    if (token == null) {return false; }
+    const roles = Service.getUserRolesFromToken(token);
+    return roles.includes(Role.teacher);
+  };
+
+  const isExpiredToken = () => {
+    if (token == null) {return false; }
+    return Service.isExpiredToken(token);
+  };
+
+  const register = async (userName: string, password: string) => {
     // TODO Implement Register logic
   };
 
   const logout = () => {
-    // TODO Implement register logic
+    if (token != null) {
+      logoutApi.makeAuthRequest(token);
+    }
     clearTokens();
+    loginApi.clearData();
   };
 
   const constructAuthContextValues = (): IAuthContext => {
-    return { isLoggedIn, login, register, logout };
+    return { isLoggedIn, login, register, logout, isExpiredToken, isTeacher };
   };
 
   return (
@@ -55,3 +62,4 @@ export const AuthProvider: React.FC<Props> = ({
     </AuthContext.Provider>
   );
 };
+

@@ -4,9 +4,10 @@ import { useCoursePageContext } from "@/hooks";
 import { CourseList } from "./CourseList";
 import { P, Spinner, ErrorModal } from "@/components";
 import { getAPI } from "@/config";
+import { CoursesController } from "./CoursesController";
 
 export const CoursesPage = (): ReactElement => {
-  const { courses, pending, error, clearError } = useCoursePageContext();
+  const { pending, error, clearError } = useCoursePageContext();
   
   if (pending) {
     return <div className="h-[calc(100vh-10rem)]"><Spinner /></div>;
@@ -21,6 +22,9 @@ export const CoursesPage = (): ReactElement => {
   }
 
   return (
-    <CourseList courses={courses}/>
+    <>
+      <CoursesController />
+      <CourseList />
+    </>
   );
 };

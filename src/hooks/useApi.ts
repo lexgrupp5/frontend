@@ -1,10 +1,9 @@
 import { useLocalStorage } from "usehooks-ts";
 
-import { ApiException } from "@/api";
+import { CustomApiException } from "@/api";
 import { useState } from "react";
 import { api } from "@/api";
 import { Storage } from "@/constants";
-import { ITokenContainer } from "@/types";
 
 export type IApiHook = ReturnType<typeof useApi>;
 
@@ -16,12 +15,12 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   apiCall: (...args: [...ApiArgs, AbortSignal?]) => Promise<ApiReturnType>,
 ) => {
   const [data, setData] = useState<ApiReturnType | null>(null);
-  const [pending, setPending] = useState<boolean>(true);
-  const [error, setError] = useState<ApiException | null>(null);
-  const [tokens, setTokens] = useLocalStorage<ITokenContainer | null>(Storage.TOKEN, null);
+  const [pending, setPending] = useState<boolean>(false);
+  const [error, setError] = useState<CustomApiException | null>(null);
+  const [tokens, setTokens] = useLocalStorage<string | null>(Storage.TOKEN, null);
 
   /** Api call used when no authorization is needed */
-  const fetchData = async (
+  const makeRequest = async (
     ...args: [...ApiArgs, AbortSignal?]
   ) => {
     try {
@@ -33,10 +32,10 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
       );
       setData(result);
     } catch (err) {
-      if (err instanceof ApiException) {
+      if (err instanceof CustomApiException) {
         setError(err);
       } else {
-        setError(new ApiException("Unknown error", 0, "", [], null));
+        setError(new CustomApiException("Unknown error"));
       }
     } finally {
       setPending(false);
@@ -44,16 +43,14 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   };
 
   /** Api call used when authorization is needed */
-  const fetchAuthData = async (
+  const makeAuthRequest = async (
     ...args: [...ApiArgs, AbortSignal?]
   ) => {
     try {
       setPending(true);
-      
       if (tokens === null) {
-        throw new ApiException("Token have not been set", 0, "", [], null);
+        throw new CustomApiException("Token have not been set");
       }
-
       const result = await api.makeApiRequest<ApiReturnType, ApiArgs>(
         apiCall,
         tokens,
@@ -61,10 +58,10 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
       );
       setData(result);
     } catch (err) {
-      if (err instanceof ApiException) {
+      if (err instanceof CustomApiException) {
         setError(err);
       } else {
-        setError(new ApiException("Unknown error", 0, "", [], null));
+        setError(new CustomApiException("Unknown error"));
       }
     } finally {
       setPending(false);
@@ -75,5 +72,17 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     setError(null);
   };
 
-  return { data, pending, error, fetchData, fetchAuthData, clearError };
+  const clearData = () => {
+    setData(null);
+  };
+
+  return { 
+    data,
+    pending,
+    error,
+    makeRequest,
+    makeAuthRequest,
+    clearError,
+    clearData,
+  };
 };
