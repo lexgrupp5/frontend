@@ -1,73 +1,34 @@
+import { ReactElement } from "react";
 import { StudentLandingDesk } from "./StudentLandingDesk";
+import { useStudentPageContext } from "@/hooks";
 import { useParams } from "react-router-dom";
-import { IActivityDto, ICourseDto, IModuleDto } from "@/api";
+import { getAPI } from "@/config";
+import { Spinner, ErrorModal, P } from "@/components";
 import { CurrentCourseComponent, RelevantActivitiesComponent, CurrentModulesComponent } from "../SharedComponents/index.ts";
 
-export const StudentLandingPage = (): React.ReactElement => {
+export const StudentLandingPage = (): ReactElement => {
+    const { pending, error, clearError, course, modules, activities } = useStudentPageContext();
     const { username } = useParams();
 
-    //PLACEHOLDER COURSE, API FETCH TO GET COURSE BASED ON USERNAME GOES HERE
-    const course: ICourseDto = {
-        name: "Placeholder course",
-        startDate: new Date(2024, 9, 24),
-        endDate: new Date(2024, 12, 24),
-    };
+    if (pending) {
+        return <div className="h-[calc(100vh-10rem)]"><Spinner /></div>
+    }
 
-    //PLACEHOLDER ACTIVIITES, API FETCH TO GET THE CURRENT RELEVANT ACTIVITIES GOES HERE
-    const activities: IActivityDto[] = [
-        {
-            id: 1,
-            description: "Seminar day",
-            startDate: new Date(2024, 9, 1),
-            endDate: new Date(2024, 9, 1),
-        },
-        {
-            id: 2,
-            description: "Group assignment",
-            startDate: new Date(2024, 9, 2),
-            endDate: new Date(2024, 9, 7),
-        },
-        {
-            id: 3,
-            description: "Group review day",
-            startDate: new Date(2024, 9, 8),
-            endDate: new Date(2024, 9, 8),
-        },
-        {
-            id: 4,
-            description: "Final presentation",
-            startDate: new Date(2024, 9, 9),
-            endDate: new Date(2024, 9, 9),
-        }
-    ];
+    if (error != null) {
+        return <ErrorModal isOpen={true}
+            onClose={clearError}>
+            <P>Error message from {getAPI()}:</P>
+            <P>{error.message}</P>
+        </ErrorModal>
+    }
 
-    //PLACEHOLDER MODULES, API FETCH TO GET THE MODULES OF THE CURRENT COURSE GOES HERE
-    const modules: IModuleDto[] = [
-        {
-            id: 1,
-            name: "Introduction to Programming",
-            description: "This module introduces the basics of programming and computational thinking.",
-            startDate: new Date(2024, 9, 1),
-            endDate: new Date(2024, 11, 15),
-            activities: [],
-        },
-        {
-            id: 2,
-            name: "Advanced Data Structures",
-            description: "A deep dive into complex data structures and algorithms.",
-            startDate: new Date(2024, 9, 17),
-            endDate: new Date(2025, 0, 31),
-            activities: [],
-        },
-        {
-            id: 3,
-            name: "Web Development",
-            description: "Learn how to build modern web applications using the latest frameworks.",
-            startDate: new Date(2025, 1, 1),
-            endDate: new Date(2025, 1, 10),
-            activities: [],
-        }
-    ];
+    if (course == null) {
+        return <ErrorModal isOpen={true}
+            onClose={clearError}>
+            <P>Course was null. Course object:</P>
+            <P>{course}</P>
+        </ErrorModal>
+    }
 
     return (
         <>

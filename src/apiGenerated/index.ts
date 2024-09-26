@@ -40,11 +40,15 @@ export interface IClient {
     /**
      * @return Success
      */
-    activities(id: number): Promise<ModuleDto>;
+    activities(id: number): Promise<ActivityDto[]>;
     /**
      * @return Success
      */
     course2(id: number): Promise<UserDto[]>;
+    /**
+     * @return Success
+     */
+    userAll(username: string): Promise<CourseDto[]>;
     /**
      * @param body (optional) 
      * @return Success
@@ -376,7 +380,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    activities(id: number, signal?: AbortSignal): Promise<ModuleDto> {
+    activities(id: number, signal?: AbortSignal): Promise<ActivityDto[]> {
         let url_ = this.baseUrl + "/api/modules/activities/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -403,7 +407,7 @@ export class Client implements IClient {
         });
     }
 
-    protected processActivities(response: AxiosResponse): Promise<ModuleDto> {
+    protected processActivities(response: AxiosResponse): Promise<ActivityDto[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -417,14 +421,21 @@ export class Client implements IClient {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = ModuleDto.fromJS(resultData200);
-            return Promise.resolve<ModuleDto>(result200);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ActivityDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<ActivityDto[]>(result200);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<ModuleDto>(null as any);
+        return Promise.resolve<ActivityDto[]>(null as any);
     }
 
     /**
@@ -486,6 +497,67 @@ export class Client implements IClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<UserDto[]>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    userAll(username: string, signal?: AbortSignal): Promise<CourseDto[]> {
+        let url_ = this.baseUrl + "/api/User/{username}";
+        if (username === undefined || username === null)
+            throw new Error("The parameter 'username' must be defined.");
+        url_ = url_.replace("{username}", encodeURIComponent("" + username));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUserAll(_response);
+        });
+    }
+
+    protected processUserAll(response: AxiosResponse): Promise<CourseDto[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(CourseDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<CourseDto[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<CourseDto[]>(null as any);
     }
 
     /**

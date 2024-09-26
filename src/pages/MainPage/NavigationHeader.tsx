@@ -26,7 +26,7 @@ export const NavigationHeader = () => {
     setMenuOpen(open);
   };
 
-  const username = "Peter62"; //PLACEHOLDER STRING, USERNAME TO BE FETCHED FROM LOGIN
+  const username = "Bo81"; //PLACEHOLDER STRING, USERNAME TO BE FETCHED FROM LOGIN
 
   return (
     <header className="fixed h-[var(--header-height)]
