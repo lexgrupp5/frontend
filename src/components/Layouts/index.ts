@@ -1,1 +1,1 @@
-export { FormLayout } from "./FormLayout";
+export { FormLayout as FormLayout } from "./FormLayout";
