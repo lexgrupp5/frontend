@@ -22,8 +22,6 @@ export const StudentPageProvider = (): ReactElement => {
                 await fetchModuleData(courseId);
                 await fetchActivityData(moduleId!);
                 await fetchParticipantData(courseId);
-                console.log("FROM PROVIDER:")
-                console.log(participantsData)
             } catch (e) {
                 console.log(e);
             }

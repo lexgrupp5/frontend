@@ -10,8 +10,7 @@ interface Props {
 export function CurrentModulesComponent({ modules }: Props): ReactElement {
     return (
         <>
-            <article className="flex flex-col justify-center items-center 
-                                h-full w-full
+            <article className="flex flex-col
                                 bg-indigo-600 p-3
                                 rounded border-2 border-black
                                 outline-offset-2 hover:outline-3

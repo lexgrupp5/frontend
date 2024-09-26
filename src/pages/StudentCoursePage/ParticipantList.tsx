@@ -5,8 +5,6 @@ import { useStudentPageContext } from "@/hooks";
 
 export const ParticipantList = (): ReactElement => {
     const { participants } = useStudentPageContext();
-    console.log("FROM LIST PAGE: ");
-    console.log(participants);
     return (
         <article
             className="flex flex-wrap p-4 max-w-7xl m-auto">
