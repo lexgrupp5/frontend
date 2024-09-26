@@ -3,7 +3,7 @@ import { FormEventHandler, ReactElement, useState } from "react";
 import { Input, SubmitButton, NavLink, NavigateToPath, H, P, TextColor, SecretInput } from "@/components";
 import { Path } from "@/constants";
 import { useAuthContext, useNavigateToPath } from "@/hooks";
-import { getDefaultPwd, getDefaultUsername } from "@/utils";
+import { getDefaultPwd, getDefaultUsername } from "@/services";
 
 export const RegisterForm = (): ReactElement => {
   const [username, setUsername] = useState(getDefaultUsername());

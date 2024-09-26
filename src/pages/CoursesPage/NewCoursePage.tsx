@@ -18,7 +18,7 @@ export const NewCoursePage = (): ReactElement => {
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     handleCloseResult();
-    await createCourse.fetchAuthData(new CourseCreateDto({
+    await createCourse.makeAuthRequest(new CourseCreateDto({
       name,
       description,
       startDate: new Date(startDate),

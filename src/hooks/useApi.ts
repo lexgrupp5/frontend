@@ -20,7 +20,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   const [tokens, setTokens] = useLocalStorage<string | null>(Storage.TOKEN, null);
 
   /** Api call used when no authorization is needed */
-  const fetchData = async (
+  const makeRequest = async (
     ...args: [...ApiArgs, AbortSignal?]
   ) => {
     try {
@@ -43,7 +43,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   };
 
   /** Api call used when authorization is needed */
-  const fetchAuthData = async (
+  const makeAuthRequest = async (
     ...args: [...ApiArgs, AbortSignal?]
   ) => {
     try {
@@ -72,5 +72,17 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     setError(null);
   };
 
-  return { data, pending, error, fetchData, fetchAuthData, clearError };
+  const clearData = () => {
+    setData(null);
+  };
+
+  return { 
+    data,
+    pending,
+    error,
+    makeRequest,
+    makeAuthRequest,
+    clearError,
+    clearData,
+  };
 };

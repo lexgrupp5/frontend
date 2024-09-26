@@ -1,12 +1,11 @@
-import { ReactElement, ReactNode, useEffect, useState } from "react";
+import { ReactElement, ReactNode, useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import { jwtDecode } from "jwt-decode";
 
 import { AuthContext, IAuthContext } from "@/contexts";
-// import { ITokenContainer } from "@/types";
-import { Storage } from "@/constants";
+import { Role, Storage } from "@/constants";
 import { useApi } from "@/hooks";
 import { api, UserAuthModel } from "@/api";
+import * as Service from "@/services";
 
 interface Props {
   children: ReactNode;
@@ -17,37 +16,28 @@ export const AuthProvider: React.FC<Props> = ({
 }): ReactElement => {
   const loginApi = useApi(api.login);
   const logoutApi = useApi(api.logout);
-  const [token, setTokens, clearTokens] = useLocalStorage<
-    string | null
-  >(Storage.TOKEN, null);
+  const [
+    token, setTokens, clearTokens
+  ] = useLocalStorage<string | null>(Storage.TOKEN, null);
   const isLoggedIn = token != null;
 
   useEffect(() => {
     setTokens(loginApi.data);
   }, [loginApi.data]);
 
-  useEffect(() => {
-    isAdmin();
-    isTokenExpired();
-  }, [token]);
-
   const login = async (userName: string, password: string) => {
-    await loginApi.fetchData(new UserAuthModel({userName, password}));
+    await loginApi.makeRequest(new UserAuthModel({userName, password}));
   };
 
-  const isAdmin = () => {
-    if (token == null) return true;
-    const decoded = jwtDecode(token);
-    if (decoded.exp == null) return true;
+  const isTeacher = () => {
+    if (token == null) {return false; }
+    const roles = Service.getUserRolesFromToken(token);
+    return roles.includes(Role.teacher);
   };
 
-  const isTokenExpired = () => {
-    if (token == null) return true;
-    const decoded = jwtDecode(token);
-    if (decoded.exp == null) return true;
-    const expire = decoded.exp * 1000;
-    const currentTimestamp = Date.now();
-    return expire < currentTimestamp;
+  const isExpiredToken = () => {
+    if (token == null) {return false; }
+    return Service.isExpiredToken(token);
   };
 
   const register = async (userName: string, password: string) => {
@@ -56,14 +46,14 @@ export const AuthProvider: React.FC<Props> = ({
 
   const logout = () => {
     if (token != null) {
-      logoutApi.fetchAuthData(token);
+      logoutApi.makeAuthRequest(token);
     }
-    // TODO Implement register logic
     clearTokens();
+    loginApi.clearData();
   };
 
   const constructAuthContextValues = (): IAuthContext => {
-    return { isLoggedIn, login, register, logout };
+    return { isLoggedIn, login, register, logout, isExpiredToken, isTeacher };
   };
 
   return (
