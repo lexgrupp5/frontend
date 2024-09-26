@@ -4,7 +4,6 @@ import { CustomApiException } from "@/api";
 import { useState } from "react";
 import { api } from "@/api";
 import { Storage } from "@/constants";
-import { ITokenContainer } from "@/types";
 
 export type IApiHook = ReturnType<typeof useApi>;
 
@@ -18,7 +17,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   const [data, setData] = useState<ApiReturnType | null>(null);
   const [pending, setPending] = useState<boolean>(false);
   const [error, setError] = useState<CustomApiException | null>(null);
-  const [tokens, setTokens] = useLocalStorage<ITokenContainer | null>(Storage.TOKEN, null);
+  const [tokens, setTokens] = useLocalStorage<string | null>(Storage.TOKEN, null);
 
   /** Api call used when no authorization is needed */
   const fetchData = async (

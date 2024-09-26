@@ -1,9 +1,12 @@
 import { ReactElement, ReactNode, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
+import { jwtDecode } from "jwt-decode";
 
 import { AuthContext, IAuthContext } from "@/contexts";
-import { ITokenContainer } from "@/types";
+// import { ITokenContainer } from "@/types";
 import { Storage } from "@/constants";
+import { useApi } from "@/hooks";
+import { api, UserAuthModel } from "@/api";
 
 interface Props {
   children: ReactNode;
@@ -12,35 +15,49 @@ interface Props {
 export const AuthProvider: React.FC<Props> = ({
   children
 }): ReactElement => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [tokens, setTokens, clearTokens] = useLocalStorage<
-  ITokenContainer | null>(Storage.TOKEN, null);
+  const loginApi = useApi(api.login);
+  const logoutApi = useApi(api.logout);
+  const [token, setTokens, clearTokens] = useLocalStorage<
+    string | null
+  >(Storage.TOKEN, null);
+  const isLoggedIn = token != null;
 
   useEffect(() => {
-    if (tokens === null) {
-      setIsLoggedIn(false);
-    } else {
-      // Todo Check Validation, e.g., expire time.
-      // Todo Check Role
-      setIsLoggedIn(true);
-    }
-  }, [tokens]);
+    setTokens(loginApi.data);
+  }, [loginApi.data]);
 
-  const login = async (username: string, password: string) => {
-    // TODO Implement login logic
-    setIsLoggedIn(true);
-    const mockToken: ITokenContainer = {
-      accessToken: "accessToken",
-      refreshToken: "refreshToken" 
-    };
-    setTokens(mockToken);
+  useEffect(() => {
+    isAdmin();
+    isTokenExpired();
+  }, [token]);
+
+  const login = async (userName: string, password: string) => {
+    await loginApi.fetchData(new UserAuthModel({userName, password}));
   };
 
-  const register = async (username: string, password: string) => {
+  const isAdmin = () => {
+    if (token == null) return true;
+    const decoded = jwtDecode(token);
+    if (decoded.exp == null) return true;
+  };
+
+  const isTokenExpired = () => {
+    if (token == null) return true;
+    const decoded = jwtDecode(token);
+    if (decoded.exp == null) return true;
+    const expire = decoded.exp * 1000;
+    const currentTimestamp = Date.now();
+    return expire < currentTimestamp;
+  };
+
+  const register = async (userName: string, password: string) => {
     // TODO Implement Register logic
   };
 
   const logout = () => {
+    if (token != null) {
+      logoutApi.fetchAuthData(token);
+    }
     // TODO Implement register logic
     clearTokens();
   };
@@ -55,3 +72,4 @@ export const AuthProvider: React.FC<Props> = ({
     </AuthContext.Provider>
   );
 };
+

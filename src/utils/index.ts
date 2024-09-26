@@ -1,11 +1,11 @@
 import { isDevelopment } from "@/config";
 
 export function getDefaultUsername() {
-  return isDevelopment() ? "dev_user" : "";
+  return isDevelopment() ? "Mattias31" : "";
 }
 
 export function getDefaultPwd() {
-  return isDevelopment() ? "password" : "";
+  return isDevelopment() ? "Qwerty1234" : "";
 }
 
 export function isType<ObjectType>(

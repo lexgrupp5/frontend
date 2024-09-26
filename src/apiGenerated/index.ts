@@ -13,54 +13,89 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } fr
 
 export interface IClient {
     /**
+     * @param body (optional) 
+     * @return OK
+     */
+    login(body?: UserAuthModel | undefined): Promise<string>;
+    /**
+     * @param access (optional) 
+     * @return OK
+     */
+    logout(access?: string | undefined): Promise<void>;
+    /**
+     * @param access (optional) 
+     * @return OK
+     */
+    refresh(access?: string | undefined): Promise<string>;
+    /**
      * @param searchText (optional) 
      * @param endDate (optional) 
      * @param startDate (optional) 
-     * @return Success
+     * @return OK
      */
     coursesAll(searchText?: string | undefined, endDate?: Date | undefined, startDate?: Date | undefined): Promise<CourseDto[]>;
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createCourse(body?: CourseCreateDto | undefined): Promise<CourseDto>;
     /**
-     * @return Success
+     * @return OK
      */
     getCourse(id: number): Promise<CourseDto>;
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     courses(id: number, body?: Operation[] | undefined): Promise<void>;
     /**
-     * @return Success
+     * @return OK
      */
     course(id: number): Promise<ModuleDto[]>;
     /**
-     * @return Success
+     * @return OK
      */
     activities(id: number): Promise<ActivityDto[]>;
     /**
-     * @return Success
+     * @param body (optional) 
+     * @return OK
+     */
+    modules(body?: ModuleCreateModel | undefined): Promise<ModuleForCreationDto>;
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    createactivity(body?: ActivityCreateModel | undefined): Promise<ActivityForCreationDto>;
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    module(id: number, body?: Operation[] | undefined): Promise<void>;
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    activity(id: number, body?: Operation[] | undefined): Promise<void>;
+    /**
+     * @return OK
      */
     course2(id: number): Promise<UserDto[]>;
     /**
-     * @return Success
+     * @return OK
      */
     userAll(username: string): Promise<CourseDto[]>;
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     userPATCH(username: string, body?: Operation[] | undefined): Promise<void>;
     /**
-     * @return Success
+     * @return OK
      */
     getAllStudents(): Promise<UserDto[]>;
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     userPOST(body?: UserForCreationDto | undefined): Promise<UserDto>;
 }
@@ -79,10 +114,170 @@ export class Client implements IClient {
     }
 
     /**
+     * @param body (optional) 
+     * @return OK
+     */
+    login(body?: UserAuthModel | undefined, signal?: AbortSignal): Promise<string> {
+        let url_ = this.baseUrl + "/api/auth/login";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processLogin(_response);
+        });
+    }
+
+    protected processLogin(response: AxiosResponse): Promise<string> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return Promise.resolve<string>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<string>(null as any);
+    }
+
+    /**
+     * @param access (optional) 
+     * @return OK
+     */
+    logout(access?: string | undefined, signal?: AbortSignal): Promise<void> {
+        let url_ = this.baseUrl + "/api/auth/logout";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "POST",
+            url: url_,
+            headers: {
+                "access": access !== undefined && access !== null ? "" + access : "",
+            },
+            signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processLogout(_response);
+        });
+    }
+
+    protected processLogout(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param access (optional) 
+     * @return OK
+     */
+    refresh(access?: string | undefined, signal?: AbortSignal): Promise<string> {
+        let url_ = this.baseUrl + "/api/auth/refresh";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "POST",
+            url: url_,
+            headers: {
+                "access": access !== undefined && access !== null ? "" + access : "",
+                "Accept": "text/plain"
+            },
+            signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRefresh(_response);
+        });
+    }
+
+    protected processRefresh(response: AxiosResponse): Promise<string> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return Promise.resolve<string>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<string>(null as any);
+    }
+
+    /**
      * @param searchText (optional) 
      * @param endDate (optional) 
      * @param startDate (optional) 
-     * @return Success
+     * @return OK
      */
     coursesAll(searchText?: string | undefined, endDate?: Date | undefined, startDate?: Date | undefined, signal?: AbortSignal): Promise<CourseDto[]> {
         let url_ = this.baseUrl + "/api/courses?";
@@ -153,7 +348,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createCourse(body?: CourseCreateDto | undefined, signal?: AbortSignal): Promise<CourseDto> {
         let url_ = this.baseUrl + "/api/courses";
@@ -208,7 +403,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getCourse(id: number, signal?: AbortSignal): Promise<CourseDto> {
         let url_ = this.baseUrl + "/api/courses/{id}";
@@ -263,7 +458,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     courses(id: number, body?: Operation[] | undefined, signal?: AbortSignal): Promise<void> {
         let url_ = this.baseUrl + "/api/courses/{id}";
@@ -317,7 +512,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     course(id: number, signal?: AbortSignal): Promise<ModuleDto[]> {
         let url_ = this.baseUrl + "/api/modules/course/{id}";
@@ -378,7 +573,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     activities(id: number, signal?: AbortSignal): Promise<ActivityDto[]> {
         let url_ = this.baseUrl + "/api/modules/activities/{id}";
@@ -439,10 +634,232 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @param body (optional) 
+     * @return OK
+     */
+    modules(body?: ModuleCreateModel | undefined, signal?: AbortSignal): Promise<ModuleForCreationDto> {
+        let url_ = this.baseUrl + "/api/modules";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            },
+            signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processModules(_response);
+        });
+    }
+
+    protected processModules(response: AxiosResponse): Promise<ModuleForCreationDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = ModuleForCreationDto.fromJS(resultData200);
+            return Promise.resolve<ModuleForCreationDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ModuleForCreationDto>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    createactivity(body?: ActivityCreateModel | undefined, signal?: AbortSignal): Promise<ActivityForCreationDto> {
+        let url_ = this.baseUrl + "/api/modules/createactivity";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            },
+            signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateactivity(_response);
+        });
+    }
+
+    protected processCreateactivity(response: AxiosResponse): Promise<ActivityForCreationDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = ActivityForCreationDto.fromJS(resultData200);
+            return Promise.resolve<ActivityForCreationDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ActivityForCreationDto>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    module(id: number, body?: Operation[] | undefined, signal?: AbortSignal): Promise<void> {
+        let url_ = this.baseUrl + "/api/modules/module/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+            },
+            signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processModule(_response);
+        });
+    }
+
+    protected processModule(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    activity(id: number, body?: Operation[] | undefined, signal?: AbortSignal): Promise<void> {
+        let url_ = this.baseUrl + "/api/modules/activity/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+            },
+            signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processActivity(_response);
+        });
+    }
+
+    protected processActivity(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
      */
     course2(id: number, signal?: AbortSignal): Promise<UserDto[]> {
-        let url_ = this.baseUrl + "/api/User/course/{id}";
+        let url_ = this.baseUrl + "/api/user/course/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -500,10 +917,10 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     userAll(username: string, signal?: AbortSignal): Promise<CourseDto[]> {
-        let url_ = this.baseUrl + "/api/User/{username}";
+        let url_ = this.baseUrl + "/api/user/{username}";
         if (username === undefined || username === null)
             throw new Error("The parameter 'username' must be defined.");
         url_ = url_.replace("{username}", encodeURIComponent("" + username));
@@ -562,10 +979,10 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     userPATCH(username: string, body?: Operation[] | undefined, signal?: AbortSignal): Promise<void> {
-        let url_ = this.baseUrl + "/api/User/{username}";
+        let url_ = this.baseUrl + "/api/user/{username}";
         if (username === undefined || username === null)
             throw new Error("The parameter 'username' must be defined.");
         url_ = url_.replace("{username}", encodeURIComponent("" + username));
@@ -616,10 +1033,10 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getAllStudents(signal?: AbortSignal): Promise<UserDto[]> {
-        let url_ = this.baseUrl + "/api/User";
+        let url_ = this.baseUrl + "/api/user";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -675,10 +1092,10 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     userPOST(body?: UserForCreationDto | undefined, signal?: AbortSignal): Promise<UserDto> {
-        let url_ = this.baseUrl + "/api/User";
+        let url_ = this.baseUrl + "/api/user";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -730,8 +1147,57 @@ export class Client implements IClient {
     }
 }
 
+export class ActivityCreateModel implements IActivityCreateModel {
+    moduleId?: number;
+    description?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
+
+    constructor(data?: IActivityCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.moduleId = _data["moduleId"];
+            this.description = _data["description"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ActivityCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ActivityCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["moduleId"] = this.moduleId;
+        data["description"] = this.description;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IActivityCreateModel {
+    moduleId?: number;
+    description?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
+}
+
 export class ActivityDto implements IActivityDto {
     id?: number;
+    moduleId?: number;
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
@@ -748,6 +1214,7 @@ export class ActivityDto implements IActivityDto {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.moduleId = _data["moduleId"];
             this.description = _data["description"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
@@ -764,6 +1231,7 @@ export class ActivityDto implements IActivityDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["moduleId"] = this.moduleId;
         data["description"] = this.description;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
@@ -773,6 +1241,55 @@ export class ActivityDto implements IActivityDto {
 
 export interface IActivityDto {
     id?: number;
+    moduleId?: number;
+    description?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
+}
+
+export class ActivityForCreationDto implements IActivityForCreationDto {
+    moduleId?: number;
+    description?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
+
+    constructor(data?: IActivityForCreationDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.moduleId = _data["moduleId"];
+            this.description = _data["description"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ActivityForCreationDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ActivityForCreationDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["moduleId"] = this.moduleId;
+        data["description"] = this.description;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IActivityForCreationDto {
+    moduleId?: number;
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
@@ -878,8 +1395,61 @@ export interface ICourseDto {
     endDate?: Date;
 }
 
+export class ModuleCreateModel implements IModuleCreateModel {
+    name?: string | undefined;
+    courseId?: number;
+    description?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
+
+    constructor(data?: IModuleCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.courseId = _data["courseId"];
+            this.description = _data["description"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ModuleCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ModuleCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["courseId"] = this.courseId;
+        data["description"] = this.description;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IModuleCreateModel {
+    name?: string | undefined;
+    courseId?: number;
+    description?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
+}
+
 export class ModuleDto implements IModuleDto {
     id?: number;
+    courseId?: number;
     name?: string | undefined;
     description?: string | undefined;
     startDate?: Date;
@@ -898,6 +1468,7 @@ export class ModuleDto implements IModuleDto {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.courseId = _data["courseId"];
             this.name = _data["name"];
             this.description = _data["description"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
@@ -920,6 +1491,7 @@ export class ModuleDto implements IModuleDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["courseId"] = this.courseId;
         data["name"] = this.name;
         data["description"] = this.description;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
@@ -935,11 +1507,64 @@ export class ModuleDto implements IModuleDto {
 
 export interface IModuleDto {
     id?: number;
+    courseId?: number;
     name?: string | undefined;
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
     activities?: ActivityDto[] | undefined;
+}
+
+export class ModuleForCreationDto implements IModuleForCreationDto {
+    name?: string | undefined;
+    courseId?: number;
+    description?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
+
+    constructor(data?: IModuleForCreationDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.courseId = _data["courseId"];
+            this.description = _data["description"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ModuleForCreationDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ModuleForCreationDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["courseId"] = this.courseId;
+        data["description"] = this.description;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IModuleForCreationDto {
+    name?: string | undefined;
+    courseId?: number;
+    description?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
 }
 
 export class Operation implements IOperation {
@@ -1002,6 +1627,46 @@ export enum OperationType {
     _4 = 4,
     _5 = 5,
     _6 = 6,
+}
+
+export class UserAuthModel implements IUserAuthModel {
+    userName!: string;
+    password!: string;
+
+    constructor(data?: IUserAuthModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userName = _data["userName"];
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any): UserAuthModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserAuthModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userName"] = this.userName;
+        data["password"] = this.password;
+        return data;
+    }
+}
+
+export interface IUserAuthModel {
+    userName: string;
+    password: string;
 }
 
 export class UserDto implements IUserDto {
