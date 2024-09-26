@@ -21,6 +21,9 @@ export const MainRoutes = (): ReactElement => {
         <Route path={Path.STUDENTHOME} element={<StudentPageProvider />}>
           <Route path=":username" element={<Pages.StudentLandingPage />} />
         </Route>
+        <Route path={Path.STUDENTCOURSE} element={<StudentPageProvider />}>
+          <Route path=":id" element={<Pages.StudentCoursePage />} />
+        </Route>
       </Route>
       <Route path={Path.UNKNOWN} element={<NavigateToPath to={Path.INDEX} />} />
     </>
