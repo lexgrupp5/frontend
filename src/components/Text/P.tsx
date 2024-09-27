@@ -11,8 +11,11 @@ interface Props {
 export const P: React.FC<Props> = ({
   children,
   color = TextColor.LIGHT,
-  className = "" }): ReactElement => {
-  const derivedClassName = `text-${color} ${className ? className : ""}`;
+  className
+}): ReactElement => {
+  const derivedClassName = `text-${color} overflow-hidden break-all
+    ${className ? className : ""}`;
+  
   return (
     <p className={derivedClassName}>
       {children}

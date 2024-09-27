@@ -60,12 +60,9 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
         tokens,
         ...args
       );
-      console.log('result', result)
       setData(result);
       return result;
     } catch (err) {
-      
-      console.log('error', err)
       if (err instanceof CustomApiException) {
         setError(err);
       } else {

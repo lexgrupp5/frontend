@@ -3,7 +3,6 @@ const StaticPath = {
   LOGIN: "login",
   REGISTER: "register",
   COURSES: "courses",
-  CURRENT_COURSE: "current-course",
   PROFILE: "profile",
   STUDENTHOME: "student-homepage",
   STUDENTCOURSE: "student-coursepage",

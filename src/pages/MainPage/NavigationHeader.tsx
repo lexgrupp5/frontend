@@ -41,9 +41,6 @@ export const NavigationHeader = () => {
           <NavLink to={StudentPath.constructStudentHomePath(username)} className={linkClass}>
             StudentLanding
           </NavLink>
-          <NavLink to={Path.CURRENT_COURSE} className={linkClass}>
-            Current
-          </NavLink>
           <NavLink to={Path.COURSES} className={linkClass}>
             Courses
           </NavLink>

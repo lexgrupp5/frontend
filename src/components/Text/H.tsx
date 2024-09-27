@@ -16,11 +16,12 @@ export const H: React.FC<Props> = ({
   className = ""
 }) => {
   const HeaderTag = `h${size}` as keyof JSX.IntrinsicElements;
-
+  const derivedClasName = `overflow-hidden break-all 
+    ${className ? className : ""}`;
   const headerSizeClass = HeaderSize[size] ?? HeaderSize[1];
 
   return (
-    <HeaderTag className={`text-${color} ${headerSizeClass} ${className}`}>
+    <HeaderTag className={`text-${color} ${headerSizeClass} ${derivedClasName}`}>
       {children}
     </HeaderTag>
   );
