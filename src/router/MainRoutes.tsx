@@ -14,9 +14,8 @@ export const MainRoutes = (): ReactElement => {
         <Route path={Path.COURSES} element={<CoursesPageProvider />} >
           <Route index element={<Pages.CoursesPage />} />
           <Route path="new" element={<Pages.NewCoursePage />} />
-          <Route path=":id" element={<Pages.SelectedCoursePage />} />
+          <Route path=":id" element={<Pages.CurrentCoursePage />} />
         </Route>
-        <Route path={Path.CURRENT_COURSE} element={<Pages.CurrentCoursePage />} />
         <Route path={Path.PROFILE} element={<Pages.ProfilePage />} />
         <Route path={Path.STUDENTHOME} element={<StudentPageProvider />}>
           <Route path=":username" element={<Pages.StudentLandingPage />} />
