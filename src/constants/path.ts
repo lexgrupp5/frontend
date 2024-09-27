@@ -48,4 +48,9 @@ export const StudentCoursePath = {
   ...StudentCourseDynamicPath,
 } as const;
 
-export type PathType = StaticPathType | CoursesDynamicPathType | StudentDynamicPathType | StudentCourseDynamicPathType;
+export type PathType = (
+  StaticPathType | 
+  CoursesDynamicPathType | 
+  StudentDynamicPathType | 
+  StudentCourseDynamicPathType
+);

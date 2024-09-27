@@ -2,11 +2,15 @@ import { ReactElement } from "react";
 
 import { CourseItem } from "./CourseItem";
 import { P } from "@/components";
-import { useCoursePageContext } from "@/hooks";
+import { ICourseDto } from "@/apiGenerated";
 
-export const CourseList = (): ReactElement => {
-  const { courses } = useCoursePageContext();
+interface Props {
+  courses: ICourseDto[];
+}
 
+export const CourseList: React.FC<Props> = ({
+  courses
+}): ReactElement => {
   return (
     <article className="flex flex-wrap p-4 max-w-7xl m-auto">
       {courses.length === 0 && <div className="w-full flex justify-center p-8">

@@ -7,7 +7,7 @@ import { getAPI } from "@/config";
 import { CoursesController } from "./CoursesController";
 
 export const CoursesPage = (): ReactElement => {
-  const { pending, error, clearError } = useCoursePageContext();
+  const { courses, pending, error, clearError } = useCoursePageContext();
   
   if (pending) {
     return <div className="h-[calc(100vh-10rem)]"><Spinner /></div>;
@@ -24,7 +24,7 @@ export const CoursesPage = (): ReactElement => {
   return (
     <>
       <CoursesController />
-      <CourseList />
+      <CourseList courses={courses}/>
     </>
   );
 };
