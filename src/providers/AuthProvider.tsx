@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, useEffect } from "react";
+import { ReactElement, ReactNode } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 import { AuthContext, IAuthContext } from "@/contexts";
@@ -17,22 +17,21 @@ export const AuthProvider: React.FC<Props> = ({
   const loginApi = useApi(api.login);
   const logoutApi = useApi(api.logout);
   const [
-    token, setTokens, clearTokens
+    token, setToken, clearTokens
   ] = useLocalStorage<string | null>(Storage.TOKEN, null);
   const isLoggedIn = token != null;
 
-  useEffect(() => {
-    setTokens(loginApi.data);
-  }, [loginApi.data]);
-
   const login = async (userName: string, password: string) => {
-    await loginApi.makeRequest(new UserAuthModel({userName, password}));
+    setToken(await loginApi.makeRequest(new UserAuthModel({
+      userName,
+      password
+    })));
   };
 
   const isTeacher = () => {
     if (token == null) {return false; }
-    const roles = Service.getUserRolesFromToken(token);
-    return roles.includes(Role.teacher);
+    const role = Service.getUserRolesFromToken(token);
+    return role === Role.teacher;
   };
 
   const isExpiredToken = () => {
@@ -52,12 +51,12 @@ export const AuthProvider: React.FC<Props> = ({
     loginApi.clearData();
   };
 
-  const constructAuthContextValues = (): IAuthContext => {
+  const constructAuthContext = (): IAuthContext => {
     return { isLoggedIn, login, register, logout, isExpiredToken, isTeacher };
   };
 
   return (
-    <AuthContext.Provider value={constructAuthContextValues()}>
+    <AuthContext.Provider value={constructAuthContext()}>
       {children}
     </AuthContext.Provider>
   );
