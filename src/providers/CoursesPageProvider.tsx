@@ -14,7 +14,6 @@ export const CoursesPageProvider = (): React.ReactElement => {
     (async () => {
       try {
         await fetchAuthData();
-        console.log(data);
       } catch (e) {
         console.log(e);
       }

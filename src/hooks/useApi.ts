@@ -24,6 +24,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     ...args: [...ApiArgs, AbortSignal?]
   ) => {
     try {
+      setError(null);
       setPending(true);
       const result = await api.makeApiRequest<ApiReturnType, ApiArgs>(
         apiCall,
@@ -31,12 +32,14 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
         ...args
       );
       setData(result);
+      return result;
     } catch (err) {
       if (err instanceof CustomApiException) {
         setError(err);
       } else {
         setError(new CustomApiException("Unknown error"));
       }
+      return null;
     } finally {
       setPending(false);
     }
@@ -47,6 +50,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     ...args: [...ApiArgs, AbortSignal?]
   ) => {
     try {
+      setError(null);
       setPending(true);
       if (tokens === null) {
         throw new CustomApiException("Token have not been set");
@@ -56,13 +60,18 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
         tokens,
         ...args
       );
+      console.log('result', result)
       setData(result);
+      return result;
     } catch (err) {
+      
+      console.log('error', err)
       if (err instanceof CustomApiException) {
         setError(err);
       } else {
         setError(new CustomApiException("Unknown error"));
       }
+      return null;
     } finally {
       setPending(false);
     }

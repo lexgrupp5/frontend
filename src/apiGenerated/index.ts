@@ -38,7 +38,7 @@ export interface IClient {
      * @param body (optional) 
      * @return OK
      */
-    createCourse(body?: CourseCreateDto | undefined): Promise<CourseDto>;
+    coursesPOST(body?: CourseCreateDto | undefined): Promise<CourseDto>;
     /**
      * @return OK
      */
@@ -47,7 +47,7 @@ export interface IClient {
      * @param body (optional) 
      * @return OK
      */
-    courses(id: number, body?: Operation[] | undefined): Promise<void>;
+    coursesPATCH(id: number, body?: Operation[] | undefined): Promise<void>;
     /**
      * @return OK
      */
@@ -350,7 +350,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return OK
      */
-    createCourse(body?: CourseCreateDto | undefined, signal?: AbortSignal): Promise<CourseDto> {
+    coursesPOST(body?: CourseCreateDto | undefined, signal?: AbortSignal): Promise<CourseDto> {
         let url_ = this.baseUrl + "/api/courses";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -374,11 +374,11 @@ export class Client implements IClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCreateCourse(_response);
+            return this.processCoursesPOST(_response);
         });
     }
 
-    protected processCreateCourse(response: AxiosResponse): Promise<CourseDto> {
+    protected processCoursesPOST(response: AxiosResponse): Promise<CourseDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -460,7 +460,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return OK
      */
-    courses(id: number, body?: Operation[] | undefined, signal?: AbortSignal): Promise<void> {
+    coursesPATCH(id: number, body?: Operation[] | undefined, signal?: AbortSignal): Promise<void> {
         let url_ = this.baseUrl + "/api/courses/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -486,11 +486,11 @@ export class Client implements IClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCourses(_response);
+            return this.processCoursesPATCH(_response);
         });
     }
 
-    protected processCourses(response: AxiosResponse): Promise<void> {
+    protected processCoursesPATCH(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -515,7 +515,7 @@ export class Client implements IClient {
      * @return OK
      */
     course(id: number, signal?: AbortSignal): Promise<ModuleDto[]> {
-        let url_ = this.baseUrl + "/api/modules/course/{id}";
+        let url_ = this.baseUrl + "/api/modules/{id}/course";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -576,7 +576,7 @@ export class Client implements IClient {
      * @return OK
      */
     activities(id: number, signal?: AbortSignal): Promise<ActivityDto[]> {
-        let url_ = this.baseUrl + "/api/modules/activities/{id}";
+        let url_ = this.baseUrl + "/api/modules/{id}/activities";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));

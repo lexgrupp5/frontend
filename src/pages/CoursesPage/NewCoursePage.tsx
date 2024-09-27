@@ -8,7 +8,7 @@ import { FormEventHandler, ReactElement, useState } from "react";
 export const NewCoursePage = (): ReactElement => {
   const { updateSelectedCourse } = useCoursePageContext();
   const navigate = useNavigateToPath();
-  const createCourse = useApi(api.createCourse);
+  const createCourse = useApi(api.coursesPOST);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
