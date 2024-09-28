@@ -38,7 +38,7 @@ export const Input: React.FC<InputProps> = ({
               outline-none focus:outline-indigo-500"
             onPress={onSelectIcon}
             onKeyDown={e => { if (e.key === "Enter") { onSelectIcon(); }}}>
-            <IconContainer className="h-6 w-6 text-gray-600">
+            <IconContainer className="size-6 text-gray-600">
               {icon}
             </IconContainer>
           </Button>

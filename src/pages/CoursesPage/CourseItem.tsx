@@ -1,18 +1,15 @@
-import { ReactElement, useState } from "react";
-import { FaEdit } from "react-icons/fa";
+import { ReactElement } from "react";
 
-import { H, P, TextColor, IconContainer, UnstyledButton } from "@/components";
+import { H, P, TextColor } from "@/components";
 import { ICourseDto } from "@/api";
 import { useCoursePageContext, useNavigateToPath } from "@/hooks";
 import { Path } from "@/constants";
-import { CourseModal } from "./CourseModal";
 
 interface Props {
   course: ICourseDto;
 }
 
 export const CourseItem: React.FC<Props> = ({ course }): ReactElement => {
-  const [viewCourse, setViewCourse] = useState(false);
   const { updateSelectedCourse } = useCoursePageContext();
   const navigate = useNavigateToPath();
 
@@ -24,9 +21,6 @@ export const CourseItem: React.FC<Props> = ({ course }): ReactElement => {
 
   return (
     <>
-      {viewCourse && <CourseModal isOpen={viewCourse}
-        course={course}
-        onClose={() => { setViewCourse(false); }}/>}
       <article
         className="flex h-full flex-col justify-between
         bg-indigo-600 p-3
@@ -34,19 +28,11 @@ export const CourseItem: React.FC<Props> = ({ course }): ReactElement => {
         outline-offset-2 hover:outline-3
         hover:outline hover:outline-indigo-50
         cursor-pointer overflow-y-auto"
-        onClick={() => { setViewCourse(true); }}>
+        onClick={navigateToSelectedCoursePage}>
         <H size={4}>{course.name}</H>
-        <div className="w-full flex justify-between items-end">
-          <div>
-            <P color={TextColor.MEDIUM}>Start: {course.startDate?.toDateString()}</P>
-            <P color={TextColor.MEDIUM}>End: {course.endDate?.toDateString()}</P>
-          </div>
-          <UnstyledButton onPress={navigateToSelectedCoursePage}> 
-            <IconContainer className="flex items-center justify-center
-              p-2 size-9 text-gray-200
-              rounded-full hover:bg-indigo-950">
-              <FaEdit />
-            </IconContainer></UnstyledButton>
+        <div>
+          <P color={TextColor.MEDIUM}>Start: {course.startDate?.toDateString()}</P>
+          <P color={TextColor.MEDIUM}>End: {course.endDate?.toDateString()}</P>
         </div>
       </article>
     </>

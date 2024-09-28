@@ -35,17 +35,26 @@ export const SearchFilterInput = (): ReactElement => {
 
   return (
     <div ref={inputContainerRef}
-      className="relative flex items-cente p-2 rounded-t-lg rounded-b-lg bg-white">
-      <Input type="text"
-        className="py-2 px-4 w-full border-none outline-none focus:outline-none"
-        placeholder="search text..."
-        maxLength={100}
-        icon={<MdFilterList className="text-black" />}
-        onSelectIcon={toggleFilterMenu}
-        onFocus={selectSearchFocus}
-        value={searchAndFilterDTO.searchText ?? ""}
-        onChange={e => { updateSearchText(e.target.value); }} />
-      <UnstyledButton className="focus:outline-indigo-500"
+      className="relative flex flex-col justify-between items-center
+      p-2 rounded-t-lg rounded-b-lg
+      w-full bg-white
+      min-[350px]:flex-row
+      sm:w-auto">
+      <div className="flex-grow">
+        <Input type="text"
+          className="py-2 px-4
+          border-none outline-none focus:outline-none"
+          placeholder="search text..."
+          maxLength={100}
+          icon={<MdFilterList className="text-black" />}
+          onSelectIcon={toggleFilterMenu}
+          onFocus={selectSearchFocus}
+          value={searchAndFilterDTO.searchText ?? ""}
+          onChange={e => { updateSearchText(e.target.value); }} />
+      </div>
+      <UnstyledButton 
+        className="flex-shrink-0 
+        focus:outline-indigo-500"
         onPress={handleSearch}>
         <IconContainer className="size-10 p-2 border-none focus:outline-none">
           <FaSearch />
@@ -53,7 +62,7 @@ export const SearchFilterInput = (): ReactElement => {
       </UnstyledButton>
       <div ref={filterMenuRef} className="absolute top-full left-0 right-0 
         rounded-b-lg p-2 bg-white
-        z-10 hidden">  
+        z-10 hidden">
         <FilterMenu
           searchAndFilterDTO={searchAndFilterDTO}
           updateSearchAndFilterDTO={updateSearchAndFilterDTO} />

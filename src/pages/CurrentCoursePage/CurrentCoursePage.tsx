@@ -4,11 +4,12 @@ import { H, P, TextColor } from "@/components";
 import { useApi, useCoursePageContext } from "@/hooks";
 import { Sidebar } from "./Sidebar";
 import { api, type ModuleDto } from "@/api";
-import { ModuleDrawer } from "./ModuleDrawer";
+import { ModulePanel } from "./ModulePanel";
 
 export const CurrentCoursePage = (): ReactElement => {
   const sidebarWidth = 300;
-  const [sidebarOpen, setSidebarOpen] = useState(768 < window.innerWidth);
+  const isLargeScreen = window.innerWidth > 768;
+  const [sidebarOpen, setSidebarOpen] = useState(isLargeScreen);
   const { selectedCourse } = useCoursePageContext();
   const modulesApi = useApi(api.course);
   const activitiesApi = useApi(api.activities);
@@ -51,10 +52,10 @@ export const CurrentCoursePage = (): ReactElement => {
           if (module.id == null) { return <></>; }
           const id = module.id;
           return <div key={id}>
-            <ModuleDrawer
+            <ModulePanel
               module={module}
               open={openModules[module.id]}
-              toggleOpen={() => toggleModuleOpen(id)}/>
+              toggleOpen={() => toggleModuleOpen(id)} />
           </div>;
         })}
         <div className="h-[1px] bg-white mx-2" />
@@ -70,8 +71,9 @@ export const CurrentCoursePage = (): ReactElement => {
         updateOpen={updateSidebarOpen}
         width={sidebarWidth}>
         {constructSidebar()}
-      </Sidebar>    
-      <div className={`p-16 md:ml-[${sidebarOpen ? sidebarWidth : 0}px]`}>
+      </Sidebar>
+      <div style={{ marginLeft: `${sidebarOpen && isLargeScreen ? 300 : 0}px` }}
+        className={"p-16"}>
         <H size={2} color={TextColor.DARK_X}>Use this page to view and update course: '{selectedCourse.name}'</H>
         <br />
         <H size={4} color={TextColor.DARK_X}>{selectedCourse.name}</H>
