@@ -58,7 +58,7 @@ export const CurrentCoursePage = (): ReactElement => {
               toggleOpen={() => toggleModuleOpen(id)} />
           </div>;
         })}
-        <div className="h-[1px] bg-white mx-2" />
+        <div className="border-t" />
       </>
     );
   };

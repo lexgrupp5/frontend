@@ -25,16 +25,16 @@ export const Sidebar: React.FC<Props> = ({
       {!open
         ? <UnstyledButton
           className="fixed z-50 min-h-screen-header
-        flex flex-col justify-start"
+          flex flex-col justify-start"
           onPress={() => { updateOpen(true); }}>
-          <IconContainer className="size-12 m-2 p-2 
+          <IconContainer className="size-12 m-2 p-2
           bg-indigo-300 rounded-full">
             <TfiMenuAlt />
           </IconContainer>
         </UnstyledButton>
         : <aside style={{ width: `${ width != null ? width : defaultWidth}px` }} 
-          className="fixed z-50 min-h-screen-header
-          bg-indigo-900 overflow-hidden">
+          className="fixed z-50 h-screen-header
+          bg-indigo-900 overflow-y-auto">
           <UnstyledButton onPress={() => { updateOpen(false); }}>
             <IconContainer className={"text-white size-8 m-4"}>
               <FaTimes />

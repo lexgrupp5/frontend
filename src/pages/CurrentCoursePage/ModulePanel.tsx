@@ -17,10 +17,11 @@ export const ModulePanel: React.FC<Props> = ({
 }): ReactElement => {
   return (
     <article key={module.id}
-      className={`border-t mx-2 ${open && "bg-indigo-950"} my-2 cursor-pointer`}
+      className={`border-t  ${open && "bg-indigo-950"}
+      cursor-pointer hover:bg-indigo-950 pb-1`}
       onClick={toggleOpen}>
       <div className="flex justify-between items-center p-4 overflow-hidden">
-        <H size={5}>{module.name}</H>
+        <H size={4}>{module.name}</H>
         {!open
           ?
           <IconContainer
@@ -34,7 +35,7 @@ export const ModulePanel: React.FC<Props> = ({
       {open && module.activities != null && module.activities.map(activity => (
         <div key={activity.id}
           className="flex justify-start items-start p-2 m-2 
-          cursor-pointer">
+          cursor-pointe">
           <P color={TextColor.MEDIUM}>🚀 {activity.description}</P>
         </div>
       ))}
