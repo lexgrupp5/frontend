@@ -1,8 +1,8 @@
 import { useOutletContext } from "react-router-dom";
 import { ICoursesPageContext } from "@/contexts";
 
-export type ICoursePageContextHook = ReturnType<typeof useCoursePageContext>;
+export type ICoursePageContextHook = ReturnType<typeof useCoursesPageContext>;
 
-export const useCoursePageContext = () => {
+export const useCoursesPageContext = () => {
   return useOutletContext<ICoursesPageContext>();
 };

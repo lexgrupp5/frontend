@@ -4,7 +4,7 @@ import { FaSearch } from "react-icons/fa";
 
 import { IconContainer, Input, UnstyledButton } from "@/components";
 import { FilterMenu } from "./FilterMenu";
-import { useCoursePageContext } from "@/hooks";
+import { useCoursesPageContext } from "@/hooks";
 
 export const SearchFilterInput = (): ReactElement => {
   const filterMenuRef = useRef<HTMLDivElement>(null);
@@ -13,7 +13,7 @@ export const SearchFilterInput = (): ReactElement => {
     searchAndFilterDTO,
     updateSearchAndFilterDTO,
     fetchCourses
-  } = useCoursePageContext();
+  } = useCoursesPageContext();
 
   const handleSearch = () => {
     fetchCourses(searchAndFilterDTO);

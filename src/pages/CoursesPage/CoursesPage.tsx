@@ -1,13 +1,13 @@
 import { ReactElement } from "react";
 
-import { useCoursePageContext } from "@/hooks";
+import { useCoursesPageContext } from "@/hooks";
 import { CourseList } from "./CourseList";
 import { P, Spinner, ErrorModal } from "@/components";
 import { getAPI } from "@/config";
 import { CoursesController } from "./CoursesController";
 
 export const CoursesPage = (): ReactElement => {
-  const { courses, pending, error, clearError } = useCoursePageContext();
+  const { courses, pending, error, clearError } = useCoursesPageContext();
   
   if (pending) {
     return <div className="h-[calc(100vh-10rem)]"><Spinner /></div>;
