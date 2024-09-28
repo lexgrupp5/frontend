@@ -14,11 +14,16 @@ export const CoursesController = (): ReactElement => {
   };
 
   return (
-    <article className="flex flex-row pt-16 justify-center items-center gap-6">
+    <article className="flex flex-col-reverse pt-16 justify-center items-center
+      gap-6 px-6
+      sm:flex-row">
       <SearchFilterInput />
-      <UnstyledButton 
-        className="display flex items-center 
-        py-2 pl-4 pr-2 rounded-t-lg rounded-b-lg bg-white"
+      <UnstyledButton
+        className="display flex justify-center items-center
+        w-full py-2 pl-4 pr-2 
+        rounded-t-lg rounded-b-lg 
+        bg-white
+        sm:w-auto"
         onPress={navigateToSelectedCoursePage}>
         <P color={TextColor.DARK}>Create new course</P>
         <IconContainer className="size-10 p-2 border-none focus:outline-none">

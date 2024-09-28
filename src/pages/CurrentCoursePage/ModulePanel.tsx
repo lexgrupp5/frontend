@@ -10,34 +10,32 @@ interface Props {
   toggleOpen: () => void;
 }
 
-export const ModuleDrawer: React.FC<Props> = ({
+export const ModulePanel: React.FC<Props> = ({
   module,
   open,
   toggleOpen
 }): ReactElement => {
   return (
     <article key={module.id}
-      className="border-t mx-2">
+      className={`border-t mx-2 ${open && "bg-indigo-950"} my-2 cursor-pointer`}
+      onClick={toggleOpen}>
       <div className="flex justify-between items-center p-4 overflow-hidden">
         <H size={5}>{module.name}</H>
         {!open
-          ? <div onClick={toggleOpen}>
-            <IconContainer
-              className="text-white size-4 cursor-pointer"><FaChevronRight />
-            </IconContainer>
-          </div>
-          : <div onClick={toggleOpen}>
-            <IconContainer
-              className="text-white size-4 cursor-pointer"><FaChevronDown />
-            </IconContainer>
-          </div>
+          ?
+          <IconContainer
+            className="text-white size-4 cursor-pointer"><FaChevronRight />
+          </IconContainer>
+          : <IconContainer
+            className="text-white size-4 cursor-pointer"><FaChevronDown />
+          </IconContainer>
         }
       </div>
       {open && module.activities != null && module.activities.map(activity => (
         <div key={activity.id}
-          className="flex justify-start items-start p-2 
-          cursor-pointer hover:bg-indigo-950">
-          <P color={TextColor.MEDIUM}>{activity.description}</P>
+          className="flex justify-start items-start p-2 m-2 
+          cursor-pointer">
+          <P color={TextColor.MEDIUM}>🚀 {activity.description}</P>
         </div>
       ))}
     </article>

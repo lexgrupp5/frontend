@@ -19,6 +19,7 @@ export const Sidebar: React.FC<Props> = ({
   updateOpen
 }): ReactElement => {
   const defaultWidth = 300;
+  
   return (
     <>
       {!open
@@ -31,8 +32,9 @@ export const Sidebar: React.FC<Props> = ({
             <TfiMenuAlt />
           </IconContainer>
         </UnstyledButton>
-        : <aside className={`fixed z-50 min-h-screen-header
-          w-[${width != null ? width : defaultWidth}px] bg-indigo-900 overflow-hidden`}>
+        : <aside style={{ width: `${ width != null ? width : defaultWidth}px` }} 
+          className="fixed z-50 min-h-screen-header
+          bg-indigo-900 overflow-hidden">
           <UnstyledButton onPress={() => { updateOpen(false); }}>
             <IconContainer className={"text-white size-8 m-4"}>
               <FaTimes />
