@@ -5,8 +5,8 @@ export interface IAuthContext {
 	login: (username: string, password: string) => Promise<void>;
 	register: (username: string, password: string) => Promise<void>;
 	logout: () => void;
-	isTeacher: () => void;
-	isExpiredToken: () => void;
+	isTeacher: () => boolean;
+	isExpiredToken: () => boolean;
 }
 
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);

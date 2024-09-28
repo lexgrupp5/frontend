@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 
 import { H, P, TextColor } from "@/components";
 import { ICourseDto } from "@/api";
-import { useCoursePageContext, useNavigateToPath } from "@/hooks";
+import { useCoursesPageContext, useNavigateToPath } from "@/hooks";
 import { Path } from "@/constants";
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const CourseItem: React.FC<Props> = ({ course }): ReactElement => {
-  const { updateSelectedCourse } = useCoursePageContext();
+  const { updateSelectedCourse } = useCoursesPageContext();
   const navigate = useNavigateToPath();
 
   const navigateToSelectedCoursePage = () => {

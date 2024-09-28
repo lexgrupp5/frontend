@@ -44,7 +44,7 @@ export const CourseSidebar: React.FC<Props> = ({
     setOpen(open);
   };
 
-  const constructSidebarContent = () => {
+  const constructContent = () => {
     return (
       <>
         <div className="border-b p-4">
@@ -68,7 +68,7 @@ export const CourseSidebar: React.FC<Props> = ({
     <Sidebar open={open}
       updateOpen={updateSidebarOpen}
       width={sidebarWidth}>
-      {constructSidebarContent()}
+      {constructContent()}
     </Sidebar>
   );
 };

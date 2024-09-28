@@ -5,19 +5,21 @@ import { FaTimes } from "react-icons/fa";
 interface BaseModalProps {
   isOpen: boolean;
   children?: ReactNode;
-  onClose: () => void;
   bgColor: string;
   iconColor: string;
   iconBgHoverColor: string;
+  fixedSize?: boolean
+  onClose: () => void;
 }
 
 export const BaseModal: React.FC<BaseModalProps> = ({
   isOpen,
   children,
-  onClose,
   bgColor,
   iconColor,
   iconBgHoverColor,
+  fixedSize,
+  onClose,
 }) => {
   if (!isOpen) return null;
 
@@ -25,13 +27,16 @@ export const BaseModal: React.FC<BaseModalProps> = ({
     <article
       className="fixed inset-0 z-50
       flex items-center justify-center 
-      bg-black bg-opacity-90">
-      <div className={`max-h-[80vh] max-w-[90vw] lg:max-w-[50vw]
+      bg-black/20">
+      <div className={ `${fixedSize
+        ? "h-[80vh] w-[90vw] lg:w-[50vw]"
+        : "max-h-[80vh] max-w-[90vw] lg:max-w-[50vw]"}
       ${bgColor} rounded-lg
       border border-indigo-50
       overflow-y-auto`}>
         <div className="sticky top-2 pr-2 flex flex-row-reverse w-full">
-          <NativeButton className="focus:outline-none" onClick={onClose}>
+          <NativeButton className="focus:outline-none"
+            onClick={onClose}>
             <IconContainer
               className={`w-12 h-12 p-2 rounded-full ${iconColor}
               cursor-pointer hover:${iconBgHoverColor}`}>

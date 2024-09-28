@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
 
-import { useApi, useCoursePageContext } from "@/hooks";
+import { useApi, useCoursesPageContext } from "@/hooks";
 import { api, type ActivityDto, type ModuleDto } from "@/api";
 import { CourseSidebar } from "./CourseSidebar";
 import { CourseArticle } from "./CourseArticle";
@@ -8,7 +8,7 @@ import { CourseArticle } from "./CourseArticle";
 export const CurrentCoursePage = (): ReactElement => {
   const modulesApi = useApi(api.course);
   const activitiesApi = useApi(api.activities);
-  const { selectedCourse } = useCoursePageContext();
+  const { selectedCourse } = useCoursesPageContext();
   const courseSection = useRef<HTMLDivElement>(null);
   const moduleSection = useRef<HTMLDivElement>(null);
   const activitySection = useRef<HTMLDivElement>(null);
@@ -61,9 +61,9 @@ export const CurrentCoursePage = (): ReactElement => {
         className="px-8 py-16">
         <CourseArticle
           courseArticle={{ courseSection, moduleSection, activitySection }}
-          selectedCourse={selectedCourse}
-          selectedModule={selectedModule}
-          selectedActivity={selectedActivity}          
+          course={selectedCourse}
+          module={selectedModule}
+          activity={selectedActivity}          
         />  
       </div>
     </article>

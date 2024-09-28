@@ -4,12 +4,14 @@ import { BaseModal } from "./BaseModal";
 interface Props {
   isOpen: boolean;
   children?: ReactNode;
+  fixedSize?: boolean
   onClose: () => void;
 }
 
 export const DarkModal: React.FC<Props> = ({
   isOpen,
   children,
+  fixedSize,
   onClose,
 }) => {
   if (!isOpen) return null;
@@ -19,6 +21,7 @@ export const DarkModal: React.FC<Props> = ({
       bgColor="bg-indigo-950"
       iconColor="text-gray-200"
       iconBgHoverColor="bg-indigo-900"
+      fixedSize={fixedSize}
       onClose={onClose}>
       {children}
     </BaseModal>

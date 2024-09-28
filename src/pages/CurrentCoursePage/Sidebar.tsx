@@ -25,7 +25,7 @@ export const Sidebar: React.FC<Props> = ({
     <>
       {!open
         ? <UnstyledButton
-          className="fixed z-50"
+          className="fixed z-20"
           onPress={() => { updateOpen(true); }}>
           <IconContainer className="size-12 m-2 p-2
           bg-indigo-300 opacity-70 rounded-full">
