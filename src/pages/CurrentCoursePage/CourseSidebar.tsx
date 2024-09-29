@@ -8,6 +8,7 @@ interface Props {
   course: ICourseDto;
   modules: ModuleDto[];
   currentModule: ModuleDto | null;
+  currentActivity: ActivityDto | null;
   onOpen: (margin: number) => void
   updateSelectedActivity: (activity: ActivityDto | null, module: ModuleDto | null) => void;
   updateSelectedModule: (module: ModuleDto | null) => void;
@@ -16,6 +17,7 @@ interface Props {
 export const CourseSidebar: React.FC<Props> = ({
   modules,
   currentModule,
+  currentActivity,
   onOpen,
   updateSelectedActivity,
   updateSelectedModule,
@@ -47,15 +49,15 @@ export const CourseSidebar: React.FC<Props> = ({
   const constructContent = () => {
     return (
       <>
+        <div className="border-b" />
         {modules.map(module => {
-          console.log('module', module)
-          console.log('currentModule', currentModule)
           if (module.id == null) { return <></>; }
           return <div key={module.id}>
             <ModulePanel
               module={module}
               open={openPanels[module.id]}
-              current={module.id === currentModule?.id}
+              isCurrentModule={module.id === currentModule?.id}
+              currentActivity={currentActivity}
               toggleOpen={() => toggleModuleOpen(module)}
               selectActivity={updateSelectedActivity} />
           </div>;

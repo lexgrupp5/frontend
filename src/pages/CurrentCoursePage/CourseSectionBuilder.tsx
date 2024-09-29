@@ -43,10 +43,12 @@ export class CourseSectionBuilder {
     return (
       <>
         {this.editComponent()}
-        <div className="flex justify-start items-center gap-2">
+        <div className="flex justify-start items-center gap-2 overflow-hidden">
           <H size={this.headerSize} color={TextColor.DARK_X}>{this.title}</H>
           {this.showEditButton && (
-            <UnstyledButton className="hover:bg-indigo-400 cursor-pointer p-3 rounded-full"
+            <UnstyledButton 
+              className="hover:bg-indigo-400 cursor-pointer
+              flex-shrink-0 p-3 rounded-full"
               onPress={this.editAction}>
               <IconContainer className="size-6 mb-[2px]">
                 <FaEdit />

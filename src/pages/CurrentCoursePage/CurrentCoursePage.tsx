@@ -8,8 +8,8 @@ import { FullPageSpinner } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
 
 export const CurrentCoursePage = (): ReactElement => {
-  const modulesApi = useApi(api.course);
-  const activitiesApi = useApi(api.activities);
+  const getCourseModules = useApi(api.course);
+  const getModuleActivities = useApi(api.activities);
   const { selectedCourse } = useCoursesPageContext();
   const courseSection = useRef<HTMLDivElement>(null);
   const moduleSection = useRef<HTMLDivElement>(null);
@@ -19,28 +19,25 @@ export const CurrentCoursePage = (): ReactElement => {
   const [selectedModule, setSelectedModule] = useState<ModuleDto | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<ActivityDto | null>(null);
   const msgContext = useMessageContext();
+  const [courseCacheTimestamp, setCourseCacheTimestamp] = useState(Date.now());
 
   useEffect(() => {
     (async () => {
-      await fetchCourseData();
+      if (selectedCourse?.id == null) { return; }
+      const [err, result] = await getCourseModules.makeAuthRequestWithErrorResponse(selectedCourse.id);
+      if (err != null || result == null) {
+        msgContext.updateErrorMessage("Course data could not be fetched");
+      } else {
+        await updateModuleActivities(result);
+        setModules(result);
+      }
     })();
-  }, []);
-
-  const fetchCourseData = async () => {
-    if (selectedCourse?.id == null) { return; }
-    const [err, result] = await modulesApi.makeAuthRequestWithErrorResponse(selectedCourse.id);
-    if (err != null || result == null) {
-      msgContext.updateErrorMessage("Course data could not be fetched");
-    } else {
-      await updateModuleActivities(result);
-      setModules(result);
-    }
-  };
+  }, [courseCacheTimestamp]);
 
   const updateModuleActivities = async (courseModules: ModuleDto[]) => {
     courseModules.forEach(async module => {
       if (module.id == null) { return; }
-      module.activities = await activitiesApi.makeAuthRequest(module.id) ?? [];
+      module.activities = await getModuleActivities.makeAuthRequest(module.id) ?? [];
     });
   };
 
@@ -62,9 +59,13 @@ export const CurrentCoursePage = (): ReactElement => {
     setLeftMargin(margin);
   }; 
 
+  const updateCourseCacheTimestamp = () => {
+    setCourseCacheTimestamp(Date.now());
+  };
+
   if (selectedCourse == null) { return <></>; }
 
-  if (modulesApi.pending || activitiesApi.pending) {
+  if (getCourseModules.pending || getModuleActivities.pending) {
     return <FullPageSpinner />;
   }
 
@@ -74,6 +75,7 @@ export const CurrentCoursePage = (): ReactElement => {
       <CourseSidebar course={selectedCourse}
         modules={modules}
         currentModule={selectedModule}
+        currentActivity={selectedActivity}
         onOpen={updateLeftMargin}
         updateSelectedActivity={updateSelectedActivity}
         updateSelectedModule={updateSelectedModule} />
@@ -84,6 +86,8 @@ export const CurrentCoursePage = (): ReactElement => {
           course={selectedCourse}
           module={selectedModule}
           activity={selectedActivity}
+          updateSelectedModule={updateSelectedModule}
+          updateCourseCacheTimestamp={updateCourseCacheTimestamp}
         />  
       </div>
     </article>

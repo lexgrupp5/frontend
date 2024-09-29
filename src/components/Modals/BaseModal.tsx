@@ -5,19 +5,19 @@ import { FaTimes } from "react-icons/fa";
 interface BaseModalProps {
   isOpen: boolean;
   children?: ReactNode;
-  onClose: () => void;
   bgColor: string;
   iconColor: string;
   iconBgHoverColor: string;
+  onClose: () => void;
 }
 
 export const BaseModal: React.FC<BaseModalProps> = ({
   isOpen,
   children,
-  onClose,
   bgColor,
   iconColor,
   iconBgHoverColor,
+  onClose,
 }) => {
   if (!isOpen) return null;
 
@@ -26,7 +26,7 @@ export const BaseModal: React.FC<BaseModalProps> = ({
       className="fixed inset-0 z-50
       flex items-center justify-center 
       bg-black bg-opacity-60">
-      <div className={`max-h-[80vh] max-w-[90vw] lg:max-w-[50vw]
+      <div className={`max-h-[90vh] max-w-[95vw] lg:max-w-[50vw]
       ${bgColor} rounded-lg
       border border-indigo-50
       overflow-y-auto`}>

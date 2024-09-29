@@ -32,12 +32,14 @@ export const UpdateCourseForm: React.FC<Props> = ({
     msgContext.clearMessages();
     if (course.id == null) { return; }
 
-    const [err] = await patchCourse.makeAuthRequestWithErrorResponse(course.id, createPatchOperations<CourseDto>([
-      { key: "name", value: name },
-      { key: "description", value: description },
-      { key: "startDate", value: startDate },
-      { key: "endDate", value: endDate },
-    ]));
+    const [err] = await patchCourse.makeAuthRequestWithErrorResponse(
+      course.id,
+      createPatchOperations<CourseDto>([
+        { key: "name", value: name },
+        { key: "description", value: description },
+        { key: "startDate", value: startDate },
+        { key: "endDate", value: endDate },
+      ]));
     if (err == null) {
       await updateCourse();
     } else {
@@ -78,7 +80,7 @@ export const UpdateCourseForm: React.FC<Props> = ({
         <form onSubmit={submit}
           className="w-full
         bg-indigo-100
-        rounded-lg max-w-lg">
+          rounded-lg max-w-lg">
           <DefaultToastMessage onClose={handleCloseResult} />
           <H size={3} color={TextColor.DARK_X} className="mb-2">
             Course: {course.name}
