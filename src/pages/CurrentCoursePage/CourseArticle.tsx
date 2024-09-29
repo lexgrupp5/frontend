@@ -18,13 +18,17 @@ interface Props {
   course: ICourseDto;
   module: ModuleDto | null;
   activity: ActivityDto | null;
+  updateSelectedModule: (module: ModuleDto | null) => void;
+  updateCourseCacheTimestamp: () => void;
 }
 
 export const CourseArticle: React.FC<Props> = ({
   courseArticle,
   course,
   module,
-  activity
+  activity,
+  updateSelectedModule,
+  updateCourseCacheTimestamp
 }): ReactElement => {
   const { isTeacher } = useAuthContext();
   const [editCourse, setEditCourse] = useState(false);
@@ -43,9 +47,9 @@ export const CourseArticle: React.FC<Props> = ({
       section.withEditAction(() => { setEditCourse(true); })
         .withEditComponent(() => (
           <UpdateCourseForm
+            course={course}
             isOpen={editCourse}
-            onClose={() => { setEditCourse(false); }}
-            course={course} />
+            onClose={() => { setEditCourse(false); }} />
         ));
     }
     return section.build();
@@ -63,9 +67,11 @@ export const CourseArticle: React.FC<Props> = ({
       section.withEditAction(() => { setEditModule(true); })
         .withEditComponent(() => (
           <UpdateModuleForm
+            module={module}
             isOpen={editModule}
             onClose={() => { setEditModule(false); }}
-            module={module} />
+            updateSelectedModule={updateSelectedModule}
+            updateCourseCacheTimestamp={updateCourseCacheTimestamp}/>
         ));
     }
     return section.build();
@@ -75,7 +81,7 @@ export const CourseArticle: React.FC<Props> = ({
     activity
   }): ReactElement => {
     const section = new CourseSectionBuilder()
-      .setTitle(`Activity: ${activity.id}`, 2)
+      .setTitle(`Activity: ${activity.description}`, 2)
       .withSubtitle(`${activity.startDate?.toDateString()} - ${activity.endDate?.toDateString()}`)
       .withDescription(`${activity.description}`);
   

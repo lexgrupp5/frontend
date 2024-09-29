@@ -8,7 +8,8 @@ import type { ActivityDto, ModuleDto } from "@/apiGenerated";
 interface Props {
   module: ModuleDto;
   open: boolean;
-  current: boolean;
+  isCurrentModule: boolean;
+  currentActivity: ActivityDto | null;
   toggleOpen: () => void;
   selectActivity: (activity: ActivityDto, module: ModuleDto) => void;
 }
@@ -16,7 +17,8 @@ interface Props {
 export const ModulePanel: React.FC<Props> = ({
   module,
   open,
-  current,
+  isCurrentModule,
+  currentActivity,
   toggleOpen,
   selectActivity
 }): ReactElement => {
@@ -30,11 +32,11 @@ export const ModulePanel: React.FC<Props> = ({
 
   return (
     <article
-      className={`border-b ${current && "bg-indigo-950"}
+      className={`border-b ${isCurrentModule && "bg-indigo-950"}
       cursor-pointer hover:bg-indigo-950 pb-1`}
       onClick={toggleOpen}>
       <div className="flex justify-between items-center p-4 overflow-hidden">
-        <H size={4} className={`${open && "underline underline-offset-4"}`}>
+        <H size={4} className={`${isCurrentModule && "underline underline-offset-4"}`}>
           {module.name}
         </H>
         {!open
@@ -50,8 +52,11 @@ export const ModulePanel: React.FC<Props> = ({
         <div key={activity.id}
           onClick={e => { handleSelectActivity(activity, e); }}
           className="flex justify-start items-start p-2 m-2 
-          cursor-pointe">
-          <P color={TextColor.MEDIUM}>• {activity.description}</P>
+          cursor-pointer">
+          {currentActivity?.id !== activity.id
+            ? <P className="text-gray-400 hover:text-white">• {activity.description}</P> 
+            : <P color={TextColor.LIGHT}>• {activity.description}</P>
+          }
         </div>
       ))}
     </article>

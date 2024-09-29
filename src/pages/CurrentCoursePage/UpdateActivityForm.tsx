@@ -1,7 +1,8 @@
 import { FormEventHandler, ReactElement } from "react";
 
 import { ActivityDto } from "@/api";
-import { LightModal } from "@/components";
+import { H, LightModal, P, SubmitButton, TextColor } from "@/components";
+import { DefaultToastMessage } from "../SharedComponents";
 
 interface Props {
   activity: ActivityDto;
@@ -36,7 +37,14 @@ export const UpdateActivityForm: React.FC<Props> = ({
           className="w-full
           bg-indigo-100
           rounded-lg max-w-lg">
-
+          <DefaultToastMessage onClose={handleCloseResult} />
+          <H size={3} color={TextColor.DARK_X} className="mb-2">
+            Activity: {activity.description}
+          </H>
+          <P color={TextColor.DARK} className="mb-6">
+            Please update activity details below
+          </P>
+          <SubmitButton>Update</SubmitButton>
         </form>
       </div>
     </LightModal>
