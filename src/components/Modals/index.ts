@@ -1,2 +1,3 @@
-export * from "./DarkModal";
-export * from "./ErrorModal";
+export { DarkModal } from "./DarkModal";
+export { ErrorModal } from "./ErrorModal";
+export { LightModal } from "./LightModal";

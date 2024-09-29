@@ -3,7 +3,8 @@ import { ReactElement, useState } from "react";
 import type { ActivityDto, ModuleDto, ICourseDto } from "@/api";
 import { useAuthContext } from "@/hooks";
 import { SectionBuilder } from "./SectionBuilder";
-import { DarkModal } from "@/components";
+import { LightModal } from "@/components";
+import { UpdateCourseForm } from "./UpdateCourseForm";
 
 export interface ICourseArticle {
   courseSection: React.RefObject<HTMLDivElement>;
@@ -29,57 +30,56 @@ export const CourseArticle: React.FC<Props> = ({
   const [editModule, setEditModuöe] = useState(false);
   const [editActivity, setEditActivity] = useState(false);
 
+  const handleClose = async () => {
+    setEditCourse(false);
+  };
+
   return (
     <article className="flex flex-col gap-4">
       <section ref={courseArticle.courseSection}>    
         {new SectionBuilder()
-          .setTitle(`Course: ${course.name}`)
-          .setHeaderSize(2)
-          .setSubtitle(`${course.startDate?.toDateString()} - ${course.endDate?.toDateString()}`)
+          .setTitle(`Course: ${course.name}`, 2)
+          .withSubtitle(`${course.startDate?.toDateString()} - ${course.endDate?.toDateString()}`)
+          .withDescription(`${course.description}`)
           .setEditable(isTeacher())
           .withEditAction(() => { setEditCourse(true); })
           .withEditComponent(() => (
-            <DarkModal
+            <LightModal
               isOpen={editCourse}
-              fixedSize={true}
-              onClose={() => { setEditCourse(false); }}>
-            </DarkModal>
+              onClose={handleClose}>
+              <UpdateCourseForm course={course}/>
+            </LightModal>
           ))
-          .withDescription(`${course.description}`)
           .build()
         }
       </section>
       {module != null && <section ref={courseArticle.moduleSection}>
         {new SectionBuilder()
-          .setTitle(`Module: ${module.name}`)
-          .setHeaderSize(3)
-          .setSubtitle(`${module.startDate?.toDateString()} - ${module.endDate?.toDateString()}`)
+          .setTitle(`Module: ${module.name}`, 3)
+          .withSubtitle(`${module.startDate?.toDateString()} - ${module.endDate?.toDateString()}`)
+          .withDescription(`${module.description}`)
           .setEditable(isTeacher())
           .withEditAction(() => { setEditModuöe(true); })
           .withEditComponent(() => (
-            <DarkModal
+            <LightModal
               isOpen={editModule}
-              fixedSize={true}
               onClose={() => { setEditModuöe(false); }}>
-            </DarkModal>
+            </LightModal>
           ))
-          .withDescription(`${module.description}`)
           .build()
         }
       </section>
       }
       {activity != null && <section ref={courseArticle.activitySection}>
         {new SectionBuilder()
-          .setTitle(`Activity: ${activity.id}`)
-          .setHeaderSize(3)
-          .setSubtitle(`${activity.startDate?.toDateString()} - ${activity.endDate?.toDateString()}`)
+          .setTitle(`Activity: ${activity.id}`, 3)
+          .withSubtitle(`${activity.startDate?.toDateString()} - ${activity.endDate?.toDateString()}`)
+          .withDescription(`${activity.description}`)
           .setEditable(isTeacher())
           .withEditAction(() => { setEditActivity(true); })
-          .withEditComponent(() => <DarkModal
+          .withEditComponent(() => <LightModal
             isOpen={editActivity}
-            fixedSize={true}
             onClose={() => { setEditActivity(false); }} />)
-          .withDescription(`${activity.description}`)
           .build()
         }
       </section>

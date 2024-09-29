@@ -5,25 +5,26 @@ import { ReactElement } from "react";
 
 export class SectionBuilder {
   private title: string = "";
-  private headerSize: HeaderSizeType = 2;
-  private subtitle: string = "";
+  private headerSize: HeaderSizeType = 1;
+  private subtitle?: string;
+  private description?: string;
   private showEditButton: boolean = false;
-  private description: string = "";
   private editAction: () => void = () => {};
   private editComponent: () => ReactElement = () => <></>;
 
-  setTitle(title: string): SectionBuilder {
+  setTitle(title: string, headerSize?: HeaderSizeType): SectionBuilder {
     this.title = title;
+    if (headerSize != null) { this.headerSize = headerSize; }
     return this;
   }
 
-  setHeaderSize(headerSize: HeaderSizeType): SectionBuilder {
-    this.headerSize = headerSize;
-    return this;
-  }
-
-  setSubtitle(subtitle: string): SectionBuilder {
+  withSubtitle(subtitle: string): SectionBuilder {
     this.subtitle = subtitle;
+    return this;
+  }
+
+  withDescription(description: string): SectionBuilder {
+    this.description = description;
     return this;
   }
 
@@ -42,16 +43,10 @@ export class SectionBuilder {
     return this;
   }
 
-  withDescription(description: string): SectionBuilder {
-    this.description = description;
-    return this;
-  }
-
   build(): ReactElement {
     return (
       <>
         {this.editComponent()}
-          
         <div className="flex justify-start items-center gap-2">
           <H size={this.headerSize} color={TextColor.DARK_X}>{this.title}</H>
           {this.showEditButton && (
@@ -63,11 +58,12 @@ export class SectionBuilder {
             </UnstyledButton>
           )}
         </div>
-        <P color={TextColor.DARK}>{this.subtitle}</P>
-        <div>
-          <br />
+        {this.subtitle != null && <P color={TextColor.DARK}>
+          {this.subtitle}
+        </P>}
+        {this.description != null && <div className="mt-2">
           <P color={TextColor.DARK}>{this.description}</P>
-        </div>
+        </div>}
       </>
     );
   }

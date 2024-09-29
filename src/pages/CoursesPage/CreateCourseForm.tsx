@@ -1,6 +1,6 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 
-import { api, CourseCreateDto, CourseDto } from "@/api";
+import { api, CourseCreateDto, type CourseDto } from "@/api";
 import { H, Input, P, SubmitButton, TextColor, UnstyledButton, OkTopToast, ErrorTopToast, FullPageSpinner } from "@/components";
 import { Path } from "@/constants";
 import { useCoursesPageContext, useNavigateToPath } from "@/hooks";
