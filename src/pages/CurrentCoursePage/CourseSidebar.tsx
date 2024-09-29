@@ -7,13 +7,15 @@ import { Sidebar } from "./Sidebar";
 interface Props {
   course: ICourseDto;
   modules: ModuleDto[];
+  currentModule: ModuleDto | null;
   onOpen: (margin: number) => void
-  updateSelectedActivity: (activity: ActivityDto | null) => void;
+  updateSelectedActivity: (activity: ActivityDto | null, module: ModuleDto | null) => void;
   updateSelectedModule: (module: ModuleDto | null) => void;
 }
 
 export const CourseSidebar: React.FC<Props> = ({
   modules,
+  currentModule,
   onOpen,
   updateSelectedActivity,
   updateSelectedModule,
@@ -26,7 +28,7 @@ export const CourseSidebar: React.FC<Props> = ({
   const toggleModuleOpen = (module: ModuleDto) => {
     if (module.id == null) { return; }
     const moduleId = module.id;
-    updateSelectedActivity(null);
+    updateSelectedActivity(null, module);
     updateSelectedModule(module);
     setOpenPanels(prevState => ({
       ...prevState,
@@ -46,11 +48,14 @@ export const CourseSidebar: React.FC<Props> = ({
     return (
       <>
         {modules.map(module => {
+          console.log('module', module)
+          console.log('currentModule', currentModule)
           if (module.id == null) { return <></>; }
           return <div key={module.id}>
             <ModulePanel
               module={module}
               open={openPanels[module.id]}
+              current={module.id === currentModule?.id}
               toggleOpen={() => toggleModuleOpen(module)}
               selectActivity={updateSelectedActivity} />
           </div>;

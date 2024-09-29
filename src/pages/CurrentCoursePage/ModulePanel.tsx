@@ -8,26 +8,29 @@ import type { ActivityDto, ModuleDto } from "@/apiGenerated";
 interface Props {
   module: ModuleDto;
   open: boolean;
+  current: boolean;
   toggleOpen: () => void;
-  selectActivity: (activity: ActivityDto) => void;
+  selectActivity: (activity: ActivityDto, module: ModuleDto) => void;
 }
 
 export const ModulePanel: React.FC<Props> = ({
   module,
   open,
+  current,
   toggleOpen,
   selectActivity
 }): ReactElement => {
   const handleSelectActivity = (
     activity: ActivityDto,
-    e:  React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e:  React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     e.stopPropagation();
-    selectActivity(activity);
+    selectActivity(activity, module);
   };
 
   return (
     <article
-      className={`border-b ${open && "bg-indigo-950"}
+      className={`border-b ${current && "bg-indigo-950"}
       cursor-pointer hover:bg-indigo-950 pb-1`}
       onClick={toggleOpen}>
       <div className="flex justify-between items-center p-4 overflow-hidden">
