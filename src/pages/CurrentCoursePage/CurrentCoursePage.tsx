@@ -4,7 +4,7 @@ import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
 import { api, type ActivityDto, type ModuleDto } from "@/api";
 import { CourseSidebar } from "./CourseSidebar";
 import { CourseArticle } from "./CourseArticle";
-import { ErrorTopToast, FullPageSpinner } from "@/components";
+import { FullPageSpinner } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
 
 export const CurrentCoursePage = (): ReactElement => {
@@ -14,7 +14,7 @@ export const CurrentCoursePage = (): ReactElement => {
   const courseSection = useRef<HTMLDivElement>(null);
   const moduleSection = useRef<HTMLDivElement>(null);
   const activitySection = useRef<HTMLDivElement>(null);
-  const [ leftMargin, setLeftMargin ] = useState(0);
+  const [leftMargin, setLeftMargin ] = useState(0);
   const [modules, setModules] = useState<ModuleDto[]>([]);
   const [selectedModule, setSelectedModule] = useState<ModuleDto | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<ActivityDto | null>(null);
@@ -44,7 +44,11 @@ export const CurrentCoursePage = (): ReactElement => {
     });
   };
 
-  const updateSelectedActivity = (activity: ActivityDto | null) => {
+  const updateSelectedActivity = (
+    activity: ActivityDto | null,
+    module: ModuleDto | null
+  ) => {
+    setSelectedModule(module);
     setSelectedActivity(activity);
     activitySection.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -69,6 +73,7 @@ export const CurrentCoursePage = (): ReactElement => {
       <DefaultToastMessage />
       <CourseSidebar course={selectedCourse}
         modules={modules}
+        currentModule={selectedModule}
         onOpen={updateLeftMargin}
         updateSelectedActivity={updateSelectedActivity}
         updateSelectedModule={updateSelectedModule} />
