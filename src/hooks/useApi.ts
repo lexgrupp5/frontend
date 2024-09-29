@@ -74,7 +74,9 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     }
   };
 
-  /** Api call used when authorization is needed */
+  /** Api call used when authorization is needed with error and data
+   * both returned
+  */
   const makeAuthRequestWithErrorResponse = async (
     ...args: [...ApiArgs, AbortSignal?]
   ): Promise<[CustomApiException | null, ApiReturnType | null]> => {

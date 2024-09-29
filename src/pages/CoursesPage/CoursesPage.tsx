@@ -2,23 +2,14 @@ import { ReactElement } from "react";
 
 import { useCoursesPageContext } from "@/hooks";
 import { CourseList } from "./CourseList";
-import { P, Spinner, ErrorModal } from "@/components";
-import { getAPI } from "@/config";
+import { Spinner } from "@/components";
 import { CoursesController } from "./CoursesController";
 
 export const CoursesPage = (): ReactElement => {
-  const { courses, pending, error, clearError } = useCoursesPageContext();
+  const { courses, pending } = useCoursesPageContext();
   
   if (pending) {
     return <div className="h-[calc(100vh-10rem)]"><Spinner /></div>;
-  }
-
-  if (error != null) {
-    return <ErrorModal isOpen={true}
-      onClose={clearError}>
-      <P>Error message from {getAPI()}:</P>
-      <P>{error.message}</P>
-    </ErrorModal>;
   }
 
   return (

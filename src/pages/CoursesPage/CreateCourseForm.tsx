@@ -5,6 +5,7 @@ import { H, Input, P, SubmitButton, TextColor, UnstyledButton, OkTopToast, Error
 import { Path } from "@/constants";
 import { useCoursesPageContext, useNavigateToPath } from "@/hooks";
 import { useApi } from "@/hooks/useApi";
+import { useMessageContext } from "@/hooks";
 
 export const CreateCourseForm = (): ReactElement => {
   const { updateSelectedCourse } = useCoursesPageContext();
@@ -14,30 +15,30 @@ export const CreateCourseForm = (): ReactElement => {
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [showResult, setShowResult] = useState(false);
+  const msgContext = useMessageContext();
 
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    handleCloseResult();
-    await createCourse.makeAuthRequest(new CourseCreateDto({
+    msgContext.clearMessages();
+    const [err, result] = await createCourse.makeAuthRequestWithErrorResponse(new CourseCreateDto({
       name,
       description,
       startDate: new Date(startDate),
       endDate: new Date(endDate)
     }));
-    setShowResult(true);
-  };
-
-  const handleCloseResult = () => {
-    setShowResult(false);
-    if (createCourse.error != null) {
-      createCourse.clearError();
+    if (err == null) {
+      msgContext.updateMessage(
+        `New course '${result?.name}' created`
+      );
+    } else {
+      msgContext.updateErrorMessage("Course could not be created");
     }
   };
 
   const handleNavigateToNewCourse = (course: CourseDto | null) => {
     if (course == null) { return; }
     updateSelectedCourse(course);
+    msgContext.clearMessages();
     navigate(Path.constructSelectedCoursePath(`${createCourse.data?.id}`));
   };
 
@@ -48,17 +49,17 @@ export const CreateCourseForm = (): ReactElement => {
         className="w-full p-8 
         bg-indigo-100
         rounded-lg shadow-lg max-w-lg">
-        {showResult && createCourse.error == null && 
-          <OkTopToast onClose={handleCloseResult} keepOpen={true}>
+        {msgContext.message != null && 
+          <OkTopToast onClose={msgContext.clearMessages} keepOpen={true}>
             <UnstyledButton className="underline underline-offset-4 max-w-full" 
               onPress={() => { handleNavigateToNewCourse(createCourse.data); }}>
-              New course '{createCourse.data?.name}' created
+              {msgContext.message}
             </UnstyledButton>
           </OkTopToast>
         }
-        {showResult && createCourse.error != null &&
-          <ErrorTopToast onClose={handleCloseResult} keepOpen={true}>
-            Course could not be created
+        {msgContext.errorMessage != null &&
+          <ErrorTopToast onClose={msgContext.clearMessages} keepOpen={true}>
+            {msgContext.errorMessage}
           </ErrorTopToast>
         }
         <H size={1} color={TextColor.DARK_X} className="mb-2">Create new course</H>

@@ -1,24 +1,23 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import { api, ICourseDto } from "@/api";
+import { api, CourseDto, CustomApiException, ICourseDto } from "@/api";
 import { ICoursesPageContext, ISearchAndFilterDTO } from "@/contexts";
 import { useApi } from "@/hooks/useApi";
+import { useMessageContext } from "@/hooks";
+import { DefaultToastMessage } from "@/pages/SharedComponents";
 
-/**
- * @TODO Use global pending and error for all context requests.
- */
 export const CoursesPageProvider = (): React.ReactElement => {
-  const { data, pending, error, makeAuthRequest, clearError } = useApi(api.coursesAll);
+  const { data, pending, error, makeAuthRequestWithErrorResponse, clearError } = useApi(api.coursesAll);
   const [selectedCourse, setSelectedCourse] = useState<ICourseDto | null>(null);
   const [searchAndFilterDTO, setSearchAndFIlterDTO] = useState<ISearchAndFilterDTO>({});
+  const msgContext = useMessageContext();
 
   useEffect(() => {
     (async () => {
-      try {
-        await makeAuthRequest();
-      } catch (e) {
-        console.log(e);
+      const [err, result] = await makeAuthRequestWithErrorResponse();
+      if (err != null || result == null) {
+        msgContext.updateErrorMessage("Could not fetch courses from server");
       }
     })();
   }, []);
@@ -31,12 +30,18 @@ export const CoursesPageProvider = (): React.ReactElement => {
     setSearchAndFIlterDTO(dto);
   };
 
-  const fetchCourses = (dto: ISearchAndFilterDTO) => {
+  const fetchCourses = async (dto: ISearchAndFilterDTO) => {
+    let [err, result]: [ CustomApiException | null, CourseDto[] | null ] = [null, null]; 
     if (dto.searchText === "" || dto.searchText == null) {
-      makeAuthRequest(undefined, dto.endDate, dto.startDate);
+      [err, result] = await makeAuthRequestWithErrorResponse(undefined, dto.endDate, dto.startDate);
     } else {
-      makeAuthRequest(dto.searchText, dto.endDate, dto.startDate);
+      [err, result] = await makeAuthRequestWithErrorResponse(dto.searchText, dto.endDate, dto.startDate);
     }
+    if (err != null || result == null) { updateErrorMsg(); }
+  };
+
+  const updateErrorMsg = () => {
+    msgContext.updateErrorMessage("Could not fetch courses from server");
   };
 
   const constructCoursesPageContext = (): ICoursesPageContext => ({
@@ -53,6 +58,7 @@ export const CoursesPageProvider = (): React.ReactElement => {
 
   return (
     <>
+      <DefaultToastMessage onClose={clearError}/>
       <Outlet context={constructCoursesPageContext()} />
     </>
   );  
