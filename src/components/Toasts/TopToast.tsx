@@ -19,7 +19,7 @@ export const TopToast: React.FC<Props> = ({
   timeMilliseconds,
   onClose
 }): ReactElement => {
-  const defautlTime = 10 * 1000;
+  const defautlTime = 5 * 1000;
 
   useEffect(() => {
     if (keepOpen) { return; }

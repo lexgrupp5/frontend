@@ -1,10 +1,11 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 
 import { api, CourseDto, ICourseDto } from "@/api";
-import { H, Input, P, SubmitButton, TextColor, UnstyledButton, OkTopToast, ErrorTopToast, FullPageSpinner, LightModal } from "@/components";
+import { H, Input, P, SubmitButton, TextColor, FullPageSpinner, LightModal } from "@/components";
 import { useApi } from "@/hooks/useApi";
 import { createPatchOperations, formatDateToString } from "@/utils";
-import { useCoursesPageContext } from "@/hooks";
+import { useCoursesPageContext, useMessageContext } from "@/hooks";
+import { DefaultToastMessage } from "../SharedComponents";
 
 interface Props {
   course: ICourseDto;
@@ -24,11 +25,11 @@ export const UpdateCourseForm: React.FC<Props> = ({
   const [startDate, setStartDate] = useState(formatDateToString(course.startDate) ?? "");
   const [endDate, setEndDate] = useState(formatDateToString(course.endDate) ?? "");
   const { selectedCourse, updateSelectedCourse } = useCoursesPageContext();
-  const [showResult, setShowResult] = useState(false);
+  const msgContext = useMessageContext();
 
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    handleCloseResult();
+    msgContext.clearMessages();
     if (course.id == null) { return; }
 
     const [err] = await patchCourse.makeAuthRequestWithErrorResponse(course.id, createPatchOperations<CourseDto>([
@@ -39,18 +40,21 @@ export const UpdateCourseForm: React.FC<Props> = ({
     ]));
     if (err == null) {
       await updateCourse();
+    } else {
+      msgContext.updateErrorMessage("Course could not be updated");
     }
-    setShowResult(true);
   };
 
   const updateCourse = async () => {
     if (selectedCourse?.id == null) {
       return;
     }
-    const updatedCourse = await getCourse.makeAuthRequest(selectedCourse.id);
-    if (updatedCourse != null) { 
-      console.log("???????");
-      updateSelectedCourse(updatedCourse); 
+    const [err, result] = await getCourse.makeAuthRequestWithErrorResponse(selectedCourse.id);
+    if (err == null && result != null) {
+      updateSelectedCourse(result);
+      msgContext.updateMessage(`Course ${result.name} have been updated`);
+    } else {
+      msgContext.updateErrorMessage("Updated course could not be fetched");
     }
   };
 
@@ -60,7 +64,6 @@ export const UpdateCourseForm: React.FC<Props> = ({
   };
 
   const handleCloseResult = () => {
-    setShowResult(false);
     if (patchCourse.error != null) {
       patchCourse.clearError();
     }
@@ -76,19 +79,7 @@ export const UpdateCourseForm: React.FC<Props> = ({
           className="w-full
         bg-indigo-100
         rounded-lg max-w-lg">
-          {showResult && patchCourse.error == null &&
-            <OkTopToast onClose={handleCloseResult}>
-              <UnstyledButton className="max-w-full"
-                onPress={() => { }}>
-                Course '{course.name}' updated
-              </UnstyledButton>
-            </OkTopToast>
-          }
-          {showResult && patchCourse.error != null &&
-            <ErrorTopToast onClose={handleCloseResult} keepOpen={true}>
-              Course could not be updated
-            </ErrorTopToast>
-          }
+          <DefaultToastMessage onClose={handleCloseResult} />
           <H size={3} color={TextColor.DARK_X} className="mb-2">
             Course: {course.name}
           </H>

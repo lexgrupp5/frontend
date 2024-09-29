@@ -1,10 +1,11 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
 
-import { useApi, useCoursesPageContext } from "@/hooks";
+import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
 import { api, type ActivityDto, type ModuleDto } from "@/api";
 import { CourseSidebar } from "./CourseSidebar";
 import { CourseArticle } from "./CourseArticle";
-import { FullPageSpinner } from "@/components";
+import { ErrorTopToast, FullPageSpinner } from "@/components";
+import { DefaultToastMessage } from "../SharedComponents";
 
 export const CurrentCoursePage = (): ReactElement => {
   const modulesApi = useApi(api.course);
@@ -17,6 +18,7 @@ export const CurrentCoursePage = (): ReactElement => {
   const [modules, setModules] = useState<ModuleDto[]>([]);
   const [selectedModule, setSelectedModule] = useState<ModuleDto | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<ActivityDto | null>(null);
+  const msgContext = useMessageContext();
 
   useEffect(() => {
     (async () => {
@@ -26,10 +28,13 @@ export const CurrentCoursePage = (): ReactElement => {
 
   const fetchCourseData = async () => {
     if (selectedCourse?.id == null) { return; }
-    const courseModules = await modulesApi.makeAuthRequest(selectedCourse.id);
-    if (courseModules == null) { return; }
-    updateModuleActivities(courseModules);
-    setModules(courseModules);
+    const [err, result] = await modulesApi.makeAuthRequestWithErrorResponse(selectedCourse.id);
+    if (err != null || result == null) {
+      msgContext.updateErrorMessage("Course data could not be fetched");
+    } else {
+      await updateModuleActivities(result);
+      setModules(result);
+    }
   };
 
   const updateModuleActivities = async (courseModules: ModuleDto[]) => {
@@ -61,6 +66,7 @@ export const CurrentCoursePage = (): ReactElement => {
 
   return (
     <article className="min-h-screen-header bg-indigo-100">
+      <DefaultToastMessage />
       <CourseSidebar course={selectedCourse}
         modules={modules}
         onOpen={updateLeftMargin}
