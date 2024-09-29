@@ -5,15 +5,18 @@ import { api, ICourseDto } from "@/api";
 import { ICoursesPageContext, ISearchAndFilterDTO } from "@/contexts";
 import { useApi } from "@/hooks/useApi";
 
+/**
+ * @TODO Use global pending and error for all context requests.
+ */
 export const CoursesPageProvider = (): React.ReactElement => {
-  const { data, pending, error, makeAuthRequest: fetchAuthData, clearError } = useApi(api.coursesAll);
+  const { data, pending, error, makeAuthRequest, clearError } = useApi(api.coursesAll);
   const [selectedCourse, setSelectedCourse] = useState<ICourseDto | null>(null);
   const [searchAndFilterDTO, setSearchAndFIlterDTO] = useState<ISearchAndFilterDTO>({});
 
   useEffect(() => {
     (async () => {
       try {
-        await fetchAuthData();
+        await makeAuthRequest();
       } catch (e) {
         console.log(e);
       }
@@ -30,9 +33,9 @@ export const CoursesPageProvider = (): React.ReactElement => {
 
   const fetchCourses = (dto: ISearchAndFilterDTO) => {
     if (dto.searchText === "" || dto.searchText == null) {
-      fetchAuthData(undefined, dto.endDate, dto.startDate);
+      makeAuthRequest(undefined, dto.endDate, dto.startDate);
     } else {
-      fetchAuthData(dto.searchText, dto.endDate, dto.startDate);
+      makeAuthRequest(dto.searchText, dto.endDate, dto.startDate);
     }
   };
 
@@ -42,10 +45,10 @@ export const CoursesPageProvider = (): React.ReactElement => {
     error,
     selectedCourse,
     searchAndFilterDTO,
+    updateSelectedCourse,
     updateSearchAndFilterDTO,
     fetchCourses,
-    clearError,
-    updateSelectedCourse
+    clearError
   });
 
   return (

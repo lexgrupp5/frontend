@@ -8,6 +8,7 @@ interface Props {
   children?: ReactNode;
   background?: string;
   keepOpen?: boolean
+  timeMilliseconds?: number
   onClose: () => void;
 }
 
@@ -15,29 +16,29 @@ export const TopToast: React.FC<Props> = ({
   children,
   background,
   keepOpen,
+  timeMilliseconds,
   onClose
 }): ReactElement => {
+  const defautlTime = 10 * 1000;
 
   useEffect(() => {
     if (keepOpen) { return; }
     const timer = setTimeout(() => {
       onClose();
-    }, 10000);
+    }, timeMilliseconds != null ? timeMilliseconds : defautlTime);
 
     return () => clearTimeout(timer);
   }, [onClose]);
 
   return (
     <div className="fixed top-[var(--header-height)] left-0 right-0 z-50">
-      <div className={`flex items-center
-        ${keepOpen ? "justify-between" : "justify-center"} 
-        gap-4 p-2
+      <div className={`flex items-center justify-between gap-4 p-2
         ${background != null ? background  : "bg-sky-500"}`}>
-        {keepOpen && <IconContainer className="size-6 flex-shrink-0">
+        {<IconContainer className="size-6 flex-shrink-0">
           <MdOutlineNotificationsActive />
         </IconContainer>}
         {children}
-        {keepOpen && <UnstyledButton className="size-6 flex-shrink-0"
+        {<UnstyledButton className="size-6 flex-shrink-0"
           onPress={onClose}>
           <IconContainer>
             <FaTimes />

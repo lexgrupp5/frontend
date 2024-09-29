@@ -7,10 +7,10 @@ const axiosInstance = axios.create({});
 if (isDevelopment()) {
   // TODO Use request interceptor e.g for adding config option
   axiosInstance.interceptors.request.use(config => {
-    console.log("Request intercepted, method:", config.method);
-    if (config.headers.Authorization != null) {
-      console.log("Request authorization header:", config.headers.Authorization);
-    }
+    console.log("Request intercepted, method:", config.url);
+    // if (config.headers.Authorization != null) {
+    //   console.log("Request authorization header:", config.headers.Authorization);
+    // }
     return config;
   }, (error) => {
     console.error("Request Error:", error);

@@ -1,7 +1,6 @@
 import { ReactElement, useEffect, useState } from "react";
 
 import type { ActivityDto, ICourseDto, ModuleDto } from "@/apiGenerated";
-import { H } from "@/components";
 import { ModulePanel } from "./ModulePanel";
 import { Sidebar } from "./Sidebar";
 
@@ -14,7 +13,6 @@ interface Props {
 }
 
 export const CourseSidebar: React.FC<Props> = ({
-  course,
   modules,
   onOpen,
   updateSelectedActivity,

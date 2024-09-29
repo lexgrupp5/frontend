@@ -2,9 +2,10 @@ import { ReactElement, useState } from "react";
 
 import type { ActivityDto, ModuleDto, ICourseDto } from "@/api";
 import { useAuthContext } from "@/hooks";
-import { SectionBuilder } from "./SectionBuilder";
-import { LightModal } from "@/components";
+import { CourseSectionBuilder } from "./CourseSectionBuilder";
 import { UpdateCourseForm } from "./UpdateCourseForm";
+import { UpdateModuleForm } from "./UpdateModuleForm";
+import { UpdateActivityForm } from "./UpdateActivityForm";
 
 export interface ICourseArticle {
   courseSection: React.RefObject<HTMLDivElement>;
@@ -27,63 +28,80 @@ export const CourseArticle: React.FC<Props> = ({
 }): ReactElement => {
   const { isTeacher } = useAuthContext();
   const [editCourse, setEditCourse] = useState(false);
-  const [editModule, setEditModuöe] = useState(false);
+  const [editModule, setEditModule] = useState(false);
   const [editActivity, setEditActivity] = useState(false);
 
-  const handleClose = async () => {
-    setEditCourse(false);
+  const CourseSection: React.FC<{ course: ICourseDto }> = ({
+    course
+  }) => {
+    const section = new CourseSectionBuilder()
+      .setTitle(`Course: ${course.name}`, 2)
+      .withSubtitle(`${course.startDate?.toDateString()} - ${course.endDate?.toDateString()}`)
+      .withDescription(`${course.description}`);
+  
+    if (isTeacher()) {
+      section.withEditAction(() => { setEditCourse(true); })
+        .withEditComponent(() => (
+          <UpdateCourseForm
+            isOpen={editCourse}
+            onClose={() => { setEditCourse(false); }}
+            course={course} />
+        ));
+    }
+    return section.build();
+  };
+
+  const ModuleSection: React.FC<{module: ModuleDto}> = ({
+    module
+  }): ReactElement => {
+    const section = new CourseSectionBuilder()
+      .setTitle(`Module: ${module.name}`, 2)
+      .withSubtitle(`${module.startDate?.toDateString()} - ${module.endDate?.toDateString()}`)
+      .withDescription(`${module.description}`);
+  
+    if (isTeacher()) {
+      section.withEditAction(() => { setEditModule(true); })
+        .withEditComponent(() => (
+          <UpdateModuleForm
+            isOpen={editModule}
+            onClose={() => { setEditModule(false); }}
+            module={module} />
+        ));
+    }
+    return section.build();
+  };
+
+  const ActivtySection: React.FC<{activity: ActivityDto}> = ({
+    activity
+  }): ReactElement => {
+    const section = new CourseSectionBuilder()
+      .setTitle(`Activity: ${activity.id}`, 2)
+      .withSubtitle(`${activity.startDate?.toDateString()} - ${activity.endDate?.toDateString()}`)
+      .withDescription(`${activity.description}`);
+  
+    if (isTeacher()) {
+      section.withEditAction(() => { setEditActivity(true); })
+        .withEditComponent(() => (
+          <UpdateActivityForm
+            isOpen={editActivity}
+            onClose={() => { setEditActivity(false); }}
+            activity={activity} />
+        ));
+    }
+    return section.build();
   };
 
   return (
     <article className="flex flex-col gap-4">
-      <section ref={courseArticle.courseSection}>    
-        {new SectionBuilder()
-          .setTitle(`Course: ${course.name}`, 2)
-          .withSubtitle(`${course.startDate?.toDateString()} - ${course.endDate?.toDateString()}`)
-          .withDescription(`${course.description}`)
-          .setEditable(isTeacher())
-          .withEditAction(() => { setEditCourse(true); })
-          .withEditComponent(() => (
-            <LightModal
-              isOpen={editCourse}
-              onClose={handleClose}>
-              <UpdateCourseForm course={course}/>
-            </LightModal>
-          ))
-          .build()
-        }
+      <section ref={courseArticle.courseSection}>
+        {<CourseSection course={course}/>}
       </section>
       {module != null && <section ref={courseArticle.moduleSection}>
-        {new SectionBuilder()
-          .setTitle(`Module: ${module.name}`, 3)
-          .withSubtitle(`${module.startDate?.toDateString()} - ${module.endDate?.toDateString()}`)
-          .withDescription(`${module.description}`)
-          .setEditable(isTeacher())
-          .withEditAction(() => { setEditModuöe(true); })
-          .withEditComponent(() => (
-            <LightModal
-              isOpen={editModule}
-              onClose={() => { setEditModuöe(false); }}>
-            </LightModal>
-          ))
-          .build()
-        }
-      </section>
-      }
+        {<ModuleSection module={module}/>}
+      </section>}
       {activity != null && <section ref={courseArticle.activitySection}>
-        {new SectionBuilder()
-          .setTitle(`Activity: ${activity.id}`, 3)
-          .withSubtitle(`${activity.startDate?.toDateString()} - ${activity.endDate?.toDateString()}`)
-          .withDescription(`${activity.description}`)
-          .setEditable(isTeacher())
-          .withEditAction(() => { setEditActivity(true); })
-          .withEditComponent(() => <LightModal
-            isOpen={editActivity}
-            onClose={() => { setEditActivity(false); }} />)
-          .build()
-        }
-      </section>
-      }
+        {<ActivtySection activity={activity}/>}
+      </section>}
     </article>
   );
 };
