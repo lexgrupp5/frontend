@@ -6,7 +6,6 @@ import { CustomApiException } from "./CustomApiException";
 import * as Generated from "@/apiGenerated";
 
 import { getAPI } from "@/config";
-import { ITokenContainer } from "@/types";
 import { axiosInstance } from "./axiosInstance";
 import { ApiException } from "@/apiGenerated";
 
@@ -23,11 +22,11 @@ class Client extends Generated.Client {
 
   public async makeApiRequest<ApiReturnType, ApiArgs extends unknown[]>(
     apiCall: (...args: [...ApiArgs, AbortSignal?]) => Promise<ApiReturnType>,
-    tokenContainer?: ITokenContainer,
+    token: string | null,
     ...args: [...ApiArgs, AbortSignal?]
   ): Promise<ApiReturnType> {
-    if (tokenContainer) {
-      this.instance.defaults.headers["Authorization"] = `Bearer ${tokenContainer.accessToken}`;
+    if (token) {
+      this.instance.defaults.headers["Authorization"] = `Bearer ${token}`;
     } else {
       delete this.instance.defaults.headers["Authorization"];
     }

@@ -3,7 +3,7 @@ import { FaEdit } from "react-icons/fa";
 import { H, HeaderSizeType, IconContainer, P, TextColor, UnstyledButton } from "@/components";
 import { ReactElement } from "react";
 
-export class SectionBuilder {
+export class CourseSectionBuilder {
   private title: string = "";
   private headerSize: HeaderSizeType = 1;
   private subtitle?: string;
@@ -12,33 +12,29 @@ export class SectionBuilder {
   private editAction: () => void = () => {};
   private editComponent: () => ReactElement = () => <></>;
 
-  setTitle(title: string, headerSize?: HeaderSizeType): SectionBuilder {
+  setTitle(title: string, headerSize?: HeaderSizeType): CourseSectionBuilder {
     this.title = title;
     if (headerSize != null) { this.headerSize = headerSize; }
     return this;
   }
 
-  withSubtitle(subtitle: string): SectionBuilder {
+  withSubtitle(subtitle: string): CourseSectionBuilder {
     this.subtitle = subtitle;
     return this;
   }
 
-  withDescription(description: string): SectionBuilder {
+  withDescription(description: string): CourseSectionBuilder {
     this.description = description;
     return this;
   }
 
-  setEditable(editable: boolean): SectionBuilder {
-    this.showEditButton = editable;
-    return this;
-  }
-
-  withEditAction(editAction: () => void): SectionBuilder {
+  withEditAction(editAction: () => void): CourseSectionBuilder {
     this.editAction = editAction;
+    this.showEditButton = true;
     return this;
   }
 
-  withEditComponent(editComponent: () => ReactElement): SectionBuilder {
+  withEditComponent(editComponent: () => ReactElement): CourseSectionBuilder {
     this.editComponent = editComponent;
     return this;
   }
@@ -52,7 +48,7 @@ export class SectionBuilder {
           {this.showEditButton && (
             <UnstyledButton className="hover:bg-indigo-400 cursor-pointer p-3 rounded-full"
               onPress={this.editAction}>
-              <IconContainer>
+              <IconContainer className="size-6 mb-[2px]">
                 <FaEdit />
               </IconContainer>
             </UnstyledButton>

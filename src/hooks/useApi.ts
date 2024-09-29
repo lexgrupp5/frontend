@@ -17,7 +17,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   const [data, setData] = useState<ApiReturnType | null>(null);
   const [pending, setPending] = useState<boolean>(false);
   const [error, setError] = useState<CustomApiException | null>(null);
-  const [tokens, setTokens] = useLocalStorage<string | null>(Storage.TOKEN, null);
+  const [token, setToken] = useLocalStorage<string | null>(Storage.TOKEN, null);
 
   /** Api call used when no authorization is needed */
   const makeRequest = async (
@@ -28,7 +28,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
       setPending(true);
       const result = await api.makeApiRequest<ApiReturnType, ApiArgs>(
         apiCall,
-        undefined,
+        null,
         ...args
       );
       setData(result);
@@ -52,12 +52,12 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     try {
       setError(null);
       setPending(true);
-      if (tokens === null) {
+      if (token === null) {
         throw new CustomApiException("Token have not been set");
       }
       const result = await api.makeApiRequest<ApiReturnType, ApiArgs>(
         apiCall,
-        tokens,
+        token,
         ...args
       );
       setData(result);
@@ -74,6 +74,35 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     }
   };
 
+  /** Api call used when authorization is needed */
+  const makeAuthRequestWithErrorResponse = async (
+    ...args: [...ApiArgs, AbortSignal?]
+  ): Promise<[CustomApiException | null, ApiReturnType | null]> => {
+    try {
+      setError(null);
+      setPending(true);
+      if (token === null) {
+        throw new CustomApiException("Token have not been set");
+      }
+      const result = await api.makeApiRequest<ApiReturnType, ApiArgs>(
+        apiCall,
+        token,
+        ...args
+      );
+      setData(result);
+      return [null, result];
+    } catch (err) {
+      let customErr = new CustomApiException("Unknown error");
+      if (err instanceof CustomApiException) {
+        customErr = err;
+      }
+      setError(customErr);
+      return [customErr, null];
+    } finally {
+      setPending(false);
+    }
+  };
+
   const clearError = () => {
     setError(null);
   };
@@ -82,12 +111,13 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     setData(null);
   };
 
-  return { 
+  return {
     data,
     pending,
     error,
     makeRequest,
     makeAuthRequest,
+    makeAuthRequestWithErrorResponse,
     clearError,
     clearData,
   };
