@@ -4,6 +4,7 @@ import { useApi, useCoursesPageContext } from "@/hooks";
 import { api, type ActivityDto, type ModuleDto } from "@/api";
 import { CourseSidebar } from "./CourseSidebar";
 import { CourseArticle } from "./CourseArticle";
+import { FullPageSpinner } from "@/components";
 
 export const CurrentCoursePage = (): ReactElement => {
   const modulesApi = useApi(api.course);
@@ -19,13 +20,17 @@ export const CurrentCoursePage = (): ReactElement => {
 
   useEffect(() => {
     (async () => {
-      if (selectedCourse?.id == null) { return; }
-      const courseModules = await modulesApi.makeAuthRequest(selectedCourse.id);
-      if (courseModules == null) { return; }
-      updateModuleActivities(courseModules);
-      setModules(courseModules);
+      await fetchCourseData();
     })();
   }, []);
+
+  const fetchCourseData = async () => {
+    if (selectedCourse?.id == null) { return; }
+    const courseModules = await modulesApi.makeAuthRequest(selectedCourse.id);
+    if (courseModules == null) { return; }
+    updateModuleActivities(courseModules);
+    setModules(courseModules);
+  };
 
   const updateModuleActivities = async (courseModules: ModuleDto[]) => {
     courseModules.forEach(async module => {
@@ -50,6 +55,10 @@ export const CurrentCoursePage = (): ReactElement => {
 
   if (selectedCourse == null) { return <></>; }
 
+  if (modulesApi.pending || activitiesApi.pending) {
+    return <FullPageSpinner />;
+  }
+
   return (
     <article className="min-h-screen-header bg-indigo-100">
       <CourseSidebar course={selectedCourse}
@@ -63,7 +72,7 @@ export const CurrentCoursePage = (): ReactElement => {
           courseArticle={{ courseSection, moduleSection, activitySection }}
           course={selectedCourse}
           module={selectedModule}
-          activity={selectedActivity}          
+          activity={selectedActivity}
         />  
       </div>
     </article>

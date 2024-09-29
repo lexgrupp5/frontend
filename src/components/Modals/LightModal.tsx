@@ -7,7 +7,7 @@ interface Props {
   onClose: () => void;
 }
 
-export const DarkModal: React.FC<Props> = ({
+export const LightModal: React.FC<Props> = ({
   isOpen,
   children,
   onClose,
@@ -16,9 +16,9 @@ export const DarkModal: React.FC<Props> = ({
 
   return (
     <BaseModal isOpen={isOpen}
-      bgColor="bg-indigo-950"
-      iconColor="text-gray-200"
-      iconBgHoverColor="bg-indigo-900"
+      bgColor="bg-indigo-100"
+      iconColor="text-black"
+      iconBgHoverColor="bg-indigo-400"
       onClose={onClose}>
       {children}
     </BaseModal>

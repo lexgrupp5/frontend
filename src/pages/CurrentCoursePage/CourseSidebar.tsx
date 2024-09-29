@@ -47,9 +47,6 @@ export const CourseSidebar: React.FC<Props> = ({
   const constructContent = () => {
     return (
       <>
-        <div className="border-b p-4">
-          <H size={4}>{course.name}</H>
-        </div>
         {modules.map(module => {
           if (module.id == null) { return <></>; }
           return <div key={module.id}>
