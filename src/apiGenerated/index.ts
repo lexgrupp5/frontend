@@ -1377,7 +1377,6 @@ export class CourseCreateDto implements ICourseCreateDto {
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
-    readonly moduleNames?: string[] | undefined;
 
     constructor(data?: ICourseCreateDto) {
         if (data) {
@@ -1394,11 +1393,6 @@ export class CourseCreateDto implements ICourseCreateDto {
             this.description = _data["description"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
-            if (Array.isArray(_data["moduleNames"])) {
-                (<any>this).moduleNames = [] as any;
-                for (let item of _data["moduleNames"])
-                    (<any>this).moduleNames!.push(item);
-            }
         }
     }
 
@@ -1415,11 +1409,6 @@ export class CourseCreateDto implements ICourseCreateDto {
         data["description"] = this.description;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
-        if (Array.isArray(this.moduleNames)) {
-            data["moduleNames"] = [];
-            for (let item of this.moduleNames)
-                data["moduleNames"].push(item);
-        }
         return data;
     }
 }
@@ -1429,7 +1418,6 @@ export interface ICourseCreateDto {
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
-    moduleNames?: string[] | undefined;
 }
 
 export class CourseDto implements ICourseDto {
@@ -1438,7 +1426,6 @@ export class CourseDto implements ICourseDto {
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
-    moduleNames?: string[] | undefined;
 
     constructor(data?: ICourseDto) {
         if (data) {
@@ -1456,11 +1443,6 @@ export class CourseDto implements ICourseDto {
             this.description = _data["description"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
-            if (Array.isArray(_data["moduleNames"])) {
-                this.moduleNames = [] as any;
-                for (let item of _data["moduleNames"])
-                    this.moduleNames!.push(item);
-            }
         }
     }
 
@@ -1478,11 +1460,6 @@ export class CourseDto implements ICourseDto {
         data["description"] = this.description;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
-        if (Array.isArray(this.moduleNames)) {
-            data["moduleNames"] = [];
-            for (let item of this.moduleNames)
-                data["moduleNames"].push(item);
-        }
         return data;
     }
 }
@@ -1493,7 +1470,6 @@ export interface ICourseDto {
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
-    moduleNames?: string[] | undefined;
 }
 
 export class ModuleCreateModel implements IModuleCreateModel {
@@ -1721,13 +1697,13 @@ export interface IOperation {
 }
 
 export enum OperationType {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _5 = 5,
-    _6 = 6,
+    Add = "Add",
+    Remove = "Remove",
+    Replace = "Replace",
+    Move = "Move",
+    Copy = "Copy",
+    Test = "Test",
+    Invalid = "Invalid",
 }
 
 export class UserAuthModel implements IUserAuthModel {

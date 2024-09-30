@@ -8,7 +8,7 @@ import { FullPageSpinner } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
 
 export const CurrentCoursePage = (): ReactElement => {
-  const getCourseModules = useApi(api.course);
+  const getCourseModules = useApi(api.modulesAll);
   const getModuleActivities = useApi(api.activities);
   const { selectedCourse } = useCoursesPageContext();
   const [leftMargin, setLeftMargin ] = useState(0);
@@ -20,9 +20,11 @@ export const CurrentCoursePage = (): ReactElement => {
     (async () => {
       if (selectedCourse?.id == null) { return; }
       const [err, result] = await getCourseModules.makeAuthRequestWithErrorResponse(selectedCourse.id);
+      console.log(result)
       if (err != null || result == null) {
         msgContext.updateErrorMessage("Course data could not be fetched");
       } else {
+
         await updateModuleActivities(result);
         setModules(result);
       }

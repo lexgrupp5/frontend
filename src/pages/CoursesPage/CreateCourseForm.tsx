@@ -10,7 +10,7 @@ import { useMessageContext } from "@/hooks";
 export const CreateCourseForm = (): ReactElement => {
   const { updateSelectedCourse } = useCoursesPageContext();
   const navigate = useNavigateToPath();
-  const createCourse = useApi(api.coursesPOST);
+  const createCourse = useApi(api.createCourse);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");

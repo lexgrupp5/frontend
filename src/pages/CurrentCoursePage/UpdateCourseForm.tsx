@@ -18,7 +18,7 @@ export const UpdateCourseForm: React.FC<Props> = ({
   isOpen,
   onClose
 }): ReactElement => {
-  const patchCourse = useApi(api.coursesPATCH);
+  const patchCourse = useApi(api.courses);
   const getCourse = useApi(api.getCourse);
   const [name, setName] = useState(course.name ?? "");
   const [description, setDescription] = useState(course.description ?? "");
