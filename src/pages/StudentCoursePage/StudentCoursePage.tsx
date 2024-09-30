@@ -12,7 +12,7 @@ export const StudentCoursePage = (): ReactElement => {
         <>
             <article
                 className="flex flex-col justify-center items-center 
-                            h-full w-80%">
+                            pt-8 h-full w-80%">
                 <H size={4}> Other participants of your course:</H>
                 <div
                     className="flex flex-col">

@@ -26,8 +26,6 @@ export const NavigationHeader = () => {
     setMenuOpen(open);
   };
 
-  const username = "Filip67"; //PLACEHOLDER STRING, USERNAME TO BE FETCHED FROM LOGIN
-
   return (
     <header className="fixed h-[var(--header-height)]
     top-0 left-0 w-full p-4
@@ -38,9 +36,6 @@ export const NavigationHeader = () => {
           <FaHome />
         </IconContainer></Link>
         <nav className="flex justify-between items-center gap-3 dura">
-          <NavLink to={StudentPath.constructStudentHomePath(username)} className={linkClass}>
-            StudentLanding
-          </NavLink>
           <NavLink to={Path.COURSES} className={linkClass}>
             Courses
           </NavLink>
