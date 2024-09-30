@@ -14,7 +14,7 @@ export const UnstyledButton: React.FC<Props> = ({
   onPress,
   ...props
 }) => {
-  const derivedClassname = `text-ceneter overflow-hidden break-all
+  const derivedClassname = `text-center overflow-hidden break-all
   ${className ? className : "focus:outline-none"}`;
 
   return (
