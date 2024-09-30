@@ -1,7 +1,7 @@
-import { ReactElement, useEffect, useRef, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 
 import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
-import { api, type ActivityDto, type ModuleDto } from "@/api";
+import { api, type ModuleDto } from "@/api";
 import { CourseSidebar } from "./CourseSidebar";
 import { CourseArticle } from "./CourseArticle";
 import { FullPageSpinner } from "@/components";
@@ -11,13 +11,8 @@ export const CurrentCoursePage = (): ReactElement => {
   const getCourseModules = useApi(api.course);
   const getModuleActivities = useApi(api.activities);
   const { selectedCourse } = useCoursesPageContext();
-  const courseSection = useRef<HTMLDivElement>(null);
-  const moduleSection = useRef<HTMLDivElement>(null);
-  const activitySection = useRef<HTMLDivElement>(null);
   const [leftMargin, setLeftMargin ] = useState(0);
   const [modules, setModules] = useState<ModuleDto[]>([]);
-  const [selectedModule, setSelectedModule] = useState<ModuleDto | null>(null);
-  const [selectedActivity, setSelectedActivity] = useState<ActivityDto | null>(null);
   const msgContext = useMessageContext();
   const [courseCacheTimestamp, setCourseCacheTimestamp] = useState(Date.now());
 
@@ -41,20 +36,6 @@ export const CurrentCoursePage = (): ReactElement => {
     });
   };
 
-  const updateSelectedActivity = (
-    activity: ActivityDto | null,
-    module: ModuleDto | null
-  ) => {
-    setSelectedModule(module);
-    setSelectedActivity(activity);
-    activitySection.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const updateSelectedModule = (module: ModuleDto | null) => {
-    setSelectedModule(module);
-    moduleSection.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   const updateLeftMargin = (margin: number) => {
     setLeftMargin(margin);
   }; 
@@ -74,19 +55,11 @@ export const CurrentCoursePage = (): ReactElement => {
       <DefaultToastMessage />
       <CourseSidebar course={selectedCourse}
         modules={modules}
-        currentModule={selectedModule}
-        currentActivity={selectedActivity}
-        onOpen={updateLeftMargin}
-        updateSelectedActivity={updateSelectedActivity}
-        updateSelectedModule={updateSelectedModule} />
+        onOpen={updateLeftMargin} />
       <div style={{ marginLeft: `${leftMargin}px` }}
         className="px-8 py-16">
         <CourseArticle
-          courseArticle={{ courseSection, moduleSection, activitySection }}
           course={selectedCourse}
-          module={selectedModule}
-          activity={selectedActivity}
-          updateSelectedModule={updateSelectedModule}
           updateCourseCacheTimestamp={updateCourseCacheTimestamp}
         />  
       </div>

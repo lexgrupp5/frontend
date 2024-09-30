@@ -1,33 +1,31 @@
-
 import { ReactElement } from "react";
 
 import { H, IconContainer, P, TextColor } from "@/components";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import type { ActivityDto, ModuleDto } from "@/apiGenerated";
+import { useCoursesPageContext } from "@/hooks";
 
 interface Props {
   module: ModuleDto;
   open: boolean;
-  isCurrentModule: boolean;
-  currentActivity: ActivityDto | null;
   toggleOpen: () => void;
-  selectActivity: (activity: ActivityDto, module: ModuleDto) => void;
 }
 
 export const ModulePanel: React.FC<Props> = ({
   module,
   open,
-  isCurrentModule,
-  currentActivity,
-  toggleOpen,
-  selectActivity
+  toggleOpen
 }): ReactElement => {
+  const context = useCoursesPageContext();
+  const isCurrentModule = module.id === context.selectedModule?.id;
+  
   const handleSelectActivity = (
     activity: ActivityDto,
     e:  React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
-    selectActivity(activity, module);
+    context.updateSelectedActivity(activity);
+    context.updateSelectedModule(module);
   };
 
   return (
@@ -53,10 +51,9 @@ export const ModulePanel: React.FC<Props> = ({
           onClick={e => { handleSelectActivity(activity, e); }}
           className="flex justify-start items-start p-2 m-2 
           cursor-pointer">
-          {currentActivity?.id !== activity.id
-            ? <P className="text-gray-400 hover:text-white">• {activity.description}</P> 
-            : <P color={TextColor.LIGHT}>• {activity.description}</P>
-          }
+          {activity.id !== context.selectedActivity?.id
+            ? <P color={TextColor.MEDIUM_X} className=" hover:text-white">• {activity.description}</P> 
+            : <P color={TextColor.LIGHT}> • {activity.description}</P> }
         </div>
       ))}
     </article>

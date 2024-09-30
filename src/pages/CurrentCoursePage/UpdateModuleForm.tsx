@@ -10,7 +10,6 @@ interface Props {
   module: ModuleDto;
   isOpen: boolean;
   onClose: () => void;
-  updateSelectedModule: (module: ModuleDto | null) => void
   updateCourseCacheTimestamp: () => void;
 }
 
@@ -18,7 +17,6 @@ export const UpdateModuleForm: React.FC<Props> = ({
   module,
   isOpen,
   onClose,
-  updateSelectedModule,
   updateCourseCacheTimestamp
 }): ReactElement => {
   const patchModule = useApi(api.module);
@@ -27,6 +25,7 @@ export const UpdateModuleForm: React.FC<Props> = ({
   const [startDate, setStartDate] = useState(formatDateToString(module.startDate) ?? "");
   const [endDate, setEndDate] = useState(formatDateToString(module.endDate) ?? "");
   const msgContext = useMessageContext();
+  const coursesPageContext = useCoursesPageContext();
 
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -50,7 +49,7 @@ export const UpdateModuleForm: React.FC<Props> = ({
   };
 
   const updateModuleData = () => {
-    updateSelectedModule(new ModuleDto({
+    coursesPageContext.updateSelectedModule(new ModuleDto({
       id: module.id,
       name,
       description,

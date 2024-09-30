@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import { api, CourseDto, CustomApiException, ICourseDto } from "@/api";
+import { ActivityDto, api, CourseDto, CustomApiException, ICourseDto, ModuleDto } from "@/api";
 import { ICoursesPageContext, ISearchAndFilterDTO } from "@/contexts";
 import { useApi } from "@/hooks/useApi";
 import { useMessageContext } from "@/hooks";
@@ -10,6 +10,8 @@ import { DefaultToastMessage } from "@/pages/SharedComponents";
 export const CoursesPageProvider = (): React.ReactElement => {
   const { data, pending, error, makeAuthRequestWithErrorResponse, clearError } = useApi(api.coursesAll);
   const [selectedCourse, setSelectedCourse] = useState<ICourseDto | null>(null);
+  const [selectedModule, setSelectedModule] = useState<ModuleDto | null>(null);
+  const [selectedActivity, setSelectedActivity] = useState<ActivityDto | null>(null);
   const [searchAndFilterDTO, setSearchAndFIlterDTO] = useState<ISearchAndFilterDTO>({});
   const msgContext = useMessageContext();
 
@@ -24,6 +26,14 @@ export const CoursesPageProvider = (): React.ReactElement => {
 
   const updateSelectedCourse = (course: ICourseDto) => {
     setSelectedCourse(course);
+  };
+
+  const updateSelectedActivity = (activity: ActivityDto | null) => {
+    setSelectedActivity(activity);
+  };
+
+  const updateSelectedModule = (module: ModuleDto | null) => {
+    setSelectedModule(module);
   };
 
   const updateSearchAndFilterDTO = (dto: ISearchAndFilterDTO) => {
@@ -49,8 +59,12 @@ export const CoursesPageProvider = (): React.ReactElement => {
     pending,
     error,
     selectedCourse,
+    selectedModule,
+    selectedActivity,
     searchAndFilterDTO,
     updateSelectedCourse,
+    updateSelectedActivity,
+    updateSelectedModule,
     updateSearchAndFilterDTO,
     fetchCourses,
     clearError
