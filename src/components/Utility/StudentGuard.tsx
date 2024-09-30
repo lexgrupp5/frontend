@@ -7,13 +7,13 @@ interface Props {
   children: ReactElement;
 }
 
-export const AuthGuard: React.FC<Props> = ({
+export const StudentGuard: React.FC<Props> = ({
   children
 }): ReactElement => {
-  const { isLoggedIn } = useAuthContext();
+  const { isStudent } = useAuthContext();
 
-  if (!isLoggedIn) {
-    return <NavigateToPath to={Path.LOGIN} />;
+  if (!isStudent()) {
+    return <NavigateToPath to={Path.INDEX} />;
   }
 
   return children;

@@ -13,7 +13,7 @@ export const CoursesPage = (): ReactElement => {
   }
 
   return (
-    <article>
+    <article className="bg-gradient-indigo"> 
       <CoursesController />
       <CourseList courses={courses}/>
     </article>

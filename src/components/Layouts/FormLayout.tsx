@@ -6,7 +6,7 @@ export const FormLayout: React.FC<Props> = ({ children }) => {
   return (
     <div className="min-h-screen 
       flex items-center justify-center 
-      bg-indigo-950">
+      bg-gradient-indigo">
       {children}
     </div>
   );
