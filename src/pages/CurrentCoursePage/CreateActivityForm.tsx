@@ -1,14 +1,13 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 
-import { api, ModuleCreateModel } from "@/api";
+import { ActivityCreateModel, api } from "@/api";
 import { H, Input, SubmitButton, TextColor } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
 import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
 
 
-export const CreateModuleForm = (): ReactElement => {
-  const createModule = useApi(api.modules);
-  const [name, setName] = useState("");
+export const CreateActivityForm = (): ReactElement => {
+  const createActivity = useApi(api.createactivity);
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -17,12 +16,11 @@ export const CreateModuleForm = (): ReactElement => {
 
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    createModule.clearError(); 
+    createActivity.clearError(); 
     
-    const [err, result] = await createModule.makeAuthRequestWithErrorResponse(
-      new ModuleCreateModel({
-        courseId: coursesPageContext.selectedCourse?.id,
-        name,
+    const [err, result] = await createActivity.makeAuthRequestWithErrorResponse(
+      new ActivityCreateModel({
+        moduleId: coursesPageContext.selectedModule?.id,
         description,
         startDate: new Date(startDate),
         endDate: new Date(endDate),
@@ -30,14 +28,14 @@ export const CreateModuleForm = (): ReactElement => {
     );
     
     if (err == null && result != null) {
-      msgContext.updateMessage(`Module '${result.name}' have been created`);
+      msgContext.updateMessage(`Activity '${result.description}' have been created`);
     } else {
-      msgContext.updateErrorMessage("Module could not be created");
+      msgContext.updateErrorMessage("Activity could not be created");
     }
   };
 
   const handleCloseForm = () => {
-    createModule.clearError();
+    createActivity.clearError();
   };
 
   return (
@@ -47,15 +45,10 @@ export const CreateModuleForm = (): ReactElement => {
       rounded-lg max-w-lg">
       <DefaultToastMessage onClose={handleCloseForm} />
       <H size={3} color={TextColor.DARK_X} className="mb-2">
-        Create module for course '{coursesPageContext.selectedCourse?.name}'
+        {`Create activity in module '${coursesPageContext.selectedModule?.name}'
+         for course '${coursesPageContext.selectedCourse?.name}'`}
       </H>
       <fieldset className="flex flex-col gap-6">
-        <Input
-          type="text"
-          label="Name"
-          required
-          value={name}
-          onChange={e => { setName(e.target.value); }} />
         <Input
           label="Description"
           type="text"
@@ -74,7 +67,7 @@ export const CreateModuleForm = (): ReactElement => {
           required
           value={endDate}
           onChange={e => { setEndDate(e.target.value); }} />
-        <SubmitButton>Create Module</SubmitButton>
+        <SubmitButton>Create Activity</SubmitButton>
       </fieldset>
     </form>
   );

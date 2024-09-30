@@ -6,15 +6,16 @@ import { CourseSectionBuilder } from "./CourseSectionBuilder";
 import { UpdateCourseForm } from "./UpdateCourseForm";
 import { UpdateModuleForm } from "./UpdateModuleForm";
 import { UpdateActivityForm } from "./UpdateActivityForm";
+import { CourseModal } from "./CourseModal";
 
 interface Props {
   course: ICourseDto;
-  updateCourseCacheTimestamp: () => void;
+  updateCacheTimestamp: () => void;
 }
 
 export const CourseArticle: React.FC<Props> = ({
   course,
-  updateCourseCacheTimestamp
+  updateCacheTimestamp
 }): ReactElement => {
   const context = useCoursesPageContext();
   const { isTeacher } = useAuthContext();
@@ -24,21 +25,24 @@ export const CourseArticle: React.FC<Props> = ({
 
   const CourseSection: React.FC<{ course: ICourseDto }> = ({
     course
-  }) => {
+  }): ReactElement => {
     const section = new CourseSectionBuilder()
       .setTitle(`Course: ${course.name}`, 2)
       .withSubtitle(`${course.startDate?.toDateString()} - ${course.endDate?.toDateString()}`)
       .withDescription(`${course.description}`);
   
     if (isTeacher()) {
-      section.withEditAction(() => { setEditCourse(true); })
-        .withEditComponent(() => (
-          <UpdateCourseForm
-            course={course}
+      section
+        .withEditAction(() => { setEditCourse(true); })
+        .withEditComponent(
+          <CourseModal
             isOpen={editCourse}
-            onClose={() => { setEditCourse(false); }} />
-        ));
+            onClose={() => { setEditCourse(false); }}>
+            <UpdateCourseForm course={course} />
+          </CourseModal>
+        );
     }
+
     return section.build();
   };
 
@@ -51,15 +55,17 @@ export const CourseArticle: React.FC<Props> = ({
       .withDescription(`${module.description}`);
   
     if (isTeacher()) {
-      section.withEditAction(() => { setEditModule(true); })
-        .withEditComponent(() => (
-          <UpdateModuleForm
-            module={module}
+      section
+        .withEditAction(() => { setEditModule(true); })
+        .withEditComponent(
+          <CourseModal
             isOpen={editModule}
-            onClose={() => { setEditModule(false); }}
-            updateCourseCacheTimestamp={updateCourseCacheTimestamp}/>
-        ));
+            onClose={() => { setEditModule(false); updateCacheTimestamp(); }}>
+            <UpdateModuleForm module={module} />
+          </CourseModal>
+        );
     }
+
     return section.build();
   };
 
@@ -72,19 +78,22 @@ export const CourseArticle: React.FC<Props> = ({
       .withDescription(`${activity.description}`);
   
     if (isTeacher()) {
-      section.withEditAction(() => { setEditActivity(true); })
-        .withEditComponent(() => (
-          <UpdateActivityForm
+      section
+        .withEditAction(() => { setEditActivity(true); })
+        .withEditComponent(
+          <CourseModal
             isOpen={editActivity}
-            onClose={() => { setEditActivity(false); }}
-            activity={activity} />
-        ));
+            onClose={() => { setEditActivity(false); updateCacheTimestamp(); }}>
+            <UpdateActivityForm activity={activity} />
+          </CourseModal>
+        );
     }
+
     return section.build();
   };
 
   return (  
-    <article className="flex flex-col gap-4">
+    <article className="flex flex-col gap-4 max-w-7xl">
       <section>
         {<CourseSection course={course}/>}
       </section>

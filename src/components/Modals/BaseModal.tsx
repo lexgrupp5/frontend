@@ -26,7 +26,7 @@ export const BaseModal: React.FC<BaseModalProps> = ({
       className="fixed inset-0 z-50
       flex items-center justify-center 
       bg-black bg-opacity-60">
-      <div className={`max-h-[90vh] max-w-[95vw] lg:max-w-[50vw]
+      <div className={`max-h-[80vh] w-[95vw] lg:w-[50vw]
       ${bgColor} rounded-lg
       border border-indigo-50
       overflow-y-auto`}>

@@ -10,7 +10,7 @@ export class CourseSectionBuilder {
   private description?: string;
   private showEditButton: boolean = false;
   private editAction: () => void = () => {};
-  private editComponent: () => ReactElement = () => <></>;
+  private EditComponent: ReactElement = <></>;
 
   setTitle(title: string, headerSize?: HeaderSizeType): CourseSectionBuilder {
     this.title = title;
@@ -34,15 +34,15 @@ export class CourseSectionBuilder {
     return this;
   }
 
-  withEditComponent(editComponent: () => ReactElement): CourseSectionBuilder {
-    this.editComponent = editComponent;
+  withEditComponent(EditComponent: ReactElement): CourseSectionBuilder {
+    this.EditComponent = EditComponent;
     return this;
   }
 
   build(): ReactElement {
     return (
       <>
-        {this.editComponent()}
+        {this.EditComponent}
         <div className="flex justify-start items-center gap-2 overflow-hidden">
           <H size={this.headerSize} color={TextColor.DARK_X}>{this.title}</H>
           {this.showEditButton && (
