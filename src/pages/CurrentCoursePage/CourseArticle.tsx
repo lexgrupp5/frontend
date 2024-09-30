@@ -1,35 +1,22 @@
 import { ReactElement, useState } from "react";
 
 import type { ActivityDto, ModuleDto, ICourseDto } from "@/api";
-import { useAuthContext } from "@/hooks";
+import { useAuthContext, useCoursesPageContext } from "@/hooks";
 import { CourseSectionBuilder } from "./CourseSectionBuilder";
 import { UpdateCourseForm } from "./UpdateCourseForm";
 import { UpdateModuleForm } from "./UpdateModuleForm";
 import { UpdateActivityForm } from "./UpdateActivityForm";
 
-export interface ICourseArticle {
-  courseSection: React.RefObject<HTMLDivElement>;
-  moduleSection: React.RefObject<HTMLDivElement>;
-  activitySection: React.RefObject<HTMLDivElement>;
-}
-
 interface Props {
-  courseArticle: ICourseArticle;
   course: ICourseDto;
-  module: ModuleDto | null;
-  activity: ActivityDto | null;
-  updateSelectedModule: (module: ModuleDto | null) => void;
   updateCourseCacheTimestamp: () => void;
 }
 
 export const CourseArticle: React.FC<Props> = ({
-  courseArticle,
   course,
-  module,
-  activity,
-  updateSelectedModule,
   updateCourseCacheTimestamp
 }): ReactElement => {
+  const context = useCoursesPageContext();
   const { isTeacher } = useAuthContext();
   const [editCourse, setEditCourse] = useState(false);
   const [editModule, setEditModule] = useState(false);
@@ -70,7 +57,6 @@ export const CourseArticle: React.FC<Props> = ({
             module={module}
             isOpen={editModule}
             onClose={() => { setEditModule(false); }}
-            updateSelectedModule={updateSelectedModule}
             updateCourseCacheTimestamp={updateCourseCacheTimestamp}/>
         ));
     }
@@ -97,16 +83,16 @@ export const CourseArticle: React.FC<Props> = ({
     return section.build();
   };
 
-  return (
+  return (  
     <article className="flex flex-col gap-4">
-      <section ref={courseArticle.courseSection}>
+      <section>
         {<CourseSection course={course}/>}
       </section>
-      {module != null && <section ref={courseArticle.moduleSection}>
-        {<ModuleSection module={module}/>}
+      {context.selectedModule != null && <section>
+        {<ModuleSection module={context.selectedModule}/>}
       </section>}
-      {activity != null && <section ref={courseArticle.activitySection}>
-        {<ActivtySection activity={activity}/>}
+      {context.selectedActivity != null && <section>
+        {<ActivtySection activity={context.selectedActivity}/>}
       </section>}
     </article>
   );

@@ -3,6 +3,7 @@ import { HeaderSizeType } from "./types";
 export const TextColor = {
   LIGHT: "white",
   MEDIUM: "gray-300",
+  MEDIUM_X: "gray-400",
   DARK: "gray-800",
   DARK_X: "gray-950",
 } as const;

@@ -1,14 +1,18 @@
-import { CustomApiException, ICourseDto } from "@/api";
+import { ActivityDto, CustomApiException, ICourseDto, ModuleDto } from "@/api";
 
 export interface ICoursesPageContext {
   pending: boolean
   error: CustomApiException | null;  
   courses: ICourseDto[];
   selectedCourse: ICourseDto | null;
+  selectedModule: ModuleDto | null;
+  selectedActivity: ActivityDto | null;
   searchAndFilterDTO: ISearchAndFilterDTO;
   updateSearchAndFilterDTO: (dto: ISearchAndFilterDTO) => void; 
   fetchCourses: (dto: ISearchAndFilterDTO) => void;
   updateSelectedCourse: (course: ICourseDto) => void;
+  updateSelectedActivity: (activity: ActivityDto | null) => void;
+  updateSelectedModule: (module: ModuleDto | null) => void;
   clearError: () => void;
 }
 
