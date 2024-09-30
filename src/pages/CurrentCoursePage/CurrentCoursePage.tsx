@@ -27,7 +27,7 @@ export const CurrentCoursePage = (): ReactElement => {
         setModules(result);
       }
     })();
-  }, [courseCacheTimestamp]);
+  }, [courseCacheTimestamp, selectedCourse]);
 
   const updateModuleActivities = async (courseModules: ModuleDto[]) => {
     courseModules.forEach(async module => {
