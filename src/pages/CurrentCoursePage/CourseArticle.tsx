@@ -93,7 +93,7 @@ export const CourseArticle: React.FC<Props> = ({
   };
 
   return (  
-    <article className="flex flex-col gap-4 max-w-7xl">
+    <article className="w-full flex flex-col gap-4 max-w-5xl">
       <section>
         {<CourseSection course={course}/>}
       </section>

@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from "react";
 
 import type { ModuleDto } from "@/apiGenerated";
 import { Sidebar } from "./Sidebar";
-import { useCoursesPageContext } from "@/hooks";
+import { useAuthContext, useCoursesPageContext } from "@/hooks";
 import { CourseSidebarFooter } from "./CourseSidebarFooter";
 import { CourseSidebarBody } from "./CourseSidebarBody";
 
@@ -23,6 +23,7 @@ export const CourseSidebar: React.FC<Props> = ({
   const [openSettings, setOpenSettings] = useState(false);
   const [open, setOpen] = useState(isLargeScreen);
   const context = useCoursesPageContext();
+  const autContext = useAuthContext();
 
   const togglePanelOpen = (module: ModuleDto, withSelect: boolean) => {
     if (module.id == null) { return; }
@@ -58,7 +59,7 @@ export const CourseSidebar: React.FC<Props> = ({
     <Sidebar open={open}
       updateOpen={updateSidebarBody}
       width={sidebarWidth}
-      footer={<CourseSidebarFooter 
+      footer={autContext.isTeacher() && <CourseSidebarFooter 
         openSettings={openSettings}
         updateCacheTimestamp={updateCacheTimestamp}
         updateOpenSettings={(open: boolean) => { setOpenSettings(open); }} />}>
