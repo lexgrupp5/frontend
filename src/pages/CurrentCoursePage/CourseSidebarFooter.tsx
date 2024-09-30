@@ -5,6 +5,7 @@ import { MdOutlineSettings } from "react-icons/md";
 import { CreateModuleForm } from "./CreateModuleForm";
 import { CourseModal } from "./CourseModal";
 import { CreateActivityForm } from "./CreateActivityForm";
+import { useCoursesPageContext } from "@/hooks";
 
 const settingLink = {
   CREATE_MODULE: "create-module",
@@ -17,12 +18,14 @@ type SettinLinkType = typeof settingLink[
 
 interface Props {
   openSettings: boolean;
+  hasModules: boolean;
   updateCacheTimestamp: () => void;
   updateOpenSettings: (open: boolean) => void;
 }
 
 export const CourseSidebarFooter: React.FC<Props> = ({
   openSettings,
+  hasModules,
   updateOpenSettings,
   updateCacheTimestamp  
 }): ReactElement => {
@@ -50,7 +53,7 @@ export const CourseSidebarFooter: React.FC<Props> = ({
         <div className="flex flex-col gap-4 items-center">
           <div className="flex justify-center gap-4">
             <FormLink label="Create new module" settingLink={settingLink.CREATE_MODULE}/>
-            <FormLink label="Create new activity" settingLink={settingLink.CREATE_ACTIVITY}/>
+            {hasModules && <FormLink label="Create new activity" settingLink={settingLink.CREATE_ACTIVITY}/>}
           </div>
           {link === settingLink.CREATE_MODULE && <CreateModuleForm />}
           {link === settingLink.CREATE_ACTIVITY && <CreateActivityForm />}

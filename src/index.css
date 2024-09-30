@@ -19,6 +19,14 @@ body, #root {
 }
 
 @layer utilities {
+  .bg-gradient-slate {
+    @apply bg-gradient-to-tl from-slate-950 via-slate-600 to-slate-300;
+  }
+  
+  .bg-gradient-indigo {
+    @apply bg-gradient-to-tl from-indigo-950 via-indigo-600 to-indigo-400;
+  }
+
   .h-screen-header {
     height: calc(100vh - var(--header-height));
   }

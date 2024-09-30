@@ -34,6 +34,12 @@ export const AuthProvider: React.FC<Props> = ({
     return role === Role.teacher;
   };
 
+  const isStudent = () => {
+    if (token == null) {return false; }
+    const role = Service.getUserRolesFromToken(token);
+    return role === Role.student;
+  };
+
   const isExpiredToken = () => {
     if (token == null) {return false; }
     return Service.isExpiredToken(token);
@@ -52,7 +58,15 @@ export const AuthProvider: React.FC<Props> = ({
   };
 
   const constructAuthContext = (): IAuthContext => {
-    return { isLoggedIn, login, register, logout, isExpiredToken, isTeacher };
+    return {
+      isLoggedIn,
+      login,
+      register,
+      logout,
+      isExpiredToken,
+      isTeacher,
+      isStudent
+    };
   };
 
   return (

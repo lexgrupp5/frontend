@@ -55,12 +55,17 @@ export const CourseSidebar: React.FC<Props> = ({
     setOpen(open);
   };
 
+  useEffect(() => {
+    console.log('modules.length', modules.length)
+  })
+
   return (
     <Sidebar open={open}
       updateOpen={updateSidebarBody}
       width={sidebarWidth}
-      footer={autContext.isTeacher() && <CourseSidebarFooter 
+      footer={autContext.isTeacher() && <CourseSidebarFooter
         openSettings={openSettings}
+        hasModules={modules.length > 0}
         updateCacheTimestamp={updateCacheTimestamp}
         updateOpenSettings={(open: boolean) => { setOpenSettings(open); }} />}>
       <CourseSidebarBody modules={modules}

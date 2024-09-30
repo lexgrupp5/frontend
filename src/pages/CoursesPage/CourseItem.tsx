@@ -23,7 +23,7 @@ export const CourseItem: React.FC<Props> = ({ course }): ReactElement => {
     <>
       <article
         className="flex h-full flex-col justify-between
-        bg-indigo-600 p-3
+        bg-indigo-900 p-3
         rounded border-2 border-black
         outline-offset-2 hover:outline-3
         hover:outline hover:outline-white

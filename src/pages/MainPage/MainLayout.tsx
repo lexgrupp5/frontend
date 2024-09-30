@@ -5,7 +5,7 @@ interface Props {
 export const MainLayout: React.FC<Props> = ({ children }) => {
   return (
     <div className="min-h-screen pt-[var(--header-height)]
-      bg-indigo-900">
+      bg-indigo-800">
       {children}
     </div>
   );

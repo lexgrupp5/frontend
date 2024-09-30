@@ -43,7 +43,8 @@ export const CreateCourseForm = (): ReactElement => {
   };
 
   return (
-    <div className="min-h-screen-header-center">
+    <div className="min-h-screen-header-center
+      bg-gradient-indigo">
       {createCourse.pending && <FullPageSpinner />}
       <form onSubmit={submit}
         className="w-full p-8 
