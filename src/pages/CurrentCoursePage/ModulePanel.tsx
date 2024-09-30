@@ -52,7 +52,7 @@ export const ModulePanel: React.FC<Props> = ({
           className="flex justify-start items-start p-2 m-2 
           cursor-pointer">
           {activity.id !== context.selectedActivity?.id
-            ? <P color={TextColor.MEDIUM_X} className=" hover:text-white">• {activity.description}</P> 
+            ? <P color={TextColor.MEDIUM_X} className="text-gray-400 hover:text-white">• {activity.description}</P> 
             : <P color={TextColor.LIGHT}> • {activity.description}</P> }
         </div>
       ))}
