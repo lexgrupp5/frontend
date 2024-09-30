@@ -18,6 +18,7 @@ export const CurrentCoursePage = (): ReactElement => {
 
   useEffect(() => {
     (async () => {
+      console.log("sdsdsdsdsd")
       if (selectedCourse?.id == null) { return; }
       const [err, result] = await getCourseModules.makeAuthRequestWithErrorResponse(selectedCourse.id);
       if (err != null || result == null) {
@@ -53,15 +54,14 @@ export const CurrentCoursePage = (): ReactElement => {
   return (
     <article className="min-h-screen-header bg-indigo-100">
       <DefaultToastMessage />
-      <CourseSidebar course={selectedCourse}
-        modules={modules}
-        onOpen={updateLeftMargin} />
+      <CourseSidebar modules={modules}
+        onOpen={updateLeftMargin}
+        updateCourseCacheTimestamp={updateCourseCacheTimestamp} />
       <div style={{ marginLeft: `${leftMargin}px` }}
         className="px-8 py-16">
         <CourseArticle
           course={selectedCourse}
-          updateCourseCacheTimestamp={updateCourseCacheTimestamp}
-        />  
+          updateCourseCacheTimestamp={updateCourseCacheTimestamp} />  
       </div>
     </article>
   );
