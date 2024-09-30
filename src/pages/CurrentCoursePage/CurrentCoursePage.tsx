@@ -18,7 +18,6 @@ export const CurrentCoursePage = (): ReactElement => {
 
   useEffect(() => {
     (async () => {
-      console.log("sdsdsdsdsd")
       if (selectedCourse?.id == null) { return; }
       const [err, result] = await getCourseModules.makeAuthRequestWithErrorResponse(selectedCourse.id);
       if (err != null || result == null) {
