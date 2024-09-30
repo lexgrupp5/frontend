@@ -14,7 +14,7 @@ export const OkTopToast: React.FC<Props> = ({
 }): ReactElement => {
 
   return (
-    <TopToast keepOpen={keepOpen} onClose={onClose} background="bg-sky-500">
+    <TopToast keepOpen={keepOpen} onClose={onClose} background="bg-sky-300">
       {children}
     </TopToast>
   );
