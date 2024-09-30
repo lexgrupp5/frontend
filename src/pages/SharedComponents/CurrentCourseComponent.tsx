@@ -43,11 +43,6 @@ export function CurrentCourseComponent({ course }: Props): ReactElement {
                     <P color={TextColor.MEDIUM}>End: {course!.endDate?.toDateString()}</P>
 
                 </div>
-                <div className="moduleDiv">
-                    <P color={TextColor.MEDIUM}>Current Module:</P>
-                    <P color={TextColor.MEDIUM}>MODULE GOES HERE</P>
-                </div>
-
             </article>
         )
     }

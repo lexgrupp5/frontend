@@ -19,8 +19,9 @@ export const ActivityModal: React.FC<Props> = ({
         <DarkModal
             isOpen={isOpen}
             onClose={onClose}>
-            <H size={4}>{activity.id}</H>
+            <H size={4}>{activity.activityTypeName}</H>
             <div>
+                <P color={TextColor.MEDIUM}>{activity.activityTypeDescription}</P>
                 <P color={TextColor.MEDIUM}>Start: {activity.startDate?.toDateString()}</P>
                 <P color={TextColor.MEDIUM}>End: {activity.endDate?.toDateString()}</P>
                 <br />

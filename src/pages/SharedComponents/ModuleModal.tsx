@@ -19,12 +19,10 @@ export const ModuleModal: React.FC<Props> = ({
         <DarkModal
             isOpen={isOpen}
             onClose={onClose}>
-            <H size={4}>{module.id}</H>
+            <H size={4}>{module.description}</H>
             <div>
                 <P color={TextColor.MEDIUM}>Start: {module.startDate?.toDateString()}</P>
                 <P color={TextColor.MEDIUM}>End: {module.endDate?.toDateString()}</P>
-                <br />
-                <P>{module.description}</P>
             </div>
         </DarkModal>
     );

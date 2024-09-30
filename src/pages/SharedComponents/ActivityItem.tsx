@@ -24,9 +24,10 @@ export const ActivityItem: React.FC<Props> = ({ activity }): ReactElement => {
         hover:outline hover:outline-indigo-50
         cursor-pointer overflow-y-auto"
                 onClick={() => { setViewActivity(true); }}>
-                <H size={4}>{activity.description}</H>
+                <H size={4}>{activity.activityTypeName}</H>
                 <div className="w-full flex justify-between items-end">
                     <div>
+                        <P color={TextColor.MEDIUM}>{activity.description}</P>
                         <P color={TextColor.MEDIUM}>Start: {activity.startDate?.toDateString()}</P>
                         <P color={TextColor.MEDIUM}>End: {activity.endDate?.toDateString()}</P>
                     </div>

@@ -28,6 +28,10 @@ export interface IClient {
      */
     refresh(access?: string | undefined): Promise<string>;
     /**
+     * @return OK
+     */
+    roles(): Promise<void>;
+    /**
      * @param searchText (optional) 
      * @param endDate (optional) 
      * @param startDate (optional) 
@@ -38,7 +42,7 @@ export interface IClient {
      * @param body (optional) 
      * @return OK
      */
-    coursesPOST(body?: CourseCreateDto | undefined): Promise<CourseDto>;
+    createCourse(body?: CourseCreateDto | undefined): Promise<CourseDto>;
     /**
      * @return OK
      */
@@ -47,11 +51,14 @@ export interface IClient {
      * @param body (optional) 
      * @return OK
      */
-    coursesPATCH(id: number, body?: Operation[] | undefined): Promise<void>;
+    courses(id: number, body?: Operation[] | undefined): Promise<void>;
     /**
+     * @param searchText (optional) 
+     * @param endDate (optional) 
+     * @param startDate (optional) 
      * @return OK
      */
-    course(id: number): Promise<ModuleDto[]>;
+    modulesAll(id: number, searchText?: string | undefined, endDate?: Date | undefined, startDate?: Date | undefined): Promise<ModuleDto[]>;
     /**
      * @return OK
      */
@@ -79,7 +86,7 @@ export interface IClient {
     /**
      * @return OK
      */
-    course2(id: number): Promise<UserDto[]>;
+    course(id: number): Promise<UserDto[]>;
     /**
      * @return OK
      */
@@ -274,6 +281,53 @@ export class Client implements IClient {
     }
 
     /**
+     * @return OK
+     */
+    roles(signal?: AbortSignal): Promise<void> {
+        let url_ = this.baseUrl + "/api/auth/roles";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+            },
+            signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRoles(_response);
+        });
+    }
+
+    protected processRoles(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
      * @param searchText (optional) 
      * @param endDate (optional) 
      * @param startDate (optional) 
@@ -350,7 +404,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return OK
      */
-    coursesPOST(body?: CourseCreateDto | undefined, signal?: AbortSignal): Promise<CourseDto> {
+    createCourse(body?: CourseCreateDto | undefined, signal?: AbortSignal): Promise<CourseDto> {
         let url_ = this.baseUrl + "/api/courses";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -374,11 +428,11 @@ export class Client implements IClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCoursesPOST(_response);
+            return this.processCreateCourse(_response);
         });
     }
 
-    protected processCoursesPOST(response: AxiosResponse): Promise<CourseDto> {
+    protected processCreateCourse(response: AxiosResponse): Promise<CourseDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -460,7 +514,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return OK
      */
-    coursesPATCH(id: number, body?: Operation[] | undefined, signal?: AbortSignal): Promise<void> {
+    courses(id: number, body?: Operation[] | undefined, signal?: AbortSignal): Promise<void> {
         let url_ = this.baseUrl + "/api/courses/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -486,11 +540,11 @@ export class Client implements IClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCoursesPATCH(_response);
+            return this.processCourses(_response);
         });
     }
 
-    protected processCoursesPATCH(response: AxiosResponse): Promise<void> {
+    protected processCourses(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -512,13 +566,28 @@ export class Client implements IClient {
     }
 
     /**
+     * @param searchText (optional) 
+     * @param endDate (optional) 
+     * @param startDate (optional) 
      * @return OK
      */
-    course(id: number, signal?: AbortSignal): Promise<ModuleDto[]> {
-        let url_ = this.baseUrl + "/api/modules/{id}/course";
+    modulesAll(id: number, searchText?: string | undefined, endDate?: Date | undefined, startDate?: Date | undefined, signal?: AbortSignal): Promise<ModuleDto[]> {
+        let url_ = this.baseUrl + "/api/courses/modules/{id}?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (searchText === null)
+            throw new Error("The parameter 'searchText' cannot be null.");
+        else if (searchText !== undefined)
+            url_ += "SearchText=" + encodeURIComponent("" + searchText) + "&";
+        if (endDate === null)
+            throw new Error("The parameter 'endDate' cannot be null.");
+        else if (endDate !== undefined)
+            url_ += "EndDate=" + encodeURIComponent(endDate ? "" + endDate.toISOString() : "") + "&";
+        if (startDate === null)
+            throw new Error("The parameter 'startDate' cannot be null.");
+        else if (startDate !== undefined)
+            url_ += "StartDate=" + encodeURIComponent(startDate ? "" + startDate.toISOString() : "") + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -537,11 +606,11 @@ export class Client implements IClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCourse(_response);
+            return this.processModulesAll(_response);
         });
     }
 
-    protected processCourse(response: AxiosResponse): Promise<ModuleDto[]> {
+    protected processModulesAll(response: AxiosResponse): Promise<ModuleDto[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -858,7 +927,7 @@ export class Client implements IClient {
     /**
      * @return OK
      */
-    course2(id: number, signal?: AbortSignal): Promise<UserDto[]> {
+    course(id: number, signal?: AbortSignal): Promise<UserDto[]> {
         let url_ = this.baseUrl + "/api/user/course/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -881,11 +950,11 @@ export class Client implements IClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCourse2(_response);
+            return this.processCourse(_response);
         });
     }
 
-    protected processCourse2(response: AxiosResponse): Promise<UserDto[]> {
+    protected processCourse(response: AxiosResponse): Promise<UserDto[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1201,6 +1270,8 @@ export class ActivityDto implements IActivityDto {
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
+    activityTypeName?: string | undefined;
+    activityTypeDescription?: string | undefined;
 
     constructor(data?: IActivityDto) {
         if (data) {
@@ -1218,6 +1289,8 @@ export class ActivityDto implements IActivityDto {
             this.description = _data["description"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.activityTypeName = _data["activityTypeName"];
+            this.activityTypeDescription = _data["activityTypeDescription"];
         }
     }
 
@@ -1235,6 +1308,8 @@ export class ActivityDto implements IActivityDto {
         data["description"] = this.description;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["activityTypeName"] = this.activityTypeName;
+        data["activityTypeDescription"] = this.activityTypeDescription;
         return data;
     }
 }
@@ -1245,6 +1320,8 @@ export interface IActivityDto {
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
+    activityTypeName?: string | undefined;
+    activityTypeDescription?: string | undefined;
 }
 
 export class ActivityForCreationDto implements IActivityForCreationDto {
@@ -1300,6 +1377,7 @@ export class CourseCreateDto implements ICourseCreateDto {
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
+    readonly moduleNames?: string[] | undefined;
 
     constructor(data?: ICourseCreateDto) {
         if (data) {
@@ -1316,6 +1394,11 @@ export class CourseCreateDto implements ICourseCreateDto {
             this.description = _data["description"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            if (Array.isArray(_data["moduleNames"])) {
+                (<any>this).moduleNames = [] as any;
+                for (let item of _data["moduleNames"])
+                    (<any>this).moduleNames!.push(item);
+            }
         }
     }
 
@@ -1332,6 +1415,11 @@ export class CourseCreateDto implements ICourseCreateDto {
         data["description"] = this.description;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        if (Array.isArray(this.moduleNames)) {
+            data["moduleNames"] = [];
+            for (let item of this.moduleNames)
+                data["moduleNames"].push(item);
+        }
         return data;
     }
 }
@@ -1341,6 +1429,7 @@ export interface ICourseCreateDto {
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
+    moduleNames?: string[] | undefined;
 }
 
 export class CourseDto implements ICourseDto {
@@ -1349,6 +1438,7 @@ export class CourseDto implements ICourseDto {
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
+    moduleNames?: string[] | undefined;
 
     constructor(data?: ICourseDto) {
         if (data) {
@@ -1366,6 +1456,11 @@ export class CourseDto implements ICourseDto {
             this.description = _data["description"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            if (Array.isArray(_data["moduleNames"])) {
+                this.moduleNames = [] as any;
+                for (let item of _data["moduleNames"])
+                    this.moduleNames!.push(item);
+            }
         }
     }
 
@@ -1383,6 +1478,11 @@ export class CourseDto implements ICourseDto {
         data["description"] = this.description;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        if (Array.isArray(this.moduleNames)) {
+            data["moduleNames"] = [];
+            for (let item of this.moduleNames)
+                data["moduleNames"].push(item);
+        }
         return data;
     }
 }
@@ -1393,6 +1493,7 @@ export interface ICourseDto {
     description?: string | undefined;
     startDate?: Date;
     endDate?: Date;
+    moduleNames?: string[] | undefined;
 }
 
 export class ModuleCreateModel implements IModuleCreateModel {
@@ -1620,13 +1721,13 @@ export interface IOperation {
 }
 
 export enum OperationType {
-    Add = "Add",
-    Remove = "Remove",
-    Replace = "Replace",
-    Move = "Move",
-    Copy = "Copy",
-    Test = "Test",
-    Invalid = "Invalid",
+    _0 = 0,
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+    _4 = 4,
+    _5 = 5,
+    _6 = 6,
 }
 
 export class UserAuthModel implements IUserAuthModel {
