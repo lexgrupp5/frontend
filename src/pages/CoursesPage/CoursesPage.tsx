@@ -13,9 +13,9 @@ export const CoursesPage = (): ReactElement => {
   }
 
   return (
-    <>
+    <article>
       <CoursesController />
       <CourseList courses={courses}/>
-    </>
+    </article>
   );
 };

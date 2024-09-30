@@ -1,7 +1,7 @@
 import { isDevelopment } from "@/config";
 
 export function getDefaultUsername() {
-  return isDevelopment() ? "Bjorn.Lind" : "";
+  return isDevelopment() ? "Robin98" : "";
 }
 
 export function getDefaultPwd() {

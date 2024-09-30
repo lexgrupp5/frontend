@@ -4,18 +4,20 @@ import { H, IconContainer, P, TextColor, UnstyledButton } from "@/components";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import type { ActivityDto, ModuleDto } from "@/apiGenerated";
 import { useCoursesPageContext } from "@/hooks";
-import { MdAssignmentAdd } from "react-icons/md";
+import { MdAssignmentAdd, MdSchool } from "react-icons/md";
 
 interface Props {
   module: ModuleDto;
   open: boolean;
   toggleOpen: (module: ModuleDto, withSelect: boolean) => void;
+  openCreateActivity: () => void;
 }
 
 export const ModulePanel: React.FC<Props> = ({
   module,
   open,
-  toggleOpen
+  toggleOpen,
+  openCreateActivity
 }): ReactElement => {
   const context = useCoursesPageContext();
   const isCurrentModule = module.id === context.selectedModule?.id;
@@ -31,28 +33,28 @@ export const ModulePanel: React.FC<Props> = ({
 
   return (
     <article
-      className={`border-b ${isCurrentModule && "bg-indigo-950"}
+      className={`border-b border-b-black
+      ${isCurrentModule && "bg-indigo-950"}
       cursor-pointer hover:bg-indigo-950`}>
       <div
         className="flex justify-between items-center p-2 overflow-hidden"
         onClick={() => { toggleOpen(module, true); }}>
         <div>
           <H size={4} className={`${isCurrentModule &&
-            "underline underline-offset-4"}
-            hover:underline hover:underline-offset-4`}>
+            "underline underline-offset-4"}`}>
             {module.name}
           </H>
         </div>
         <div>
           <UnstyledButton onPress={() => { toggleOpen(module, false); }}>{!open
             ? <IconContainer
-              className="text-white size-12 cursor-pointer 
-              hover:bg-black p-4 rounded-full">
+              className="text-white size-10 cursor-pointer 
+              hover:bg-indigo-500 p-3 rounded-full">
               <FaChevronRight />
             </IconContainer>
             : <IconContainer
-              className="text-white size-12 cursor-pointer
-              hover:bg-black p-4 rounded-full">
+              className="text-white size-10 cursor-pointer
+              hover:bg-indigo-500 p-3 rounded-full">
               <FaChevronDown />
             </IconContainer>
           }</UnstyledButton>
@@ -61,24 +63,41 @@ export const ModulePanel: React.FC<Props> = ({
       {open && module.activities != null && module.activities.map(activity => (
         <div key={activity.id}
           onClick={e => { handleSelectActivity(activity, e); }}
-          className="flex-shrink-0 flex justify-start items-start p-2 m-2 
-          cursor-pointer">
+          className="flex-shrink-0 flex justify-start
+          items-center gap-2 p-2 m-2 
+          cursor-pointer
+          group">
           {activity.id !== context.selectedActivity?.id
-            ? <P color={TextColor.MEDIUM_X} className="text-gray-400 hover:text-white">• {activity.description}</P>
-            : <P color={TextColor.LIGHT}> • {activity.description}</P>}
+            ? <>
+              <IconContainer
+                className="flex-shrink-0 text-gray-400 size-4 group-hover:text-white">
+                <MdSchool />
+              </IconContainer>
+              <P color={TextColor.MEDIUM_X} className="text-gray-400 group-hover:text-white">
+                {activity.description}
+              </P>
+            </> 
+            : <>
+              <IconContainer
+                className="flex-shrink-0 text-white size-4 group-hover:text-white">
+                <MdSchool />
+              </IconContainer>
+              <P color={TextColor.LIGHT}> {activity.description}</P>
+            </>}
         </div>
       ))}
       {open && module.activities != null && module.activities != null && <div>
         <UnstyledButton
           className="display flex justify-start items-center gap-2
-          w-full py-2 pl-4 pr-2"
-          onPress={() => {}}>
+          w-full p-2 m-2
+          group"
+          onPress={openCreateActivity}>
           <IconContainer
-            className="text-gray-400 size-4 ">
+            className="flex-shrink-0 text-gray-400 size-4 group-hover:text-white">
             <MdAssignmentAdd />
           </IconContainer>
-          <P color={TextColor.MEDIUM_X} className="hover:text-white">
-            Create new module activty
+          <P color={TextColor.MEDIUM_X} className="group-hover:text-white">
+            Create activty 
           </P>
         </UnstyledButton>
       </div>}

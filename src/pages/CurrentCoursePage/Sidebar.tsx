@@ -36,16 +36,20 @@ export const Sidebar: React.FC<Props> = ({
         ? <UnstyledButton
           className="fixed z-20"
           onPress={() => { updateOpen(true); }}>
-          <IconContainer className="size-12 m-2 p-2 bg-indigo-300 opacity-70 rounded-full">
+          <IconContainer className="size-12 m-2 p-2 
+          bg-indigo-300 opacity-70 rounded-full">
             <TfiMenuAlt />
           </IconContainer>
         </UnstyledButton>
         : <>
           <aside
             style={widthStyle}
-            className="overflow-y-auto fixed z-20 h-screen-header bg-indigo-900 flex flex-col"
+            className="fixed z-20 h-screen-header 
+            bg-indigo-900 flex flex-col
+            overflow-y-auto overflow-x-hidden custom-scrollbar"
           >
-            <div className="sticky top-0 bg-indigo-900 border-b">
+            <div className="sticky top-0 bg-indigo-500
+            border-b border-b-black">
               <UnstyledButton onPress={() => { updateOpen(false); }}>
                 <IconContainer className="text-white size-12 m-2 p-2">
                   <FaTimes />
@@ -59,7 +63,7 @@ export const Sidebar: React.FC<Props> = ({
 
             {footer && (
               <div className="sticky bottom-0 
-                bg-indigo-900 border-t">
+                bg-indigo-500 border-t border-t-black">
                 {footer}
               </div>
             )}

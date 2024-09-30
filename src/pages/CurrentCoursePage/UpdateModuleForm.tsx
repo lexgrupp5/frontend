@@ -1,23 +1,17 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 
 import { api, ModuleDto } from "@/api";
-import { H, Input, LightModal, P, SubmitButton, TextColor } from "@/components";
+import { FullPageSpinner, H, Input, SubmitButton, TextColor } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
 import { createPatchOperations, formatDateToString } from "@/utils";
 import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
 
 interface Props {
   module: ModuleDto;
-  isOpen: boolean;
-  onClose: () => void;
-  updateCourseCacheTimestamp: () => void;
 }
 
 export const UpdateModuleForm: React.FC<Props> = ({
-  module,
-  isOpen,
-  onClose,
-  updateCourseCacheTimestamp
+  module
 }): ReactElement => {
   const patchModule = useApi(api.module);
   const [name, setName] = useState(module.name ?? "");
@@ -41,14 +35,14 @@ export const UpdateModuleForm: React.FC<Props> = ({
         { key: "endDate", value: endDate },
       ]));
     if (err == null) {
-      updateModuleData();
       msgContext.updateMessage(`Module '${name}' have been updated`);
+      updateModule();
     } else {
       msgContext.updateErrorMessage("Module could not be updated");
     }
   };
 
-  const updateModuleData = () => {
+  const updateModule = () => {
     coursesPageContext.updateSelectedModule(new ModuleDto({
       id: module.id,
       name,
@@ -58,12 +52,6 @@ export const UpdateModuleForm: React.FC<Props> = ({
     }));
   };
 
-  const handleCloseForm = () => {
-    handleCloseResult();
-    onClose();
-    updateCourseCacheTimestamp();
-  };
-
   const handleCloseResult = () => {
     if (patchModule.error != null) {
       patchModule.clearError();
@@ -71,53 +59,42 @@ export const UpdateModuleForm: React.FC<Props> = ({
   };
 
   return (
-    <LightModal
-      isOpen={isOpen}
-      onClose={handleCloseForm}>
-      <div className="w-full h-full">
-        <form onSubmit={submit}
-          className="w-full
-          bg-indigo-100
-          rounded-lg max-w-lg">
-          <DefaultToastMessage onClose={handleCloseResult} />
-          <H size={2} color={TextColor.DARK_X} className="mb-2">
-            {module.name}
-          </H>
-          <H size={4} color={TextColor.DARK_X} className="mb-2">
-            {module.description}
-          </H>
-          <P color={TextColor.DARK} className="mb-6">
-            Please update module details below
-          </P>
-          <fieldset className="flex flex-col gap-6">
-            <Input
-              type="text"
-              label="Name"
-              required
-              value={name}
-              onChange={e => { setName(e.target.value); }} />
-            <Input
-              label="Description"
-              type="text"
-              required
-              value={description}
-              onChange={e => { setDescription(e.target.value); }} />
-            <Input
-              label="Start date"
-              type="date"
-              required
-              value={startDate}
-              onChange={e => { setStartDate(e.target.value); }} />
-            <Input
-              label="End date"
-              type="date"
-              required
-              value={endDate}
-              onChange={e => { setEndDate(e.target.value); }} />
-            <SubmitButton>Update</SubmitButton>
-          </fieldset>
-        </form>
-      </div>
-    </LightModal>
+    <form onSubmit={submit}
+      className="w-full
+      bg-indigo-100
+      rounded-lg max-w-lg">
+      {patchModule.pending && <FullPageSpinner />}
+      <DefaultToastMessage onClose={handleCloseResult} />
+      <H size={3} color={TextColor.DARK_X} className="mb-2">
+        Update module '{module.name}' in course '{coursesPageContext.selectedCourse?.name}'
+      </H>
+      <fieldset className="flex flex-col gap-6">
+        <Input
+          type="text"
+          label="Name"
+          required
+          value={name}
+          onChange={e => { setName(e.target.value); }} />
+        <Input
+          label="Description"
+          type="text"
+          required
+          value={description}
+          onChange={e => { setDescription(e.target.value); }} />
+        <Input
+          label="Start date"
+          type="date"
+          required
+          value={startDate}
+          onChange={e => { setStartDate(e.target.value); }} />
+        <Input
+          label="End date"
+          type="date"
+          required
+          value={endDate}
+          onChange={e => { setEndDate(e.target.value); }} />
+        <SubmitButton>Update Module</SubmitButton>
+      </fieldset>
+    </form>
   );
 };

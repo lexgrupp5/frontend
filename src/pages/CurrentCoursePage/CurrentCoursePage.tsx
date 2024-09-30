@@ -14,13 +14,12 @@ export const CurrentCoursePage = (): ReactElement => {
   const [leftMargin, setLeftMargin ] = useState(0);
   const [modules, setModules] = useState<ModuleDto[]>([]);
   const msgContext = useMessageContext();
-  const [courseCacheTimestamp, setCourseCacheTimestamp] = useState(Date.now());
+  const [cacheTimestamp, setCacheTimestamp] = useState(Date.now());
 
   useEffect(() => {
     (async () => {
       if (selectedCourse?.id == null) { return; }
       const [err, result] = await getCourseModules.makeAuthRequestWithErrorResponse(selectedCourse.id);
-      console.log(result)
       if (err != null || result == null) {
         msgContext.updateErrorMessage("Course data could not be fetched");
       } else {
@@ -29,7 +28,7 @@ export const CurrentCoursePage = (): ReactElement => {
         setModules(result);
       }
     })();
-  }, [courseCacheTimestamp, selectedCourse?.id]);
+  }, [cacheTimestamp, selectedCourse?.id]);
 
   const updateModuleActivities = async (courseModules: ModuleDto[]) => {
     courseModules.forEach(async module => {
@@ -42,8 +41,8 @@ export const CurrentCoursePage = (): ReactElement => {
     setLeftMargin(margin);
   }; 
 
-  const updateCourseCacheTimestamp = () => {
-    setCourseCacheTimestamp(Date.now());
+  const updateCacheTimestamp = () => {
+    setCacheTimestamp(Date.now());
   };
 
   if (selectedCourse == null) { return <></>; }
@@ -57,12 +56,12 @@ export const CurrentCoursePage = (): ReactElement => {
       <DefaultToastMessage />
       <CourseSidebar modules={modules}
         onOpen={updateLeftMargin}
-        updateCourseCacheTimestamp={updateCourseCacheTimestamp} />
+        updateCacheTimestamp={updateCacheTimestamp} />
       <div style={{ marginLeft: `${leftMargin}px` }}
-        className="px-8 py-16">
+        className="px-8 py-16 flex justify-center">
         <CourseArticle
           course={selectedCourse}
-          updateCourseCacheTimestamp={updateCourseCacheTimestamp} />  
+          updateCacheTimestamp={updateCacheTimestamp} />  
       </div>
     </article>
   );
