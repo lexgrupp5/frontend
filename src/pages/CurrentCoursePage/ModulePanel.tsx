@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 import { H, IconContainer, P, TextColor, UnstyledButton } from "@/components";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import type { ActivityDto, ModuleDto } from "@/apiGenerated";
-import { useCoursesPageContext } from "@/hooks";
+import { useAuthContext, useCoursesPageContext } from "@/hooks";
 import { MdAssignmentAdd, MdSchool } from "react-icons/md";
 
 interface Props {
@@ -20,6 +20,7 @@ export const ModulePanel: React.FC<Props> = ({
   openCreateActivity
 }): ReactElement => {
   const context = useCoursesPageContext();
+  const authContext = useAuthContext();
   const isCurrentModule = module.id === context.selectedModule?.id;
 
   const handleSelectActivity = (
@@ -86,7 +87,7 @@ export const ModulePanel: React.FC<Props> = ({
             </>}
         </div>
       ))}
-      {open && module.activities != null && module.activities != null && <div>
+      {authContext.isTeacher() && open && module.activities != null && module.activities != null && <div>
         <UnstyledButton
           className="display flex justify-start items-center gap-2
           w-full p-2 m-2
