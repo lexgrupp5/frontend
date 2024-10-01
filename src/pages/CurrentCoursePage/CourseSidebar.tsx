@@ -19,11 +19,13 @@ export const CourseSidebar: React.FC<Props> = ({
 }): ReactElement => {
   const sidebarWidth = 300;
   const isLargeScreen = window.innerWidth > 768;
-  const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({});
   const [openSettings, setOpenSettings] = useState(false);
   const [open, setOpen] = useState(isLargeScreen);
   const context = useCoursesPageContext();
   const autContext = useAuthContext();
+  const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({
+    [`${context.selectedModule?.id}`]: true
+  });
 
   const togglePanelOpen = (module: ModuleDto, withSelect: boolean) => {
     if (module.id == null) { return; }
@@ -54,10 +56,6 @@ export const CourseSidebar: React.FC<Props> = ({
   const updateSidebarBody = (open: boolean) => {
     setOpen(open);
   };
-
-  useEffect(() => {
-    console.log('modules.length', modules.length)
-  })
 
   return (
     <Sidebar open={open}
