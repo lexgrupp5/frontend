@@ -1,16 +1,8 @@
 import { ReactElement, ReactNode } from "react";
 import { TfiMenuAlt } from "react-icons/tfi";
-
-import { IconContainer, UnstyledButton } from "@/components";
 import { FaTimes } from "react-icons/fa";
 
-
-interface Props {
-  open: boolean;
-  width?: number;
-  children?: ReactNode;
-  updateOpen: (open: boolean) => void;
-}
+import { IconContainer, UnstyledButton } from "@/components";
 
 interface Props {
   open: boolean;
@@ -56,12 +48,10 @@ export const Sidebar: React.FC<Props> = ({
                 </IconContainer>
               </UnstyledButton>
             </div>
-            
             <div className="flex-1">
               {children}
             </div>
-
-            {footer && (
+            {footer != null && (
               <div className="sticky bottom-0 
                 bg-indigo-500 border-t border-t-black">
                 {footer}

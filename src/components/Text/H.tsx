@@ -16,7 +16,7 @@ export const H: React.FC<Props> = ({
   className = ""
 }) => {
   const HeaderTag = `h${size}` as keyof JSX.IntrinsicElements;
-  const derivedClasName = `overflow-hidden break-all 
+  const derivedClasName = `overflow-hidden break-word
     ${className ? className : ""}`;
   const headerSizeClass = HeaderSize[size] ?? HeaderSize[1];
 

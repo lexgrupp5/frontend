@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useState } from "react";
 
 import type { ModuleDto } from "@/apiGenerated";
-import { Sidebar } from "./Sidebar";
+import { Sidebar } from "@/components";
 import { useAuthContext, useCoursesPageContext } from "@/hooks";
 import { CourseSidebarFooter } from "./CourseSidebarFooter";
 import { CourseSidebarBody } from "./CourseSidebarBody";

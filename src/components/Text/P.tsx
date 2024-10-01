@@ -13,7 +13,7 @@ export const P: React.FC<Props> = ({
   color = TextColor.LIGHT,
   className
 }): ReactElement => {
-  const derivedClassName = `text-${color} overflow-hidden break-all
+  const derivedClassName = `text-${color} overflow-hidden break-word
     ${className ? className : ""}`;
   
   return (
