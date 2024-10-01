@@ -1,10 +1,10 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 import { AuthContext, IAuthContext } from "@/contexts";
 import { Role, Storage } from "@/constants";
 import { useApi } from "@/hooks";
-import { api, UserAuthModel } from "@/api";
+import { api, CourseDto, UserAuthModel } from "@/api";
 import * as Service from "@/services";
 
 interface Props {
@@ -16,6 +16,10 @@ export const AuthProvider: React.FC<Props> = ({
 }): ReactElement => {
   const loginApi = useApi(api.login);
   const logoutApi = useApi(api.logout);
+  const userCourse = useApi(api.userAll);
+  const [ myCourse, setMyCourse ] = useState<CourseDto | null>(null);
+  const [ username, setUsername ] = useState<string | null>(null);
+  
   const [
     token, setToken, clearTokens
   ] = useLocalStorage<string | null>(Storage.TOKEN, null);
@@ -26,6 +30,13 @@ export const AuthProvider: React.FC<Props> = ({
       userName,
       password
     })));
+    setUsername(userName);
+    const [err, result] = await userCourse.makeAuthRequestWithErrorResponse(userName);
+    if (err == null && result != null) {
+      setMyCourse(result[0]);
+    } else {
+      setMyCourse(null);
+    };
   };
 
   const isTeacher = () => {
@@ -60,6 +71,8 @@ export const AuthProvider: React.FC<Props> = ({
   const constructAuthContext = (): IAuthContext => {
     return {
       isLoggedIn,
+      myCourse,
+      username,
       login,
       register,
       logout,
