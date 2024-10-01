@@ -1,53 +1,53 @@
 import { ReactElement } from "react";
 
 import { H, IconContainer, P, TextColor, UnstyledButton } from "@/components";
-import { FaChevronDown, FaChevronRight } from "react-icons/fa";
-import type { ActivityDto, ModuleDto } from "@/apiGenerated";
+import { FaChevronDown, FaChevronRight, FaUserGraduate, FaUserPlus } from "react-icons/fa";
+import type { UserDto } from "@/apiGenerated";
 import { useAuthContext, useCoursesPageContext } from "@/hooks";
-import { MdAssignmentAdd, MdSchool } from "react-icons/md";
 
 interface Props {
-  module: ModuleDto;
+  participants: UserDto[];
+  panelId: string;
   open: boolean;
-  toggleOpen: (id: string, module: ModuleDto) => void;
-  openCreateActivity: () => void;
+  toggleOpen: (id: string) => void;
+  openCreateParticipant: () => void;
 }
 
-export const ModulePanel: React.FC<Props> = ({
-  module,
+export const ParticipantsPanel: React.FC<Props> = ({
+  participants,
   open,
+  panelId,
   toggleOpen,
-  openCreateActivity
+  openCreateParticipant
 }): ReactElement => {
   const context = useCoursesPageContext();
   const authContext = useAuthContext();
-  const isCurrentModule = module.id === context.selectedModule?.id;
+  const isCurrent = context.selectedParticipant != null;
 
-  const handleSelectActivity = (
-    activity: ActivityDto,
+  const handleSelectParticipant = (
+    participant: UserDto,
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
-    context.updateSelectedActivity(activity);
-    context.updateSelectedModule(module);
+    context.updateSelectedParticipant(participant);
   };
 
   return (
     <article
       className={`border-b border-b-black
-      ${isCurrentModule && "bg-indigo-950"}
-      cursor-pointer hover:bg-indigo-950`}>
+        ${isCurrent && "bg-indigo-950"}
+        cursor-pointer hover:bg-indigo-950`}>
       <div
         className="flex justify-between items-center p-2 overflow-hidden"
-        onClick={() => { toggleOpen(`${module?.id ?? ""}`, module); }}>
+        onClick={() => { toggleOpen(panelId); }}>
         <div>
-          <H size={4} className={`${isCurrentModule &&
+          <H size={4} className={`
             "underline underline-offset-4"}`}>
-            {module.name}
+            Participants
           </H>
         </div>
         <div>
-          <UnstyledButton onPress={() => { toggleOpen(`${module?.id ?? ""}`, module); }}>{!open
+          <UnstyledButton onPress={() => { toggleOpen(panelId); }}>{!open
             ? <IconContainer
               className="text-white size-10 cursor-pointer 
               hover:bg-indigo-500 p-3 rounded-full">
@@ -61,44 +61,44 @@ export const ModulePanel: React.FC<Props> = ({
           }</UnstyledButton>
         </div>
       </div>
-      {open && module.activities != null && module.activities.map(activity => (
-        <div key={activity.id}
-          onClick={e => { handleSelectActivity(activity, e); }}
+      {open && participants.map(participant => (
+        <div key={participant.username}
+          onClick={e => { handleSelectParticipant(participant, e); }}
           className="flex-shrink-0 flex justify-start
           items-center gap-2 p-2 m-2 
           cursor-pointer
           group">
-          {activity.id !== context.selectedActivity?.id
+          {participant.username !== context.selectedParticipant?.username
             ? <>
               <IconContainer
                 className="flex-shrink-0 text-gray-400 size-4 group-hover:text-white">
-                <MdSchool />
+                <FaUserGraduate />
               </IconContainer>
               <P color={TextColor.MEDIUM_X} className="text-gray-400 group-hover:text-white">
-                {activity.description}
+                {participant.username}
               </P>
             </> 
             : <>
               <IconContainer
                 className="flex-shrink-0 text-white size-4 group-hover:text-white">
-                <MdSchool />
+                <FaUserGraduate />
               </IconContainer>
-              <P color={TextColor.LIGHT}> {activity.description}</P>
+              <P color={TextColor.LIGHT}> {participant.username}</P>
             </>}
         </div>
       ))}
-      {authContext.isTeacher() && open && module.activities != null && <div>
+      {authContext.isTeacher() && open && <div>
         <UnstyledButton
           className="display flex justify-start items-center gap-2
           w-full p-2 m-2
           group"
-          onPress={openCreateActivity}>
+          onPress={openCreateParticipant}>
           <IconContainer
             className="flex-shrink-0 text-gray-400 size-4 group-hover:text-white">
-            <MdAssignmentAdd />
+            <FaUserPlus />
           </IconContainer>
           <P color={TextColor.MEDIUM_X} className="group-hover:text-white">
-            Create activty 
+            Add new participant
           </P>
         </UnstyledButton>
       </div>}

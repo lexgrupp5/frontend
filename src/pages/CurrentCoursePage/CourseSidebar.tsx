@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState } from "react";
 
-import type { ModuleDto } from "@/apiGenerated";
+import { ModuleDto, UserDto } from "@/apiGenerated";
 import { Sidebar } from "@/components";
 import { useAuthContext, useCoursesPageContext } from "@/hooks";
 import { CourseSidebarFooter } from "./CourseSidebarFooter";
@@ -9,12 +9,14 @@ import { CourseSettings } from "./CourseSettings";
 
 interface Props {
   modules: ModuleDto[];
+  participants: UserDto[];
   onOpen: (margin: number) => void
   updateCacheTimestamp: () => void;
 }
 
 export const CourseSidebar: React.FC<Props> = ({
   modules,
+  participants,
   onOpen,
   updateCacheTimestamp
 }): ReactElement => {
@@ -28,16 +30,24 @@ export const CourseSidebar: React.FC<Props> = ({
     [`${context.selectedModule?.id}`]: true
   });
 
-  const togglePanelOpen = (module: ModuleDto, withSelect: boolean) => {
-    if (module.id == null) { return; }
-    const moduleId = module.id;
-    if (withSelect) {
-      context.updateSelectedActivity(null);
-      context.updateSelectedModule(module);
-    }
+  const toggleModulePanelOpen = (id: string, module: ModuleDto) => {
+    if (id.trim() === "") { return; }
+    context.updateSelectedParticipant(null);
+    context.updateSelectedActivity(null);
+    context.updateSelectedModule(module);
     setOpenPanels(prevState => ({
       ...prevState,
-      [moduleId]: prevState[moduleId] == null ? true : !prevState[moduleId]
+      [id]: prevState[id] == null ? true : !prevState[id]
+    }));
+  };
+
+  const toggleParticipantPanelOpen = (id: string) => {
+    if (id.trim() === "") { return; }
+    context.updateSelectedActivity(null);
+    context.updateSelectedModule(null);
+    setOpenPanels(prevState => ({
+      ...prevState,
+      [id]: prevState[id] == null ? true : !prevState[id]
     }));
   };
 
@@ -59,14 +69,18 @@ export const CourseSidebar: React.FC<Props> = ({
   };
 
   return (
-    <Sidebar open={open}
+    <Sidebar
+      open={open}
       updateOpen={updateSidebarBody}
       width={sidebarWidth}
       footer={autContext.isTeacher() && <CourseSidebarFooter
         updateOpenSettings={(open: boolean) => { setOpenSettings(open); }} />}>
-      <CourseSidebarBody modules={modules}
+      <CourseSidebarBody
+        modules={modules}
+        participants={participants}
         openPanels={openPanels}
-        togglePanelOpen={togglePanelOpen}
+        toggleModulePanelOpen={toggleModulePanelOpen}
+        toggleParticipantPanelOpen={toggleParticipantPanelOpen}
         updateCacheTimestamp={updateCacheTimestamp} />
       <CourseSettings 
         openSettings={openSettings}
