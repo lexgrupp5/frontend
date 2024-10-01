@@ -26,7 +26,7 @@ export const CourseItem: React.FC<Props> = ({ course }): ReactElement => {
         bg-indigo-950 p-3
         rounded border-2 border-black
         outline-offset-2 hover:outline-3
-        hover:outline hover:outline-white
+        hover:outline hover:outline-gray-200 hover:bg-indigo-900
         cursor-pointer overflow-y-auto"
         onClick={navigateToSelectedCoursePage}>
         <H size={4}>{course.name}</H>
