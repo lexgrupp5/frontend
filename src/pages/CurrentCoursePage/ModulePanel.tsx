@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 import { H, IconContainer, P, TextColor, UnstyledButton } from "@/components";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import type { ActivityDto, ModuleDto } from "@/apiGenerated";
-import { useAuthContext, useCoursesPageContext } from "@/hooks";
+import { useAuthContext, useCurrentCourseContext } from "@/hooks";
 import { MdAssignmentAdd, MdSchool } from "react-icons/md";
 
 interface Props {
@@ -19,7 +19,7 @@ export const ModulePanel: React.FC<Props> = ({
   toggleOpen,
   openCreateActivity
 }): ReactElement => {
-  const context = useCoursesPageContext();
+  const context = useCurrentCourseContext();
   const authContext = useAuthContext();
   const isCurrentModule = module.id === context.selectedModule?.id;
 

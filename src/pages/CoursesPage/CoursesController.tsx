@@ -11,7 +11,7 @@ export const CoursesController = (): ReactElement => {
   const navigate = useNavigateToPath();
 
   const navigateToSelectedCoursePage = () => {
-    navigate(Path.constructSelectedCoursePath("new"));
+    navigate(Path.COURSES_NEW);
   };
 
   return (

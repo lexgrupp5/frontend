@@ -4,7 +4,7 @@ import { api, ModuleDto } from "@/api";
 import { FullPageSpinner, H, Input, SubmitButton, TextColor } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
 import { createPatchOperations, formatDateToString } from "@/utils";
-import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
+import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
 
 interface Props {
   module: ModuleDto;
@@ -21,7 +21,7 @@ export const UpdateModuleForm: React.FC<Props> = ({
   const [startDate, setStartDate] = useState(formatDateToString(module.startDate) ?? "");
   const [endDate, setEndDate] = useState(formatDateToString(module.endDate) ?? "");
   const msgContext = useMessageContext();
-  const coursesPageContext = useCoursesPageContext();
+  const coursesPageContext = useCurrentCourseContext();
 
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();

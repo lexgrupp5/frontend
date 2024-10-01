@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 import { H, IconContainer, P, TextColor, UnstyledButton } from "@/components";
 import { FaChevronDown, FaChevronRight, FaUserGraduate, FaUserPlus } from "react-icons/fa";
 import type { UserDto } from "@/apiGenerated";
-import { useAuthContext, useCoursesPageContext } from "@/hooks";
+import { useAuthContext, useCurrentCourseContext } from "@/hooks";
 
 interface Props {
   participants: UserDto[];
@@ -20,7 +20,7 @@ export const ParticipantsPanel: React.FC<Props> = ({
   toggleOpen,
   openCreateParticipant
 }): ReactElement => {
-  const context = useCoursesPageContext();
+  const context = useCurrentCourseContext();
   const authContext = useAuthContext();
   const isCurrent = context.selectedParticipant != null;
 
