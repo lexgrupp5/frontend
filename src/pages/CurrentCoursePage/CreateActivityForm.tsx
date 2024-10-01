@@ -5,8 +5,13 @@ import { H, Input, SubmitButton, TextColor } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
 import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
 
+interface Props {
+  title?: string
+}
 
-export const CreateActivityForm = (): ReactElement => {
+export const CreateActivityForm: React.FC<Props> = ({
+  title
+}): ReactElement => {
   const createActivity = useApi(api.createactivity);
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -52,8 +57,7 @@ export const CreateActivityForm = (): ReactElement => {
       rounded-lg max-w-lg">
       <DefaultToastMessage onClose={handleCloseForm} />
       <H size={3} color={TextColor.DARK_X} className="mb-2">
-        {`Create activity in module '${coursesPageContext.selectedModule?.name}'
-         for course '${coursesPageContext.selectedCourse?.name}'`}
+        {title}
       </H>
       <fieldset className="flex flex-col gap-6">
         <Input

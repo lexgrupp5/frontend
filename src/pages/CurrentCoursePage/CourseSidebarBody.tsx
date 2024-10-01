@@ -5,6 +5,7 @@ import { ModuleDto } from "@/apiGenerated";
 import { ModulePanel } from "./ModulePanel";
 import { CourseModal } from "./CourseModal";
 import { CreateActivityForm } from "./CreateActivityForm";
+import { useCoursesPageContext } from "@/hooks";
 
 interface Props {
   modules: ModuleDto[];
@@ -20,6 +21,7 @@ export const CourseSidebarBody: React.FC<Props> = ({
   updateCacheTimestamp
 }): ReactElement => {
   const [createActivity, setCreateActivity] = useState(false);
+  const { selectedModule, selectedCourse } = useCoursesPageContext();
   
   return (
     <>
@@ -27,7 +29,9 @@ export const CourseSidebarBody: React.FC<Props> = ({
       {<CourseModal
         isOpen={createActivity}
         onClose={() => { setCreateActivity(false); updateCacheTimestamp(); }}>
-        <CreateActivityForm />
+        <CreateActivityForm title={`Create activity
+        ${selectedModule?.name ? `for ${selectedModule?.name}` : ""}
+        in course '${selectedCourse?.name}'`}/>
       </CourseModal>}
       {modules.map(module => {
         if (module.id == null) { return <></>; }
