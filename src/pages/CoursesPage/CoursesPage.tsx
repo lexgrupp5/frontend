@@ -13,7 +13,7 @@ export const CoursesPage = (): ReactElement => {
   }
 
   return (
-    <article className="bg-gradient-indigo"> 
+    <article className="min-h-screen-header bg-gradient-indigo">
       <CoursesController />
       <CourseList courses={courses}/>
     </article>
