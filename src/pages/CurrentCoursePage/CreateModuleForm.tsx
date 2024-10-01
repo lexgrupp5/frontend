@@ -5,8 +5,13 @@ import { H, Input, SubmitButton, TextColor } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
 import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
 
+interface Props {
+  hasModules: (hasModules: boolean) => void;
+}
 
-export const CreateModuleForm = (): ReactElement => {
+export const CreateModuleForm: React.FC<Props> = ({
+  hasModules
+}): ReactElement => {
   const createModule = useApi(api.modules);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -31,9 +36,18 @@ export const CreateModuleForm = (): ReactElement => {
     
     if (err == null && result != null) {
       msgContext.updateMessage(`Module '${result.name}' have been created`);
+      clearInputs();
+      hasModules(true);
     } else {
       msgContext.updateErrorMessage("Module could not be created");
     }
+  };
+
+  const clearInputs = () => {
+    setName("");  
+    setDescription("");
+    setStartDate("");
+    setEndDate("");
   };
 
   const handleCloseForm = () => {

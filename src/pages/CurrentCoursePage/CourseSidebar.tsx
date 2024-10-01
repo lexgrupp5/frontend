@@ -5,6 +5,7 @@ import { Sidebar } from "@/components";
 import { useAuthContext, useCoursesPageContext } from "@/hooks";
 import { CourseSidebarFooter } from "./CourseSidebarFooter";
 import { CourseSidebarBody } from "./CourseSidebarBody";
+import { CourseSettings } from "./CourseSettings";
 
 interface Props {
   modules: ModuleDto[];
@@ -62,14 +63,16 @@ export const CourseSidebar: React.FC<Props> = ({
       updateOpen={updateSidebarBody}
       width={sidebarWidth}
       footer={autContext.isTeacher() && <CourseSidebarFooter
-        openSettings={openSettings}
-        hasModules={modules.length > 0}
-        updateCacheTimestamp={updateCacheTimestamp}
         updateOpenSettings={(open: boolean) => { setOpenSettings(open); }} />}>
       <CourseSidebarBody modules={modules}
         openPanels={openPanels}
         togglePanelOpen={togglePanelOpen}
         updateCacheTimestamp={updateCacheTimestamp} />
+      <CourseSettings 
+        openSettings={openSettings}
+        modules={modules}
+        updateCacheTimestamp={updateCacheTimestamp}
+        updateOpenSettings={(open: boolean) => { setOpenSettings(open); }} />
     </Sidebar>
   );
 };

@@ -17,7 +17,7 @@ export const Breadcrumb: React.FC<Props> = ({
   items
 }): ReactElement => {
   return (
-    <nav>
+    <nav className="flex justify-center md:justify-start">
       <ol className="flex gap-2">
         {items.map((item, index) => (
           <li key={index} className="flex items-center gap-2 group">

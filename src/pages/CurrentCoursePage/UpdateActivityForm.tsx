@@ -8,10 +8,12 @@ import { createPatchOperations, formatDateToString } from "@/utils";
 
 interface Props {
   activity: ActivityDto;
+  onSuccess: () => void;
 }
 
 export const UpdateActivityForm: React.FC<Props> = ({
-  activity
+  activity,
+  onSuccess
 }): ReactElement => {
   const patchActivity = useApi(api.activity);
   const [description, setDescription] = useState(activity.description ?? "");
@@ -25,7 +27,6 @@ export const UpdateActivityForm: React.FC<Props> = ({
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     handleCloseResult();
-    console.log(coursesPageContext.selectedModule?.activities)
     if (activity.id == null) { return; }
     const [err] = await patchActivity.makeAuthRequestWithErrorResponse(
       activity.id,
@@ -39,6 +40,7 @@ export const UpdateActivityForm: React.FC<Props> = ({
     if (err == null) {
       msgContext.updateMessage(`Activty '${description}' have been updated`);
       updateActivity();
+      onSuccess();
     } else {
       msgContext.updateErrorMessage("Activity could not be updated");
     }
