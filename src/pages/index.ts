@@ -6,3 +6,4 @@ export * from "./CurrentCoursePage";
 export * from "./ProfilePage";
 export * from "./StudentLandingPage";
 export * from "./StudentCoursePage";
+export * from "./NewCoursePage";
