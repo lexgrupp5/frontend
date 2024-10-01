@@ -1,6 +1,8 @@
+import { ReactElement } from "react";
+import { FaChevronRight } from "react-icons/fa";
+
 import { IconContainer, Link, P, TextColor } from "@/components";
 import { PathType } from "@/constants";
-import { FaChevronRight } from "react-icons/fa";
 
 export interface BreadcrumbItemType {
   label: string;
@@ -11,7 +13,9 @@ interface Props {
   items: BreadcrumbItemType[];
 }
 
-export const Breadcrumb: React.FC<Props> = ({ items }) => {
+export const Breadcrumb: React.FC<Props> = ({
+  items
+}): ReactElement => {
   return (
     <nav>
       <ol className="flex gap-2">
