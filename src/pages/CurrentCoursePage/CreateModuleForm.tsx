@@ -6,10 +6,12 @@ import { DefaultToastMessage } from "../SharedComponents";
 import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
 
 interface Props {
+  title?: string
   hasModules: (hasModules: boolean) => void;
 }
 
 export const CreateModuleForm: React.FC<Props> = ({
+  title,
   hasModules
 }): ReactElement => {
   const createModule = useApi(api.modules);
@@ -61,7 +63,7 @@ export const CreateModuleForm: React.FC<Props> = ({
       rounded-lg max-w-lg">
       <DefaultToastMessage onClose={handleCloseForm} />
       <H size={3} color={TextColor.DARK_X} className="mb-2">
-        Create module for course '{coursesPageContext.selectedCourse?.name}'
+        {title}
       </H>
       <fieldset className="flex flex-col gap-6">
         <Input
