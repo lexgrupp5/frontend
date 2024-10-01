@@ -5,6 +5,7 @@ import { CourseModal } from "./CourseModal";
 import { CreateActivityForm } from "./CreateActivityForm";
 import { H, TextColor, UnstyledButton } from "@/components";
 import { ModuleDto } from "@/apiGenerated";
+import { useCoursesPageContext } from "@/hooks";
 
 const linkContants = {
   CREATE_MODULE: "create-module",
@@ -30,6 +31,7 @@ export const CourseSettings: React.FC<Props> = ({
 }): ReactElement => {
   const [link, setLink] = useState<SettinLinkType>(linkContants.CREATE_MODULE);
   const [hasModules, setHasModules] = useState(modules?.length > 0);
+  const context = useCoursesPageContext();
 
   const FormLink: React.FC<{ label: string, aLink: SettinLinkType }> = ({
     label, aLink
@@ -39,7 +41,7 @@ export const CourseSettings: React.FC<Props> = ({
         {!hasModules && aLink === linkContants.CREATE_ACTIVITY ?
           <UnstyledButton
             onPress={() => { }}>
-            <H size={3} color={TextColor.MEDIUM_X}>
+            <H size={4} color={TextColor.MEDIUM_X}>
               {label}
             </H>
           </UnstyledButton>
@@ -60,6 +62,7 @@ export const CourseSettings: React.FC<Props> = ({
     <CourseModal isOpen={openSettings}
       onClose={() => { updateOpenSettings(false); updateCacheTimestamp(); }}>
       <div className="flex flex-col gap-4 items-center">
+        <H size={2} color={TextColor.DARK_X}>Settings course {context.selectedCourse?.name}</H>
         <div className="flex justify-center gap-4">
           <FormLink label="Create new module" aLink={linkContants.CREATE_MODULE} />
           <FormLink label="Create new activity" aLink={linkContants.CREATE_ACTIVITY} />
