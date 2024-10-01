@@ -47,7 +47,8 @@ export const CourseArticle: React.FC<Props> = ({
           <CourseModal
             isOpen={editCourse}
             onClose={() => { setEditCourse(false); }}>
-            <UpdateCourseForm course={course} />
+            <UpdateCourseForm course={course}
+              onSuccess={() => { setEditCourse(false); }}/>
           </CourseModal>
         );
     }
@@ -69,8 +70,10 @@ export const CourseArticle: React.FC<Props> = ({
         .withEditComponent(
           <CourseModal
             isOpen={editModule}
-            onClose={() => { setEditModule(false); updateCacheTimestamp(); }}>
-            <UpdateModuleForm module={module} />
+            onClose={() => { setEditModule(false); }}>
+            <UpdateModuleForm
+              module={module}
+              onSuccess={() => { setEditModule(false); updateCacheTimestamp(); }}/>
           </CourseModal>
         );
     }
@@ -92,8 +95,10 @@ export const CourseArticle: React.FC<Props> = ({
         .withEditComponent(
           <CourseModal
             isOpen={editActivity}
-            onClose={() => { setEditActivity(false); updateCacheTimestamp(); }}>
-            <UpdateActivityForm activity={activity} />
+            onClose={() => { setEditActivity(false); }}>
+            <UpdateActivityForm
+              activity={activity}
+              onSuccess={() => { setEditActivity(false); updateCacheTimestamp(); }}/>
           </CourseModal>
         );
     }

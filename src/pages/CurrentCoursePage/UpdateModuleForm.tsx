@@ -8,10 +8,12 @@ import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
 
 interface Props {
   module: ModuleDto;
+  onSuccess: () => void;
 }
 
 export const UpdateModuleForm: React.FC<Props> = ({
-  module
+  module,
+  onSuccess
 }): ReactElement => {
   const patchModule = useApi(api.module);
   const [name, setName] = useState(module.name ?? "");
@@ -37,6 +39,7 @@ export const UpdateModuleForm: React.FC<Props> = ({
     if (err == null) {
       msgContext.updateMessage(`Module '${name}' have been updated`);
       updateModule();
+      onSuccess();
     } else {
       msgContext.updateErrorMessage("Module could not be updated");
     }

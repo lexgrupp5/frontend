@@ -30,9 +30,17 @@ export const CreateCourseForm = (): ReactElement => {
       msgContext.updateMessage(
         `New course '${result?.name}' created`
       );
+      clearInputs();
     } else {
       msgContext.updateErrorMessage("Course could not be created");
     }
+  };
+
+  const clearInputs = () => {
+    setName("");  
+    setDescription("");
+    setStartDate("");
+    setEndDate("");
   };
 
   const handleNavigateToNewCourse = (course: CourseDto | null) => {

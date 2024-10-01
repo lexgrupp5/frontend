@@ -9,10 +9,12 @@ import { DefaultToastMessage } from "../SharedComponents";
 
 interface Props {
   course: ICourseDto;
+  onSuccess: () => void;
 }
 
 export const UpdateCourseForm: React.FC<Props> = ({
-  course
+  course,
+  onSuccess
 }): ReactElement => {
   const patchCourse = useApi(api.courses);
   const getCourse = useApi(api.getCourse);
@@ -38,6 +40,7 @@ export const UpdateCourseForm: React.FC<Props> = ({
       ]));
     if (err == null) {
       await updateCourse();
+      onSuccess();
     } else {
       msgContext.updateErrorMessage("Course could not be updated");
     }

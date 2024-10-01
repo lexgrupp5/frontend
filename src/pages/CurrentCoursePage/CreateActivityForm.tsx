@@ -29,9 +29,16 @@ export const CreateActivityForm = (): ReactElement => {
     
     if (err == null && result != null) {
       msgContext.updateMessage(`Activity '${result.description}' have been created`);
+      clearInputs();
     } else {
       msgContext.updateErrorMessage("Activity could not be created");
     }
+  };
+
+  const clearInputs = () => {
+    setDescription("");
+    setStartDate("");
+    setEndDate("");
   };
 
   const handleCloseForm = () => {
