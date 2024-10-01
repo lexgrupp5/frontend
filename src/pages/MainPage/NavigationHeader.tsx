@@ -2,13 +2,13 @@ import { useState } from "react";
 import { FaHome, FaUser } from "react-icons/fa";
 
 import { Button, IconContainer, Link, NavLink } from "@/components";
-import { Path, StudentPath } from "@/constants";
+import { Path } from "@/constants";
 import ProfileMenu from "./ProfileMenu";
 import { useAuthContext } from "@/hooks";
 
 export const NavigationHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { logout } = useAuthContext();
+  const { logout, isTeacher } = useAuthContext();
   const linkClass = `text-gray-300 cursor-pointer
     hover:text-white
     hover:underline
@@ -36,9 +36,9 @@ export const NavigationHeader = () => {
           <FaHome />
         </IconContainer></Link>
         <nav className="flex justify-between items-center gap-3 dura">
-          <NavLink to={Path.COURSES} className={linkClass}>
+          {isTeacher() &&<NavLink to={Path.COURSES} className={linkClass}>
             Courses
-          </NavLink>
+          </NavLink>}
           <Button className="relative focus:outline-none"
             onPress={() => { toggleMenu(); }}>
             <IconContainer className={iconClass}>

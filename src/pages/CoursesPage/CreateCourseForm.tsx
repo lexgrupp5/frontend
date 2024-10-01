@@ -3,12 +3,12 @@ import { FormEventHandler, ReactElement, useState } from "react";
 import { api, CourseCreateDto, type CourseDto } from "@/api";
 import { H, Input, P, SubmitButton, TextColor, UnstyledButton, OkTopToast, ErrorTopToast, FullPageSpinner } from "@/components";
 import { Path } from "@/constants";
-import { useCoursesPageContext, useNavigateToPath } from "@/hooks";
+import { useCurrentCourseContext, useNavigateToPath } from "@/hooks";
 import { useApi } from "@/hooks/useApi";
 import { useMessageContext } from "@/hooks";
 
 export const CreateCourseForm = (): ReactElement => {
-  const { updateSelectedCourse } = useCoursesPageContext();
+  const { updateSelectedCourse } = useCurrentCourseContext();
   const navigate = useNavigateToPath();
   const createCourse = useApi(api.createCourse);
   const [name, setName] = useState("");
@@ -47,7 +47,7 @@ export const CreateCourseForm = (): ReactElement => {
     if (course == null) { return; }
     updateSelectedCourse(course);
     msgContext.clearMessages();
-    navigate(Path.constructSelectedCoursePath(`${createCourse.data?.id}`));
+    navigate(Path.constructSelectedCoursePath(`${course.id}`));
   };
 
   return (

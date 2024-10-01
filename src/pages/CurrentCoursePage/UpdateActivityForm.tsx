@@ -3,7 +3,7 @@ import { FormEventHandler, ReactElement, useState } from "react";
 import { ActivityDto, api } from "@/api";
 import { H, Input, SubmitButton, TextColor } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
-import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
+import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
 import { createPatchOperations, formatDateToString } from "@/utils";
 
 interface Props {
@@ -22,7 +22,7 @@ export const UpdateActivityForm: React.FC<Props> = ({
   const [activityTypeName, setActivityTypeName] = useState(activity.activityTypeName ?? "");
   const [activityTypeDescription, setActivityTypeDescription] = useState(activity.activityTypeDescription ?? "");
   const msgContext = useMessageContext();
-  const coursesPageContext = useCoursesPageContext();
+  const coursesPageContext = useCurrentCourseContext();
 
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();

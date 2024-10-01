@@ -5,7 +5,7 @@ import { ModuleDto, UserDto } from "@/apiGenerated";
 import { ModulePanel } from "./ModulePanel";
 import { CourseModal } from "./CourseModal";
 import { CreateActivityForm } from "./CreateActivityForm";
-import { useCoursesPageContext } from "@/hooks";
+import { useCurrentCourseContext } from "@/hooks";
 import { ParticipantsPanel } from "./ParticipantsPanel";
 
 interface Props {
@@ -26,7 +26,7 @@ export const CourseSidebarBody: React.FC<Props> = ({
   updateCacheTimestamp
 }): ReactElement => {
   const [createActivity, setCreateActivity] = useState(false);
-  const { selectedModule, selectedCourse } = useCoursesPageContext();
+  const { selectedModule, selectedCourse } = useCurrentCourseContext();
   const participantPanelId = "partcipantsPanel";
   
   return (
