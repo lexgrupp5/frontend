@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useState } from "react";
 
 import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
-import { api, type ModuleDto } from "@/api";
+import { api, UserDto, type ModuleDto } from "@/api";
 import { CourseSidebar } from "./CourseSidebar";
 import { CourseArticle } from "./CourseArticle";
 import { FullPageSpinner } from "@/components";
@@ -10,22 +10,31 @@ import { DefaultToastMessage } from "../SharedComponents";
 export const CurrentCoursePage = (): ReactElement => {
   const getCourseModules = useApi(api.modulesAll);
   const getModuleActivities = useApi(api.activities);
+  const getCourseParticipants = useApi(api.course);
   const { selectedCourse } = useCoursesPageContext();
   const [leftMargin, setLeftMargin ] = useState(0);
   const [modules, setModules] = useState<ModuleDto[]>([]);
+  const [participants, setParticipants] = useState<UserDto[]>([]);
   const msgContext = useMessageContext();
   const [cacheTimestamp, setCacheTimestamp] = useState(Date.now());
 
   useEffect(() => {
     (async () => {
       if (selectedCourse?.id == null) { return; }
-      const [err, result] = await getCourseModules.makeAuthRequestWithErrorResponse(selectedCourse.id);
-      if (err != null || result == null) {
+      
+      const [participantsErr, participantsResult] = await getCourseParticipants.makeAuthRequestWithErrorResponse(selectedCourse.id);
+      if (participantsErr != null || participantsResult == null) {
         msgContext.updateErrorMessage("Course data could not be fetched");
       } else {
+        setParticipants(participantsResult);
+      }
 
-        await updateModuleActivities(result);
-        setModules(result);
+      const [modulesErr, modulesResult] = await getCourseModules.makeAuthRequestWithErrorResponse(selectedCourse.id);
+      if (modulesErr != null || modulesResult == null) {
+        msgContext.updateErrorMessage("Course data could not be fetched");
+      } else {
+        await updateModuleActivities(modulesResult);
+        setModules(modulesResult);
       }
     })();
   }, [cacheTimestamp, selectedCourse?.id]);
@@ -54,7 +63,9 @@ export const CurrentCoursePage = (): ReactElement => {
   return (
     <article className="min-h-screen-header bg-indigo-100">
       <DefaultToastMessage />
-      <CourseSidebar modules={modules}
+      <CourseSidebar
+        participants={participants}
+        modules={modules}
         onOpen={updateLeftMargin}
         updateCacheTimestamp={updateCacheTimestamp} />
       <div style={{ marginLeft: `${leftMargin}px` }}

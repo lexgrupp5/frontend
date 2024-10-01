@@ -1,6 +1,6 @@
 import { ReactElement, useState } from "react";
 
-import type { ActivityDto, ModuleDto, ICourseDto } from "@/api";
+import type { ActivityDto, ModuleDto, ICourseDto, UserDto } from "@/api";
 import { useAuthContext, useCoursesPageContext } from "@/hooks";
 import { CourseSectionBuilder } from "./CourseSectionBuilder";
 import { UpdateCourseForm } from "./UpdateCourseForm";
@@ -29,7 +29,8 @@ export const CourseArticle: React.FC<Props> = ({
     { label: "Courses", path: Path.COURSES },
     {
       label: `${context.selectedCourse?.id}`,
-      path: Path.constructSelectedCoursePath(`${context.selectedCourse?.id}`) },
+      path: Path.constructSelectedCoursePath(`${context.selectedCourse?.id}`)
+    },
   ];
 
   const CourseSection: React.FC<{ course: ICourseDto }> = ({
@@ -39,7 +40,7 @@ export const CourseArticle: React.FC<Props> = ({
       .setTitle(`Course: ${course.name}`, 2)
       .withSubtitle(`${course.startDate?.toDateString()} - ${course.endDate?.toDateString()}`)
       .withDescription(`${course.description}`);
-  
+
     if (isTeacher()) {
       section
         .withEditAction(() => { setEditCourse(true); })
@@ -48,7 +49,7 @@ export const CourseArticle: React.FC<Props> = ({
             isOpen={editCourse}
             onClose={() => { setEditCourse(false); }}>
             <UpdateCourseForm course={course}
-              onSuccess={() => { setEditCourse(false); }}/>
+              onSuccess={() => { setEditCourse(false); }} />
           </CourseModal>
         );
     }
@@ -56,14 +57,14 @@ export const CourseArticle: React.FC<Props> = ({
     return section.build();
   };
 
-  const ModuleSection: React.FC<{module: ModuleDto}> = ({
+  const ModuleSection: React.FC<{ module: ModuleDto }> = ({
     module
   }): ReactElement => {
     const section = new CourseSectionBuilder()
       .setTitle(`Module: ${module.name}`, 2)
       .withSubtitle(`${module.startDate?.toDateString()} - ${module.endDate?.toDateString()}`)
       .withDescription(`${module.description}`);
-  
+
     if (isTeacher()) {
       section
         .withEditAction(() => { setEditModule(true); })
@@ -73,7 +74,7 @@ export const CourseArticle: React.FC<Props> = ({
             onClose={() => { setEditModule(false); }}>
             <UpdateModuleForm
               module={module}
-              onSuccess={() => { setEditModule(false); updateCacheTimestamp(); }}/>
+              onSuccess={() => { setEditModule(false); updateCacheTimestamp(); }} />
           </CourseModal>
         );
     }
@@ -81,14 +82,14 @@ export const CourseArticle: React.FC<Props> = ({
     return section.build();
   };
 
-  const ActivtySection: React.FC<{activity: ActivityDto}> = ({
+  const ActivtySection: React.FC<{ activity: ActivityDto }> = ({
     activity
   }): ReactElement => {
     const section = new CourseSectionBuilder()
       .setTitle(`Activity: ${activity.description}`, 2)
       .withSubtitle(`${activity.startDate?.toDateString()} - ${activity.endDate?.toDateString()}`)
       .withDescription(`${activity.description}`);
-  
+
     if (isTeacher()) {
       section
         .withEditAction(() => { setEditActivity(true); })
@@ -98,7 +99,7 @@ export const CourseArticle: React.FC<Props> = ({
             onClose={() => { setEditActivity(false); }}>
             <UpdateActivityForm
               activity={activity}
-              onSuccess={() => { setEditActivity(false); updateCacheTimestamp(); }}/>
+              onSuccess={() => { setEditActivity(false); updateCacheTimestamp(); }} />
           </CourseModal>
         );
     }
@@ -106,18 +107,41 @@ export const CourseArticle: React.FC<Props> = ({
     return section.build();
   };
 
-  return (  
-    <article className="w-full flex flex-col gap-4 max-w-5xl">
-      <Breadcrumb items={breadcrumbItems} />
-      <section>
-        {<CourseSection course={course}/>}
-      </section>
-      {context.selectedModule != null && <section>
-        {<ModuleSection module={context.selectedModule}/>}
-      </section>}
-      {context.selectedActivity != null && <section>
-        {<ActivtySection activity={context.selectedActivity}/>}
-      </section>}
-    </article>
+  const UserSection: React.FC<{ participant: UserDto }> = ({
+    participant
+  }): ReactElement => {
+    const section = new CourseSectionBuilder()
+      .setTitle(`Participant: ${participant.name}`, 2)
+      .withSubtitle(`${participant.email}`);
+
+    return section.build();
+  };
+
+  return (
+    <>
+      {context.selectedParticipant != null
+        ?
+        <article className="w-full flex flex-col gap-4 max-w-5xl">
+          <Breadcrumb items={breadcrumbItems} />
+          <section>
+            {<CourseSection course={course} />}
+          </section> 
+          <section>
+            {<UserSection participant={context.selectedParticipant} />}
+          </section>
+        </article>
+        : <article className="w-full flex flex-col gap-4 max-w-5xl">
+          <Breadcrumb items={breadcrumbItems} />
+          <section>
+            {<CourseSection course={course} />}
+          </section>
+          {context.selectedModule != null && <section>
+            {<ModuleSection module={context.selectedModule} />}
+          </section>}
+          {context.selectedActivity != null && <section>
+            {<ActivtySection activity={context.selectedActivity} />}
+          </section>}
+        </article>}
+    </>
   );
 };
