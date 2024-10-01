@@ -118,30 +118,25 @@ export const CourseArticle: React.FC<Props> = ({
   };
 
   return (
-    <>
+    <article className="w-full flex flex-col gap-4 max-w-5xl">
+      <Breadcrumb items={breadcrumbItems} />
+      <section>
+        {<CourseSection course={course} />}
+      </section> 
       {context.selectedParticipant != null
         ?
-        <article className="w-full flex flex-col gap-4 max-w-5xl">
-          <Breadcrumb items={breadcrumbItems} />
-          <section>
-            {<CourseSection course={course} />}
-          </section> 
-          <section>
-            {<UserSection participant={context.selectedParticipant} />}
-          </section>
-        </article>
-        : <article className="w-full flex flex-col gap-4 max-w-5xl">
-          <Breadcrumb items={breadcrumbItems} />
-          <section>
-            {<CourseSection course={course} />}
-          </section>
+        <section>
+          {<UserSection participant={context.selectedParticipant} />}
+        </section>
+        : 
+        <>
           {context.selectedModule != null && <section>
             {<ModuleSection module={context.selectedModule} />}
           </section>}
           {context.selectedActivity != null && <section>
             {<ActivtySection activity={context.selectedActivity} />}
           </section>}
-        </article>}
-    </>
+        </>}
+    </article>
   );
 };
