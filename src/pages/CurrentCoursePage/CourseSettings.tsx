@@ -5,7 +5,7 @@ import { CourseModal } from "./CourseModal";
 import { CreateActivityForm } from "./CreateActivityForm";
 import { H, TextColor, UnstyledButton } from "@/components";
 import { ModuleDto } from "@/apiGenerated";
-import { useCoursesPageContext } from "@/hooks";
+import { useCurrentCourseContext } from "@/hooks";
 
 const linkContants = {
   CREATE_MODULE: "create-module",
@@ -31,7 +31,7 @@ export const CourseSettings: React.FC<Props> = ({
 }): ReactElement => {
   const [link, setLink] = useState<SettinLinkType>(linkContants.CREATE_MODULE);
   const [hasModules, setHasModules] = useState(modules?.length > 0);
-  const context = useCoursesPageContext();
+  const context = useCurrentCourseContext();
 
   const FormLink: React.FC<{ label: string, aLink: SettinLinkType }> = ({
     label, aLink

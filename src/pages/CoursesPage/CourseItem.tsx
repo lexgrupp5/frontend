@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 
 import { H, P, TextColor } from "@/components";
 import { ICourseDto } from "@/api";
-import { useCoursesPageContext, useNavigateToPath } from "@/hooks";
+import { useCurrentCourseContext, useNavigateToPath } from "@/hooks";
 import { Path } from "@/constants";
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const CourseItem: React.FC<Props> = ({ course }): ReactElement => {
-  const { updateSelectedCourse } = useCoursesPageContext();
+  const { updateSelectedCourse } = useCurrentCourseContext();
   const navigate = useNavigateToPath();
 
   const navigateToSelectedCoursePage = () => {
@@ -26,7 +26,7 @@ export const CourseItem: React.FC<Props> = ({ course }): ReactElement => {
         bg-indigo-950 p-3
         rounded border-2 border-black
         outline-offset-2 hover:outline-3
-        hover:outline hover:outline-gray-200 hover:bg-indigo-900
+        hover:outline hover:outline-gray-00 hover:bg-indigo-900
         cursor-pointer overflow-y-auto"
         onClick={navigateToSelectedCoursePage}>
         <H size={4}>{course.name}</H>

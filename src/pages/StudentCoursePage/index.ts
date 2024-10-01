@@ -1,1 +1,1 @@
-export { StudentCoursePage } from "./StudentCoursePage";
+// export { StudentCoursePage } from "./StudentCoursePage";

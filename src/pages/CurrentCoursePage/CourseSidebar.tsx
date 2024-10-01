@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from "react";
 
 import { ModuleDto, UserDto } from "@/apiGenerated";
 import { Sidebar } from "@/components";
-import { useAuthContext, useCoursesPageContext } from "@/hooks";
+import { useAuthContext, useCurrentCourseContext } from "@/hooks";
 import { CourseSidebarFooter } from "./CourseSidebarFooter";
 import { CourseSidebarBody } from "./CourseSidebarBody";
 import { CourseSettings } from "./CourseSettings";
@@ -24,7 +24,7 @@ export const CourseSidebar: React.FC<Props> = ({
   const isLargeScreen = window.innerWidth > 768;
   const [openSettings, setOpenSettings] = useState(false);
   const [open, setOpen] = useState(isLargeScreen);
-  const context = useCoursesPageContext();
+  const context = useCurrentCourseContext();
   const autContext = useAuthContext();
   const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({
     [`${context.selectedModule?.id}`]: true

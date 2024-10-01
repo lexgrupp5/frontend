@@ -1,8 +1,8 @@
 import { ReactElement } from "react";
 import { CourseDto } from "@/api";
 import { CgMoreVerticalO } from "react-icons/cg";
-import { useNavigateToPath } from "@/hooks";
-import { StudentCoursePath } from "@/constants";
+import { useCurrentCourseContext, useNavigateToPath } from "@/hooks";
+import { Path } from "@/constants";
 import { H, P, TextColor, UnstyledButton, IconContainer } from "@/components";
 
 interface Props {
@@ -12,11 +12,13 @@ interface Props {
 
 export function CurrentCourseComponent({ course }: Props): ReactElement {
     const navigate = useNavigateToPath();
+    const { updateSelectedCourse } = useCurrentCourseContext();
     if (course != null) {
 
         const navigateToStudentCoursePage = () => {
             if (course.id == null) { return; }
-            navigate(StudentCoursePath.constructStudentCoursePath(course.id));
+            updateSelectedCourse(course);
+            navigate(Path.constructSelectedCoursePath(`${course.id}`));
         };
 
         return (

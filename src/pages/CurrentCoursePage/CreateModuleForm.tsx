@@ -3,7 +3,7 @@ import { FormEventHandler, ReactElement, useState } from "react";
 import { api, ModuleCreateModel } from "@/api";
 import { H, Input, SubmitButton, TextColor } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
-import { useApi, useCoursesPageContext, useMessageContext } from "@/hooks";
+import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
 
 interface Props {
   title?: string
@@ -20,7 +20,7 @@ export const CreateModuleForm: React.FC<Props> = ({
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const msgContext = useMessageContext();
-  const coursesPageContext = useCoursesPageContext();
+  const coursesPageContext = useCurrentCourseContext();
 
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();

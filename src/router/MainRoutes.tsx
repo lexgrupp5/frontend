@@ -2,28 +2,26 @@ import { ReactElement } from "react";
 import { Route } from "react-router-dom";
 
 import { AuthGuard, NavigateToPath, TeacherGuard } from "@/components";
-import * as Pages from "@/pages";
 import { Path } from "@/constants";
-import { CoursesPageProvider, StudentPageProvider } from "@/providers";
+import { CoursesPageProvider, CurrentCourseProvider, StudentPageProvider } from "@/providers";
+import { CoursesPage, CurrentCoursePage, MainPage, NewCoursePage, ProfilePage, StudentLandingPage } from "@/pages";
 
-export const MainRoutes = (): ReactElement => {
+export const MainRoutes: React.FC = (): ReactElement => {
   return (
     <>
-      <Route element={<AuthGuard><Pages.MainPage /></AuthGuard>}>
+      <Route element={<AuthGuard><CurrentCourseProvider><MainPage /></CurrentCourseProvider></AuthGuard>}>
         <Route element={<StudentPageProvider />}>
-          <Route index element={<Pages.StudentLandingPage />} />
-          <Route path=":id" element={<Pages.StudentCoursePage />} />
+          <Route index element={<StudentLandingPage />} />
         </Route>
-        <Route path={Path.COURSES} element={<CoursesPageProvider />} >
-          <Route index element={<Pages.CoursesPage />} />
-          <Route path="new" element={
-            <TeacherGuard>
-              <Pages.NewCoursePage />
-            </TeacherGuard>} />
-          <Route path=":id" element={<Pages.CurrentCoursePage />} />
+        <Route path={Path.COURSE}>
+          <Route index element={<NavigateToPath to={Path.INDEX} />} />
+          <Route path=":id" element={<CurrentCoursePage />} />
         </Route>
-        <Route path={Path.PROFILE} element={<Pages.ProfilePage />} />
-        
+        <Route path={Path.COURSES} element={<TeacherGuard><CoursesPageProvider /></TeacherGuard>} >
+          <Route index element={<CoursesPage />} />
+          <Route path="new" element={<NewCoursePage />} />
+        </Route>
+        <Route path={Path.PROFILE} element={<ProfilePage />} />
       </Route>
       <Route path={Path.UNKNOWN} element={<NavigateToPath to={Path.INDEX} />} />
     </>

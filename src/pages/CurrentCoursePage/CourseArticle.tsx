@@ -1,7 +1,7 @@
 import { ReactElement, useState } from "react";
 
 import type { ActivityDto, ModuleDto, ICourseDto, UserDto } from "@/api";
-import { useAuthContext, useCoursesPageContext } from "@/hooks";
+import { useAuthContext, useCurrentCourseContext } from "@/hooks";
 import { CourseSectionBuilder } from "./CourseSectionBuilder";
 import { UpdateCourseForm } from "./UpdateCourseForm";
 import { UpdateModuleForm } from "./UpdateModuleForm";
@@ -19,14 +19,14 @@ export const CourseArticle: React.FC<Props> = ({
   course,
   updateCacheTimestamp
 }): ReactElement => {
-  const context = useCoursesPageContext();
+  const context = useCurrentCourseContext();
   const { isTeacher } = useAuthContext();
   const [editCourse, setEditCourse] = useState(false);
   const [editModule, setEditModule] = useState(false);
   const [editActivity, setEditActivity] = useState(false);
   const breadcrumbItems: BreadcrumbItemType[] = [
     { label: "Home", path: Path.INDEX },
-    { label: "Courses", path: Path.COURSES },
+    { label: "Course", path: Path.COURSE },
     {
       label: `${context.selectedCourse?.id}`,
       path: Path.constructSelectedCoursePath(`${context.selectedCourse?.id}`)

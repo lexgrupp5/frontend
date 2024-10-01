@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
 
-import { useCoursesPageContext } from "@/hooks";
+import { useCurrentCourseContext } from "@/hooks";
 import { CourseDesk } from "./CourseDesk";
 
 export const CurrentCoursePage = (): ReactElement => {
-  const { selectedCourse } = useCoursesPageContext();
+  const { selectedCourse } = useCurrentCourseContext();
   
   return (
     <>
