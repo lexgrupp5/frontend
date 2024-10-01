@@ -58,7 +58,7 @@ export const CurrentCoursePage = (): ReactElement => {
         onOpen={updateLeftMargin}
         updateCacheTimestamp={updateCacheTimestamp} />
       <div style={{ marginLeft: `${leftMargin}px` }}
-        className="px-8 py-16 flex justify-center">
+        className="px-8 py-6 flex justify-center">
         <CourseArticle
           course={selectedCourse}
           updateCacheTimestamp={updateCacheTimestamp} />  

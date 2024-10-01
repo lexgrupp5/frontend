@@ -7,6 +7,8 @@ import { UpdateCourseForm } from "./UpdateCourseForm";
 import { UpdateModuleForm } from "./UpdateModuleForm";
 import { UpdateActivityForm } from "./UpdateActivityForm";
 import { CourseModal } from "./CourseModal";
+import { Path } from "@/constants";
+import { BreadcrumbItemType, Breadcrumb } from "@/components";
 
 interface Props {
   course: ICourseDto;
@@ -22,6 +24,13 @@ export const CourseArticle: React.FC<Props> = ({
   const [editCourse, setEditCourse] = useState(false);
   const [editModule, setEditModule] = useState(false);
   const [editActivity, setEditActivity] = useState(false);
+  const breadcrumbItems: BreadcrumbItemType[] = [
+    { label: "Home", path: Path.INDEX },
+    { label: "Courses", path: Path.COURSES },
+    {
+      label: `${context.selectedCourse?.id}`,
+      path: Path.constructSelectedCoursePath(`${context.selectedCourse?.id}`) },
+  ];
 
   const CourseSection: React.FC<{ course: ICourseDto }> = ({
     course
@@ -94,6 +103,7 @@ export const CourseArticle: React.FC<Props> = ({
 
   return (  
     <article className="w-full flex flex-col gap-4 max-w-5xl">
+      <Breadcrumb items={breadcrumbItems} />
       <section>
         {<CourseSection course={course}/>}
       </section>

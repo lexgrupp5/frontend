@@ -43,58 +43,55 @@ export const CreateCourseForm = (): ReactElement => {
   };
 
   return (
-    <div className="min-h-screen-header-center
-      bg-gradient-indigo">
-      {createCourse.pending && <FullPageSpinner />}
-      <form onSubmit={submit}
-        className="w-full p-8 
+    <form onSubmit={submit}
+      className="w-full p-8 
         bg-indigo-100
         rounded-lg shadow-lg max-w-lg">
-        {msgContext.message != null && 
-          <OkTopToast onClose={msgContext.clearMessages} keepOpen={true}>
-            <UnstyledButton className="underline underline-offset-4 max-w-full" 
-              onPress={() => { handleNavigateToNewCourse(createCourse.data); }}>
-              {msgContext.message}
-            </UnstyledButton>
-          </OkTopToast>
-        }
-        {msgContext.errorMessage != null &&
-          <ErrorTopToast onClose={msgContext.clearMessages} keepOpen={true}>
-            {msgContext.errorMessage}
-          </ErrorTopToast>
-        }
-        <H size={1} color={TextColor.DARK_X} className="mb-2">Create new course</H>
-        <P color={TextColor.DARK} className="mb-6">
-          Please enter course details below
-        </P>
-        <fieldset className="flex flex-col gap-6">
-          <Input
-            type="text"
-            label="Name"
-            required
-            value={name}
-            onChange={e => { setName(e.target.value); }}/>
-          <Input
-            label="Description"
-            type="text"
-            required
-            value={description}
-            onChange={e => { setDescription(e.target.value); }}/>
-          <Input
-            label="Start date"
-            type="date"
-            required
-            value={startDate}
-            onChange={e => { setStartDate(e.target.value); }}/>
-          <Input
-            label="End date"
-            type="date"
-            required
-            value={endDate}
-            onChange={e => { setEndDate(e.target.value); }}/>
-          <SubmitButton>Create</SubmitButton>
-        </fieldset>
-      </form>
-    </div>
+      {createCourse.pending && <FullPageSpinner />}
+      {msgContext.message != null &&
+        <OkTopToast onClose={msgContext.clearMessages} keepOpen={true}>
+          <UnstyledButton className="underline underline-offset-4 max-w-full"
+            onPress={() => { handleNavigateToNewCourse(createCourse.data); }}>
+            {msgContext.message}
+          </UnstyledButton>
+        </OkTopToast>
+      }
+      {msgContext.errorMessage != null &&
+        <ErrorTopToast onClose={msgContext.clearMessages} keepOpen={true}>
+          {msgContext.errorMessage}
+        </ErrorTopToast>
+      }
+      <H size={1} color={TextColor.DARK_X} className="mb-2">Create new course</H>
+      <P color={TextColor.DARK} className="mb-6">
+        Please enter course details below
+      </P>
+      <fieldset className="flex flex-col gap-6">
+        <Input
+          type="text"
+          label="Name"
+          required
+          value={name}
+          onChange={e => { setName(e.target.value); }} />
+        <Input
+          label="Description"
+          type="text"
+          required
+          value={description}
+          onChange={e => { setDescription(e.target.value); }} />
+        <Input
+          label="Start date"
+          type="date"
+          required
+          value={startDate}
+          onChange={e => { setStartDate(e.target.value); }} />
+        <Input
+          label="End date"
+          type="date"
+          required
+          value={endDate}
+          onChange={e => { setEndDate(e.target.value); }} />
+        <SubmitButton>Create</SubmitButton>
+      </fieldset>
+    </form>
   );
 };
