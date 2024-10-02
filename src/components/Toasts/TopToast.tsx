@@ -31,7 +31,7 @@ export const TopToast: React.FC<Props> = ({
   }, [onClose]);
 
   return (
-    <div className="fixed top-[var(--header-height)] left-0 right-0 z-50">
+    <div className="fixed top-[var(--header-height)] left-0 right-0 z-40">
       <div className={`flex items-center justify-between gap-4 p-2
         ${background != null ? background  : "bg-sky-500"}`}>
         {<IconContainer className="size-6 flex-shrink-0">

@@ -1,9 +1,10 @@
 import { useLocalStorage } from "usehooks-ts";
 
-import { CustomApiException } from "@/api";
+import { CustomApiException, TokenDto } from "@/api";
 import { useState } from "react";
 import { api } from "@/api";
 import { Storage } from "@/constants";
+import { isExpiredToken } from "@/services";
 
 export type IApiHook = ReturnType<typeof useApi>;
 
@@ -19,6 +20,15 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   const [error, setError] = useState<CustomApiException | null>(null);
   const [token, setToken] = useLocalStorage<string | null>(Storage.TOKEN, null);
 
+  const getToken = async () => {
+    if (token == null || !isExpiredToken(token)) {
+      return token;
+    }
+    const result = await api.refresh(new TokenDto({ accessToken: token }));
+    setToken(result);
+    return result;
+  };
+
   /** Api call used when no authorization is needed */
   const makeRequest = async (
     ...args: [...ApiArgs, AbortSignal?]
@@ -31,6 +41,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
         null,
         ...args
       );
+      console.log(result)
       setData(result);
       return result;
     } catch (err) {
@@ -49,6 +60,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   const makeAuthRequest = async (
     ...args: [...ApiArgs, AbortSignal?]
   ) => {
+    const token = await getToken();
     try {
       setError(null);
       setPending(true);
@@ -80,6 +92,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   const makeAuthRequestWithErrorResponse = async (
     ...args: [...ApiArgs, AbortSignal?]
   ): Promise<[CustomApiException | null, ApiReturnType | null]> => {
+    const token = await getToken();
     try {
       setError(null);
       setPending(true);

@@ -18,15 +18,15 @@ export interface IClient {
      */
     login(body?: UserAuthModel | undefined): Promise<string>;
     /**
-     * @param access (optional) 
+     * @param token (optional) 
      * @return OK
      */
-    logout(access?: string | undefined): Promise<void>;
+    logout(token?: TokenDto | undefined): Promise<void>;
     /**
-     * @param access (optional) 
+     * @param body (optional) 
      * @return OK
      */
-    refresh(access?: string | undefined): Promise<string>;
+    refresh(body?: TokenDto | undefined): Promise<string>;
     /**
      * @return OK
      */
@@ -178,10 +178,10 @@ export class Client implements IClient {
     }
 
     /**
-     * @param access (optional) 
+     * @param token (optional) 
      * @return OK
      */
-    logout(access?: string | undefined, signal?: AbortSignal): Promise<void> {
+    logout(token?: TokenDto | undefined, signal?: AbortSignal): Promise<void> {
         let url_ = this.baseUrl + "/api/auth/logout";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -189,7 +189,7 @@ export class Client implements IClient {
             method: "POST",
             url: url_,
             headers: {
-                "access": access !== undefined && access !== null ? "" + access : "",
+                "token": token !== undefined && token !== null ? "" + token : "",
             },
             signal
         };
@@ -227,18 +227,21 @@ export class Client implements IClient {
     }
 
     /**
-     * @param access (optional) 
+     * @param body (optional) 
      * @return OK
      */
-    refresh(access?: string | undefined, signal?: AbortSignal): Promise<string> {
+    refresh(body?: TokenDto | undefined, signal?: AbortSignal): Promise<string> {
         let url_ = this.baseUrl + "/api/auth/refresh";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
-                "access": access !== undefined && access !== null ? "" + access : "",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             signal
@@ -1704,6 +1707,42 @@ export enum OperationType {
     Copy = "Copy",
     Test = "Test",
     Invalid = "Invalid",
+}
+
+export class TokenDto implements ITokenDto {
+    accessToken?: string | undefined;
+
+    constructor(data?: ITokenDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.accessToken = _data["accessToken"];
+        }
+    }
+
+    static fromJS(data: any): TokenDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TokenDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["accessToken"] = this.accessToken;
+        return data;
+    }
+}
+
+export interface ITokenDto {
+    accessToken?: string | undefined;
 }
 
 export class UserAuthModel implements IUserAuthModel {
