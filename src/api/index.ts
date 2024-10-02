@@ -1,5 +1,6 @@
 export * from "@/apiGenerated";
 export * from "./CustomApiException";
+export * from "./RefreshTokenExpiredException";
 
 import { CustomApiException } from "./CustomApiException";
 

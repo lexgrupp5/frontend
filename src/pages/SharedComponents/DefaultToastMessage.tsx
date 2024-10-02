@@ -3,10 +3,12 @@ import { useMessageContext } from "@/hooks";
 import { ReactElement } from "react";
 
 interface Props {
+  headerOffset?: boolean;
   onClose?: () => void;
 }
 
 export const DefaultToastMessage: React.FC<Props> = ({
+  headerOffset = true,
   onClose = () => {}
 }): ReactElement => {
   const msgContext = useMessageContext();
@@ -19,7 +21,9 @@ export const DefaultToastMessage: React.FC<Props> = ({
   return (
     <>
       {msgContext.message != null &&
-        <OkTopToast onClose={handleClose}>
+        <OkTopToast
+          headerOffset={headerOffset}
+          onClose={handleClose}>
           <UnstyledButton className="max-w-full"
             onPress={() => { }}>
             {msgContext.message}
@@ -27,7 +31,10 @@ export const DefaultToastMessage: React.FC<Props> = ({
         </OkTopToast>
       }
       {msgContext.errorMessage != null &&
-        <ErrorTopToast onClose={handleClose} keepOpen={true}>
+        <ErrorTopToast
+          keepOpen={true} 
+          headerOffset={headerOffset}
+          onClose={handleClose}>
           {msgContext.errorMessage}
         </ErrorTopToast>
       }

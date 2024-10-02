@@ -1,4 +1,5 @@
 import { Path, PathType } from "@/constants";
+import { useMessageContext } from "@/hooks";
 import { ReactElement, ReactNode } from "react";
 import { Link as LinkPlain } from "react-router-dom";
 
@@ -13,9 +14,16 @@ export const Link: React.FC<Props> = ({
   children,
   className
 }): ReactElement => {
+  const messageContext = useMessageContext();
+
+  const clearGlobalMessages = () => {
+    messageContext.clearMessages();
+  };
 
   return (
-    <LinkPlain className={`${className ? className : ""}`}
+    <LinkPlain 
+      className={`${className ? className : ""}`}
+      onClick={clearGlobalMessages}
       to={to === Path.INDEX ? Path.INDEX : `/${to}`}>
       {children}
     </LinkPlain>

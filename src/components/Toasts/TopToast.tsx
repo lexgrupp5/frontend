@@ -9,6 +9,7 @@ interface Props {
   background?: string;
   keepOpen?: boolean
   timeMilliseconds?: number
+  headerOffset?: boolean
   onClose: () => void;
 }
 
@@ -17,6 +18,7 @@ export const TopToast: React.FC<Props> = ({
   background,
   keepOpen,
   timeMilliseconds,
+  headerOffset = true,
   onClose
 }): ReactElement => {
   const defautlTime = 5 * 1000;
@@ -31,7 +33,8 @@ export const TopToast: React.FC<Props> = ({
   }, [onClose]);
 
   return (
-    <div className="fixed top-[var(--header-height)] left-0 right-0 z-40">
+    <div className={`fixed left-0 right-0 z-40 ${headerOffset ?
+      "top-[var(--header-height)]" : "top-0"}`}>
       <div className={`flex items-center justify-between gap-4 p-2
         ${background != null ? background  : "bg-sky-500"}`}>
         {<IconContainer className="size-6 flex-shrink-0">
