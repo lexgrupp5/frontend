@@ -26,7 +26,7 @@ export const CourseArticle: React.FC<Props> = ({
   const [editActivity, setEditActivity] = useState(false);
   const breadcrumbItems: BreadcrumbItemType[] = [
     { label: "Home", path: Path.INDEX },
-    { label: "Course", path: Path.COURSE },
+    { label: "Courses", path: Path.COURSES },
     {
       label: `${context.selectedCourse?.id}`,
       path: Path.constructSelectedCoursePath(`${context.selectedCourse?.id}`)
