@@ -3,7 +3,6 @@ const StaticPath = {
   LOGIN: "login",
   REGISTER: "register",
   COURSES: "courses",
-  COURSE: "course",
   PROFILE: "profile",
   UNKNOWN: "*",
 } as const;
@@ -18,15 +17,15 @@ const CoursesStaticPath = {
   COURSES_NEW: `${StaticPath.COURSES}/new`,
 } as const;
 
-const CourseDynamicPath = {
+const CoursesDynamicPath = {
   constructSelectedCoursePath: (id: string | number): CourseDynamicPathType =>
-    `${StaticPath.COURSE}/${id}`
+    `${StaticPath.COURSES}/${id}`
 } as const;
 
 export const Path = {
   ...StaticPath,
   ...CoursesStaticPath,
-  ...CourseDynamicPath
+  ...CoursesDynamicPath
 } as const;
 
 export type PathType = (
