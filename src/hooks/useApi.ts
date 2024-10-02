@@ -1,10 +1,11 @@
 import { useLocalStorage } from "usehooks-ts";
 
-import { CustomApiException, TokenDto } from "@/api";
+import { CustomApiException, RefreshTokenExpiredException, TokenDto } from "@/api";
 import { useState } from "react";
 import { api } from "@/api";
 import { Storage } from "@/constants";
 import { isExpiredToken } from "@/services";
+import { useMessageContext } from "./useMessageContext";
 
 export type IApiHook = ReturnType<typeof useApi>;
 
@@ -18,15 +19,19 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   const [data, setData] = useState<ApiReturnType | null>(null);
   const [pending, setPending] = useState<boolean>(false);
   const [error, setError] = useState<CustomApiException | null>(null);
-  const [token, setToken] = useLocalStorage<string | null>(Storage.TOKEN, null);
+  const [token, , clearToken ] = useLocalStorage<string | null>(Storage.TOKEN, null);
+  const messageContext = useMessageContext();
 
   const getToken = async () => {
     if (token == null || !isExpiredToken(token)) {
       return token;
     }
-    const result = await api.refresh(new TokenDto({ accessToken: token }));
-    setToken(result);
-    return result;
+    try {
+      const result = await api.refresh(new TokenDto({ accessToken: token }));
+      return result;
+    } catch {
+      throw new RefreshTokenExpiredException();
+    }
   };
 
   /** Api call used when no authorization is needed */
@@ -41,7 +46,6 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
         null,
         ...args
       );
-      console.log(result)
       setData(result);
       return result;
     } catch (err) {
@@ -60,8 +64,8 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   const makeAuthRequest = async (
     ...args: [...ApiArgs, AbortSignal?]
   ) => {
-    const token = await getToken();
     try {
+      const token = await getToken();
       setError(null);
       setPending(true);
       if (token === null) {
@@ -75,7 +79,11 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
       setData(result);
       return result;
     } catch (err) {
-      if (err instanceof CustomApiException) {
+      if (err instanceof RefreshTokenExpiredException) {
+        messageContext.clearMessages();
+        messageContext.updateErrorMessage(err.message);
+        clearToken();
+      } else if (err instanceof CustomApiException) {
         setError(err);
       } else {
         setError(new CustomApiException("Unknown error"));
@@ -92,8 +100,8 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   const makeAuthRequestWithErrorResponse = async (
     ...args: [...ApiArgs, AbortSignal?]
   ): Promise<[CustomApiException | null, ApiReturnType | null]> => {
-    const token = await getToken();
     try {
+      const token = await getToken();
       setError(null);
       setPending(true);
       if (token === null) {
@@ -107,12 +115,19 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
       setData(result);
       return [null, result];
     } catch (err) {
-      let customErr = new CustomApiException("Unknown error");
-      if (err instanceof CustomApiException) {
-        customErr = err;
+      if (err instanceof RefreshTokenExpiredException) {
+        clearToken();
+        messageContext.clearMessages();
+        messageContext.updateErrorMessage(err.message);
+        return [null, null];
+      } else if (err instanceof CustomApiException) {
+        setError(err);
+        return [err, null];
+      } else {
+        const unknownErr = new CustomApiException("Unknown error");
+        setError(unknownErr);
+        return [unknownErr, null];
       }
-      setError(customErr);
-      return [customErr, null];
     } finally {
       setPending(false);
     }
