@@ -13,13 +13,10 @@ export const MainRoutes: React.FC = (): ReactElement => {
         <Route element={<StudentPageProvider />}>
           <Route index element={<StudentLandingPage />} />
         </Route>
-        <Route path={Path.COURSE}>
-          <Route index element={<NavigateToPath to={Path.INDEX} />} />
+        <Route path={Path.COURSES} element={<CoursesPageProvider />} >
+          <Route index element={<TeacherGuard><CoursesPage /></TeacherGuard>} />
+          <Route path="new" element={<TeacherGuard><NewCoursePage /></TeacherGuard>} />
           <Route path=":id" element={<CurrentCoursePage />} />
-        </Route>
-        <Route path={Path.COURSES} element={<TeacherGuard><CoursesPageProvider /></TeacherGuard>} >
-          <Route index element={<CoursesPage />} />
-          <Route path="new" element={<NewCoursePage />} />
         </Route>
         <Route path={Path.PROFILE} element={<ProfilePage />} />
       </Route>
