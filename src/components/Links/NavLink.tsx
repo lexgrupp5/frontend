@@ -1,4 +1,5 @@
 import { Path, PathType } from "@/constants";
+import { useMessageContext } from "@/hooks";
 import { ReactElement, ReactNode } from "react";
 import { NavLink as NavLinkPlain } from "react-router-dom";
 
@@ -15,6 +16,11 @@ export const NavLink: React.FC<Props> = ({
   className,
   activeClassName,
 }): ReactElement => {
+  const messageContext = useMessageContext();
+
+  const clearGlobalMessages = () => {
+    messageContext.clearMessages();
+  };
 
   return (
     <NavLinkPlain
@@ -29,7 +35,8 @@ export const NavLink: React.FC<Props> = ({
             ? className
             : "text-indigo-200 hover:text-white";
         }
-      }}>
+      }}
+      onClick={clearGlobalMessages}>
       {children}
     </NavLinkPlain>
   );

@@ -14,9 +14,9 @@ export const CoursesPageProvider = (): React.ReactElement => {
 
   useEffect(() => {
     (async () => {
-      const [err, result] = await makeAuthRequestWithErrorResponse();
-      if (err != null || result == null) {
-        msgContext.updateErrorMessage("Could not fetch courses from server");
+      const [err] = await makeAuthRequestWithErrorResponse();
+      if (err != null) {
+        msgContext.updateErrorMessage(err?.message);
       }
     })();
   }, []);
@@ -26,17 +26,15 @@ export const CoursesPageProvider = (): React.ReactElement => {
   };
 
   const fetchCourses = async (dto: ISearchAndFilterDTO) => {
-    let [err, result]: [ CustomApiException | null, CourseDto[] | null ] = [null, null]; 
+    let [err]: [ CustomApiException | null, CourseDto[] | null ] = [null, null]; 
     if (dto.searchText === "" || dto.searchText == null) {
-      [err, result] = await makeAuthRequestWithErrorResponse(undefined, dto.endDate, dto.startDate);
+      [err] = await makeAuthRequestWithErrorResponse(undefined, dto.endDate, dto.startDate);
     } else {
-      [err, result] = await makeAuthRequestWithErrorResponse(dto.searchText, dto.endDate, dto.startDate);
+      [err] = await makeAuthRequestWithErrorResponse(dto.searchText, dto.endDate, dto.startDate);
     }
-    if (err != null || result == null) { updateErrorMsg(); }
-  };
-
-  const updateErrorMsg = () => {
-    msgContext.updateErrorMessage("Could not fetch courses from server");
+    if (err != null) {
+      msgContext.updateErrorMessage(err.message);
+    }
   };
 
   const constructCoursesPageContext = (): ICoursesPageContext => ({

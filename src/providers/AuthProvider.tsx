@@ -4,7 +4,7 @@ import { useLocalStorage } from "usehooks-ts";
 import { AuthContext, IAuthContext } from "@/contexts";
 import { Role, Storage } from "@/constants";
 import { useApi } from "@/hooks";
-import { api, CourseDto, UserAuthModel } from "@/api";
+import { api, CourseDto, TokenDto, UserAuthModel } from "@/api";
 import * as Service from "@/services";
 
 interface Props {
@@ -62,7 +62,7 @@ export const AuthProvider: React.FC<Props> = ({
 
   const logout = () => {
     if (token != null) {
-      logoutApi.makeAuthRequest(token);
+      logoutApi.makeAuthRequest(new TokenDto({ accessToken: token }));
     }
     clearTokens();
     loginApi.clearData();
