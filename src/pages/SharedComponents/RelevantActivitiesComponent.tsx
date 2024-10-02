@@ -12,7 +12,7 @@ export function RelevantActivitiesComponent({ activities }: Props): ReactElement
         return (
             <>
                 <article className="flex flex-col items-center max-w-4/5 mx-auto">
-                    <H size={4}>Your activities for this week</H>
+                    <H size={4}>The activities of current module:</H>
 
                     <article className="flex overflow-x-auto space-x-4 p-4 w-full">
                         {activities!.length === 0 && <div className="w-full flex justify-center p-8">
@@ -21,7 +21,7 @@ export function RelevantActivitiesComponent({ activities }: Props): ReactElement
                         {activities!.length !== 0 &&
                             activities!.map((activity) => (
                                 <div key={activity.id}
-                                    className="flex-shrink-0 w-[250px] sm:[300px] lg:w-[350px] mb-6 h-[160px] rounded shadow-lg">
+                                    className={`h-full sm:p-2 sm:w-1/2 lg:w-1/4 rounded shadow-lg}`}>
                                     <ActivityItem activity={activity} />
                                 </div>
                             ))}

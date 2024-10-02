@@ -10,6 +10,7 @@ interface Props {
 
 export const ActivityItem: React.FC<Props> = ({ activity }): ReactElement => {
     const [viewActivity, setViewActivity] = useState(false);
+    const dateNow = new Date();
 
     return (
         <>
@@ -17,19 +18,41 @@ export const ActivityItem: React.FC<Props> = ({ activity }): ReactElement => {
                 activity={activity}
                 onClose={() => { setViewActivity(false); }} />}
             <article
-                className="flex h-full flex-col justify-between
-        bg-indigo-600 p-3
-        rounded border-2 border-black
-        outline-offset-2 hover:outline-3
-        hover:outline hover:outline-indigo-50
-        cursor-pointer overflow-y-auto"
+                className="flex h-full min-w-[255px] flex-col justify-between p-3
+                    rounded border-2 bg-indigo-600
+                    outline-offset-2 hover:outline-3
+                    hover:outline hover:outline-indigo-50
+                    cursor-pointer overflow-y-auto"
                 onClick={() => { setViewActivity(true); }}>
-                <H size={4}>{activity.activityTypeName}</H>
                 <div className="w-full flex justify-between items-end">
                     <div>
-                        <P color={TextColor.MEDIUM}>{activity.description}</P>
-                        <P color={TextColor.MEDIUM}>Start: {activity.startDate?.toDateString()}</P>
-                        <P color={TextColor.MEDIUM}>End: {activity.endDate?.toDateString()}</P>
+                        {dateNow < activity.startDate! ? (
+                            <div className="flex flex-col m-4">
+                                <div className="flex">
+                                    <P color={TextColor.MEDIUM}>{activity.activityTypeName}</P>
+                                    <P color={TextColor.MEDIUM}>&nbsp;-&nbsp;UPCOMING</P>
+                                </div>
+                                <P color={TextColor.MEDIUM} className="p-0"><br />Starts: {activity.startDate!.toDateString()}</P>
+                            </div>
+                        ) : (<></>)}
+                        {dateNow > activity.endDate! ? (
+                            <div className="flex flex-col m-4">
+                                <div className="flex">
+                                    <P color={TextColor.MEDIUM}>{activity.activityTypeName}</P>
+                                    <p className="text-green-500">&nbsp;-&nbsp;COMPLETE ✔</p>
+                                </div>
+                                <P color={TextColor.MEDIUM} className="p-0"><br />Finished: {activity.endDate!.toDateString()}</P>
+                            </div>
+                        ) : (<></>)}
+                        {dateNow > activity.startDate! && dateNow < activity.endDate! ? (
+                            <div className="flex flex-col m-4">
+                                <div className="flex">
+                                    <P color={TextColor.MEDIUM}>{activity.activityTypeName}</P>
+                                    <p className="text-orange-400">&nbsp;-&nbsp;ONGOING</p>
+                                </div>
+                                <P color={TextColor.MEDIUM} className="p-0"><br />Deadline: {activity.endDate!.toDateString()}</P>
+                            </div>
+                        ) : (<></>)}
                     </div>
                 </div>
             </article>
