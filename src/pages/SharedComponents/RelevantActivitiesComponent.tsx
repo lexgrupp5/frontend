@@ -12,7 +12,7 @@ export function RelevantActivitiesComponent({ activities }: Props): ReactElement
         return (
             <>
                 <article className="flex flex-col items-center max-w-4/5 mx-auto">
-                    <H size={4}>The activities of current module:</H>
+                    <H size={4}>Activities of the ongoing module:</H>
 
                     <article className="flex overflow-x-auto space-x-4 p-4 w-full">
                         {activities!.length === 0 && <div className="w-full flex justify-center p-8">
