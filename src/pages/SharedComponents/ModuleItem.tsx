@@ -17,7 +17,7 @@ export const ModuleItem: React.FC<Props> = ({ module }): ReactElement => {
                 module={module}
                 onClose={() => { setViewModule(false); }} />}
             <article
-                className="relative flex h-[180px] flex-col justify-center items-center p-3
+                className="relative h-[180px] flex-col justify-center items-center p-3
                 rounded border-2 hover:outline-3
                 hover:outline hover:outline-indigo-50
                 cursor-pointer overflow-y-auto"
