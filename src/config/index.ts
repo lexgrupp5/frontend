@@ -9,3 +9,11 @@ export function isDevelopment (): boolean {
 export function isProduction (): boolean {
   return import.meta.env.PROD;
 }
+
+export function getDefaultUsername() {
+  return isDevelopment() ? import.meta.env.VITE_USERNAME : "";
+}
+
+export function getDefaultPwd() {
+  return isDevelopment() ? import.meta.env.VITE_PWD : "";
+}

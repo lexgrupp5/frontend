@@ -31,6 +31,7 @@ export const CourseDesk: React.FC<Props> = ({
       if (participantsErr != null || participantsResult == null) {
         msgContext.updateErrorMessage("Course data could not be fetched");
       } else {
+        console.log(participantsResult)
         setParticipants(participantsResult);
       }
 
