@@ -3,7 +3,7 @@ import { FormEventHandler, ReactElement, useState } from "react";
 import { Input, SubmitButton, NavLink, NavigateToPath, H, TextColor, P, SecretInput } from "@/components";
 import { Path } from "@/constants";
 import { useAuthContext, useNavigateToPath } from "@/hooks";
-import { getDefaultPwd, getDefaultUsername } from "@/services";
+import { getDefaultPwd, getDefaultUsername } from "@/config";
 
 export const LoginForm = (): ReactElement => {
   const [username, setUsername] = useState(getDefaultUsername());
