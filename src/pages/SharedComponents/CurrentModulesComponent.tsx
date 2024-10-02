@@ -16,7 +16,7 @@ export function CurrentModulesComponent({ modules }: Props): ReactElement {
                                 outline-offset-2 hover:outline-3
                                 hover:outline hover:outline-indigo-50
                                 cursor-pointer overflow-y-auto">
-                <H size={4}>Modules of your course</H>
+                <H size={4} className="relative left-44">Modules of your course</H>
                 <div>
                     <article className="flex flex-wrap p-4 max-w-7xl m-auto">
                         {modules!.length === 0 && (
