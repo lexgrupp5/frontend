@@ -1,6 +1,6 @@
 import { ReactElement, useState } from "react";
 
-import { H, P, TextColor } from "@/components";
+import { P, TextColor } from "@/components";
 import { IActivityDto } from "@/api";
 import { ActivityModal } from "./ActivityModal";
 

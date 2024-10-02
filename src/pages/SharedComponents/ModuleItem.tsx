@@ -25,18 +25,22 @@ export const ModuleItem: React.FC<Props> = ({ module }): ReactElement => {
                 <H size={4}>{module.name}</H>
                 <div className="static flex flex-col max-[150px] justify-between items-center items-end">
                     <P color={TextColor.MEDIUM}>{module.description}</P>
-                    <P color={TextColor.MEDIUM}>Module starts: {module.startDate?.toDateString()}</P>
                     {dateNow < module.startDate! ? (
-                        <P color={TextColor.MEDIUM} className="mt-4 absolute top-0 right-4">UPCOMING</P>
+                        <div className="flex mt-4">
+                            <p className="text-gray-200 absolute top-2 right-4">UPCOMING</p>
+                            <P color={TextColor.MEDIUM}><br/>Module starts: {module.startDate?.toDateString()}</P>
+                        </div>
                     ) : (<></>)}
                     {dateNow > module.endDate! ? (
-                        <div className="flex mt-4 absolute top-0 right-4">
-                            <p className="text-green-500">COMPLETE ✔</p>
+                        <div className="flex mt-4">
+                            <p className="text-green-500 absolute top-2 right-4">COMPLETE ✔</p>
+                            <P color={TextColor.MEDIUM}><br />Module finished: {module.endDate?.toDateString()}</P>
                         </div>
                     ) : (<></>)}
                     {dateNow > module.startDate! && dateNow < module.endDate! ? (
-                        <div className="flex mt-4 absolute top-0 right-4">
-                            <p className="text-orange-400">ONGOING</p>
+                        <div className="flex mt-4">
+                            <p className="text-orange-400 absolute top-2 right-4">ONGOING</p>
+                            <P color={TextColor.MEDIUM}><br />Module starts: {module.startDate?.toDateString()}</P>
                         </div>
                     ) : (<></>)}
                 </div>
