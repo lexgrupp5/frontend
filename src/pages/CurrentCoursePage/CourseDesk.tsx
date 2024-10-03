@@ -11,6 +11,10 @@ interface Props {
   selectedCourse: ICourseDto 
 }
 
+/**
+ * @TODO Update to use course context users, modules and activities first,
+ * if null then fetch data.
+ */
 export const CourseDesk: React.FC<Props> = ({
   selectedCourse
 }): ReactElement => {

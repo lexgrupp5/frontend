@@ -1,12 +1,12 @@
 import { ReactElement, useEffect } from "react";
-import { StudentLandingDesk } from "./StudentLandingDesk";
-import { useApi, useAuthContext, useMessageContext, useStudentPageContext } from "@/hooks";
+import { StudentLandingDesk } from "./StudentLandingDesk.tsx";
+import { useApi, useAuthContext, useMessageContext, useCourseContext } from "@/hooks";
 import { FullPageSpinner } from "@/components";
 import { CurrentCourseComponent, RelevantActivitiesComponent, CurrentModulesComponent, DefaultToastMessage } from "../SharedComponents/index.ts";
 import { ActivityDto, api, ModuleDto } from "@/api/index.ts";
 
-export const StudentLandingPage = (): ReactElement => {
-  const context = useStudentPageContext();
+export const LandingPage = (): ReactElement => {
+  const context = useCourseContext();
   const authContext = useAuthContext();
   const getCourse = useApi(api.userGET);
   const courseParticipants = useApi(api.courses);

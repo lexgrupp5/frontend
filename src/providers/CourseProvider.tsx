@@ -1,14 +1,17 @@
-import { useState, ReactElement } from "react";
+import { useState, ReactElement, ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 
 import { ActivityDto, CourseDto, ModuleDto, UserDto } from "@/api";
-import { IStudentPageContext } from "@/contexts";
+import { CourseContext, ICourseContext } from "@/contexts";
 
-/**
- * TODO Refactor to normal provider using children and use
- * it for all elements.
- */
-export const StudentPageProvider = (): ReactElement => {
+
+interface Props {
+  children?: ReactNode;
+}
+
+export const CourseProvider: React.FC<Props> = ({
+  children
+}): ReactElement => {
   const [course, setCourse] = useState<CourseDto | null>(null);
   const [modules, setModules] = useState<ModuleDto[]>([]);
   const [activities, setActivities] = useState<ActivityDto[]>([]);
@@ -30,7 +33,7 @@ export const StudentPageProvider = (): ReactElement => {
     setParticipants(participants);
   };
 
-  const constructStudentPageContext = (): IStudentPageContext => ({
+  const constructCourseContext = (): ICourseContext => ({
     course,
     modules,
     activities,
@@ -43,7 +46,9 @@ export const StudentPageProvider = (): ReactElement => {
 
   return (
     <>
-      <Outlet context={constructStudentPageContext()} />
+      <CourseContext.Provider value={constructCourseContext()}>  
+        {children}
+      </CourseContext.Provider>
     </>
   );
 };

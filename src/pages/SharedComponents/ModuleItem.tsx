@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { H, P, TextColor } from "@/components";
 import { ModuleDto } from "@/api";
 import { Path } from "@/constants";
-import { useCurrentCourseContext, useNavigateToPath, useStudentPageContext } from "@/hooks";
+import { useCurrentCourseContext, useNavigateToPath, useCourseContext } from "@/hooks";
 
 interface Props {
     module: ModuleDto;
@@ -11,16 +11,16 @@ interface Props {
 
 export const ModuleItem: React.FC<Props> = ({ module }): ReactElement => {
   const currentCourseContext = useCurrentCourseContext();
-  const landingPageContext = useStudentPageContext();
+  const courseContext = useCourseContext();
   const navigate = useNavigateToPath();
   const dateNow = new Date();
   
   const handleSelectModule = () => {
-    if (landingPageContext.course?.id == null) { return; }
-    currentCourseContext.updateSelectedCourse(landingPageContext.course);
+    if (courseContext.course?.id == null) { return; }
+    currentCourseContext.updateSelectedCourse(courseContext.course);
     currentCourseContext.updateSelectedModule(module);
     currentCourseContext.updateSelectedActivity(null);
-    navigate(Path.constructSelectedCoursePath(landingPageContext.course?.id));
+    navigate(Path.constructSelectedCoursePath(courseContext.course?.id));
   };
   
   return (

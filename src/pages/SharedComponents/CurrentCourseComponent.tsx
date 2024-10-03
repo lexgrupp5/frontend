@@ -9,15 +9,16 @@ interface Props {
     course: CourseDto | null;
 }
 
-
 export function CurrentCourseComponent({ course }: Props): ReactElement {
   const navigate = useNavigateToPath();
-  const { updateSelectedCourse } = useCurrentCourseContext();
+  const currentCourseContext = useCurrentCourseContext();
   if (course != null) {
 
     const navigateToStudentCoursePage = () => {
       if (course.id == null) { return; }
-      updateSelectedCourse(course);
+      currentCourseContext.updateSelectedCourse(course);
+      currentCourseContext.updateSelectedModule(null);
+      currentCourseContext.updateSelectedActivity(null);
       navigate(Path.constructSelectedCoursePath(`${course.id}`));
     };
 
