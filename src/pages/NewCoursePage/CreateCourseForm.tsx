@@ -32,7 +32,7 @@ export const CreateCourseForm = (): ReactElement => {
       );
       clearInputs();
     } else {
-      msgContext.updateErrorMessage("Course could not be created");
+      msgContext.updateErrorMessage("Course could not be created, please try to update your submited form");
     }
   };
 
