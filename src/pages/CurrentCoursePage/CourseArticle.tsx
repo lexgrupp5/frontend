@@ -118,7 +118,7 @@ export const CourseArticle: React.FC<Props> = ({
   };
 
   return (
-    <article className="w-full flex flex-col gap-4 max-w-5xl">
+    <article className="w-full flex flex-col gap-4 max-w-7xl">
       <Breadcrumb items={breadcrumbItems} />
       <section>
         {<CourseSection course={course} />}

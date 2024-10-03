@@ -8,6 +8,7 @@ interface Props {
 	children: ReactNode;
   className?: string;
   activeClassName?: string;
+  keepMessage?: boolean;
 }
 
 export const NavLink: React.FC<Props> = ({
@@ -15,10 +16,12 @@ export const NavLink: React.FC<Props> = ({
   children,
   className,
   activeClassName,
+  keepMessage = false
 }): ReactElement => {
   const messageContext = useMessageContext();
 
   const clearGlobalMessages = () => {
+    if (keepMessage) { return; }
     messageContext.clearMessages();
   };
 

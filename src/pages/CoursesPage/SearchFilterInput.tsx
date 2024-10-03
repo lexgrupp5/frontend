@@ -38,7 +38,7 @@ export const SearchFilterInput = (): ReactElement => {
       className="relative flex flex-col justify-between items-center
       p-2 rounded-t-lg rounded-b-lg
       w-full bg-white
-      min-[350px]:flex-row
+      min-[380px]:flex-row
       sm:w-auto">
       <div className="flex-grow">
         <Input type="text"

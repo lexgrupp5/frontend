@@ -15,21 +15,21 @@ export const CoursesController = (): ReactElement => {
   };
 
   return (
-    <article className="flex flex-col-reverse pt-4 justify-center items-center
-      gap-6 px-6
+    <article className="flex flex-col-reverse justify-center items-center
+      pt-4 gap-6 px-6 flex-grow
       sm:flex-row">
-      <div className="rounded-lg hover:outline
-         outline-offset-2 outline-gray-300">
+      <div className="rounded-lg outline-offset-2 outline-gray-300
+        hover:outline w-full sm:w-auto">
         <SearchFilterInput />
       </div>
-      {authContext.isTeacher() && <div className="rounded-lg hover:outline
-         outline-offset-2 outline-gray-300">  
+      {authContext.isTeacher() && <div
+        className="rounded-lg outline-offset-2 outline-gray-300
+        hover:outline w-full sm:w-auto">  
         <UnstyledButton
-          className="display flex justify-center items-center
-          w-full py-2 pl-4 pr-2 
-          rounded-t-lg rounded-b-lg 
-          bg-white
-          sm:w-auto"
+          className="flex justify-center items-center
+          bg-white py-2 pl-4 pr-2 
+          rounded-t-lg rounded-b-lg
+          w-full"
           onPress={navigateToSelectedCoursePage}>
           <P color={TextColor.DARK}>Create new course</P>
           <IconContainer className="size-10 p-2 border-none focus:outline-none">
