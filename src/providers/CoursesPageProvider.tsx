@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import { api, CourseDto, CustomApiException } from "@/api";
+import { api } from "@/api";
 import { ICoursesPageContext, ISearchAndFilterDTO } from "@/contexts";
 import { useApi } from "@/hooks/useApi";
 import { useMessageContext } from "@/hooks";
@@ -12,27 +12,17 @@ export const CoursesPageProvider = (): React.ReactElement => {
   const [searchAndFilterDTO, setSearchAndFIlterDTO] = useState<ISearchAndFilterDTO>({});
   const msgContext = useMessageContext();
 
-  useEffect(() => {
-    (async () => {
-      const [err] = await makeAuthRequestWithErrorResponse();
-      if (err != null) {
-        msgContext.updateErrorMessage(err?.message);
-      }
-    })();
-  }, []);
-
   const updateSearchAndFilterDTO = (dto: ISearchAndFilterDTO) => {
     setSearchAndFIlterDTO(dto);
   };
 
-  const fetchCourses = async (dto: ISearchAndFilterDTO) => {
-    let [err]: [ CustomApiException | null, CourseDto[] | null ] = [null, null]; 
-    if (dto.searchText === "" || dto.searchText == null) {
-      [err] = await makeAuthRequestWithErrorResponse(undefined, dto.endDate, dto.startDate);
-    } else {
-      [err] = await makeAuthRequestWithErrorResponse(dto.searchText, dto.endDate, dto.startDate);
-    }
-    if (err != null) {
+  const fetchCourses = async (aDto?: ISearchAndFilterDTO) => {
+    const dto = { searchText: "", startDate: undefined, endDate: undefined, ...aDto };
+    const searchParam = dto.searchText || undefined;
+    
+    const [err] = await makeAuthRequestWithErrorResponse(searchParam, dto.endDate, dto.startDate);
+  
+    if (err) {
       msgContext.updateErrorMessage(err.message);
     }
   };

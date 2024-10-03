@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 
 import { useCoursesPageContext } from "@/hooks";
 import { CourseList } from "./CourseList";
@@ -7,7 +7,13 @@ import { CoursesController } from "./CoursesController";
 import { Path } from "@/constants";
 
 export const CoursesPage = (): ReactElement => {
-  const { courses, pending } = useCoursesPageContext();
+  const { courses, pending, fetchCourses } = useCoursesPageContext();
+
+  useEffect(() => {
+    (async () => {
+      fetchCourses();
+    })();
+  }, []);
 
   const breadcrumbItems: BreadcrumbItemType[] = [
     { label: "Home", path: Path.INDEX },
