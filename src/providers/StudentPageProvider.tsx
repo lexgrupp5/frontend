@@ -1,87 +1,49 @@
-import { useEffect, useState, ReactElement } from "react";
+import { useState, ReactElement } from "react";
 import { Outlet } from "react-router-dom";
 
-import { api, IModuleDto } from "@/api";
+import { ActivityDto, CourseDto, ModuleDto, UserDto } from "@/api";
 import { IStudentPageContext } from "@/contexts";
-import { useApi } from "@/hooks/useApi";
 
+/**
+ * TODO Refactor to normal provider using children and use
+ * it for all elements.
+ */
 export const StudentPageProvider = (): ReactElement => {
-    const { pending: coursePending, error: courseError, data: courseData, makeAuthRequest: fetchCourseData, clearError: clearCourseError } = useApi(api.getCourse);
-    const { pending: modulePending, error: moduleError, data: moduleData, makeAuthRequest: fetchModuleData, clearError: clearModuleError } = useApi(api.modulesAll);
-    const { pending: activityPending, error: activityError, data: activityData, makeAuthRequest: fetchActivityData, clearError: clearActivityError } = useApi(api.activities);
-    const { pending: participantsPending, error: participantsError, data: participantsData, makeAuthRequest: fetchParticipantData, clearError: clearParticipantError } = useApi(api.course);
-    //STARTS OFF AS -1, GETS ASSIGNED AFTER MODULES HAVE BEEN FETCHED FROM API OR IS LEFT -1 IF NO MODULES WERE FOUND
-    const [moduleId, setModuleId] = useState<number | null>(-1)
+  const [course, setCourse] = useState<CourseDto | null>(null);
+  const [modules, setModules] = useState<ModuleDto[]>([]);
+  const [activities, setActivities] = useState<ActivityDto[]>([]);
+  const [participants, setParticipants] = useState<UserDto[]>([]);
 
-    //PLACEHOLDER ID, SHOULD BE FETCHED FROM THE LOGGED IN USERS REGISTERED COURSE
-    //const courseId = User.CourseId
-    const courseId = 3;
+  const updateCourse = (course: CourseDto | null) => {
+    setCourse(course);
+  };
 
-    const setCurrentModule = async (modules: IModuleDto[]) => {
-        const dateNow = new Date();
+  const updateModules = (modules: ModuleDto[]) => {
+    setModules(modules);
+  };
 
-        if (!modules || modules.length === 0) {
-            setModuleId(-1);
-            return -1;
-        }
+  const updateActivities = (activities: ActivityDto[]) => {
+    setActivities(activities);
+  };
 
-        if (dateNow > new Date(modules[modules.length - 1].endDate!)) {
-            setModuleId(modules[modules.length - 1].id!);
-            return modules[modules.length - 1].id!;
-        }
+  const updateParticipants = (participants: UserDto[]) => {
+    setParticipants(participants);
+  };
 
-        if (dateNow < new Date(modules[0].startDate!)) {
-            setModuleId(modules[0].id!);
-            return modules[0].id!;
-        }
+  const constructStudentPageContext = (): IStudentPageContext => ({
+    course,
+    modules,
+    activities,
+    participants,
+    updateCourse,
+    updateModules,
+    updateActivities,
+    updateParticipants
+  });
 
-        const activeModule = modules.find(
-            (module) => dateNow >= new Date(module.startDate!) && dateNow <= new Date(module.endDate!)
-        );
-
-        const activeModuleId = activeModule?.id! ?? -1;
-        setModuleId(activeModuleId);
-        return activeModuleId;
-    }
-
-
-    useEffect(() => {
-        (async () => {
-            try {
-                await fetchCourseData(courseId);
-                const fetchedModules = await fetchModuleData(courseId);
-                let newModuleId = moduleId;
-                if (moduleId === -1) {
-                    newModuleId = await setCurrentModule(fetchedModules!)
-                }
-                if (newModuleId !== -1) {
-                    await fetchActivityData(newModuleId!);
-                    await fetchParticipantData(courseId);
-                }
-            } catch (e) {
-                console.log(e);
-            }
-        })();
-    }, [moduleId]);
-
-    const constructStudentPageContext = (): IStudentPageContext => ({
-        course: courseData,
-        modules: moduleData,
-        activities: activityData,
-        participants: participantsData,
-        pending: coursePending || modulePending || activityPending || participantsPending,
-        error: courseError || moduleError || activityError || participantsError,
-        clearError: () => {
-            clearCourseError();
-            clearModuleError();
-            clearActivityError();
-            clearParticipantError();
-        }
-    });
-
-    return (
-        <>
-            <Outlet context={constructStudentPageContext()} />
-        </>
-    );
-}
+  return (
+    <>
+      <Outlet context={constructStudentPageContext()} />
+    </>
+  );
+};

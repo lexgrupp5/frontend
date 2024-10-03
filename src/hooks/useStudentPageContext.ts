@@ -4,5 +4,5 @@ import { IStudentPageContext } from "@/contexts";
 export type IStudentPageContextHook = ReturnType<typeof useStudentPageContext>;
 
 export const useStudentPageContext = () => {
-    return useOutletContext<IStudentPageContext>();
+  return useOutletContext<IStudentPageContext>();
 };

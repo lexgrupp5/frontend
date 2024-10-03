@@ -1,11 +1,12 @@
-import { CustomApiException, CourseDto, ModuleDto, ActivityDto, UserDto } from "@/api";
+import { CourseDto, ModuleDto, ActivityDto, UserDto } from "@/api";
 
 export interface IStudentPageContext {
-    pending: boolean;
-    error: CustomApiException | null;
     course: CourseDto | null;
-    modules: ModuleDto[] | null;
-    participants: UserDto[] | null
-    activities: ActivityDto[] | null;
-    clearError: () => void;
+    modules: ModuleDto[];
+    activities: ActivityDto[];
+    participants: UserDto[];
+    updateCourse: (course: CourseDto | null) => void
+    updateActivities: (course: ActivityDto[]) => void
+    updateModules: (course: ModuleDto[]) => void
+    updateParticipants: (course: UserDto[]) => void
 }
