@@ -5,6 +5,7 @@ export interface IStudentPageContext {
     error: CustomApiException | null;
     course: CourseDto | null;
     modules: ModuleDto[] | null;
+    module: ModuleDto | null;
     participants: UserDto[] | null
     activities: ActivityDto[] | null;
     clearError: () => void;

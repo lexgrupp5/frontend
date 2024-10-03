@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import { api, CourseDto, CustomApiException } from "@/api";
@@ -12,21 +12,12 @@ export const CoursesPageProvider = (): React.ReactElement => {
   const [searchAndFilterDTO, setSearchAndFIlterDTO] = useState<ISearchAndFilterDTO>({});
   const msgContext = useMessageContext();
 
-  useEffect(() => {
-    (async () => {
-      const [err] = await makeAuthRequestWithErrorResponse();
-      if (err != null) {
-        msgContext.updateErrorMessage(err?.message);
-      }
-    })();
-  }, []);
-
   const updateSearchAndFilterDTO = (dto: ISearchAndFilterDTO) => {
     setSearchAndFIlterDTO(dto);
   };
 
   const fetchCourses = async (dto: ISearchAndFilterDTO) => {
-    let [err]: [ CustomApiException | null, CourseDto[] | null ] = [null, null]; 
+    let [err]: [CustomApiException | null, CourseDto[] | null] = [null, null];
     if (dto.searchText === "" || dto.searchText == null) {
       [err] = await makeAuthRequestWithErrorResponse(undefined, dto.endDate, dto.startDate);
     } else {
@@ -49,8 +40,8 @@ export const CoursesPageProvider = (): React.ReactElement => {
 
   return (
     <>
-      <DefaultToastMessage onClose={clearError}/>
+      <DefaultToastMessage onClose={clearError} />
       <Outlet context={constructCoursesPageContext()} />
     </>
-  );  
+  );
 };

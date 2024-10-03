@@ -1,27 +1,35 @@
-import { ReactElement, useState } from "react";
+import { ReactElement } from "react";
+import { useNavigateToPath, useCurrentCourseContext, useStudentPageContext } from "@/hooks"
 import { H, P, TextColor } from "@/components";
-import { IModuleDto } from "@/api";
-import { ModuleModal } from "./ModuleModal";
+import { Path } from "@/constants";
+import { ModuleDto } from "@/api";
 
 interface Props {
-    module: IModuleDto;
-    modules: IModuleDto[] | null;
+    module: ModuleDto;
+    modules: ModuleDto[] | null;
 }
 
 export const ModuleItem: React.FC<Props> = ({ module }): ReactElement => {
-    const [viewModule, setViewModule] = useState(false);
+    const navigate = useNavigateToPath();
+    const { updateSelectedCourse, updateSelectedModule, selectedCourse } = useCurrentCourseContext();
+    const { course } = useStudentPageContext();
+
+    const navigateToModule = () => {
+        if (module.id == null) { return; }
+        updateSelectedCourse(course!)
+        updateSelectedModule(module);
+        navigate(Path.constructSelectedCoursePath(`${selectedCourse?.id}`))
+    }
+
     const dateNow = new Date();
     return (
         <>
-            {viewModule && <ModuleModal isOpen={viewModule}
-                module={module}
-                onClose={() => { setViewModule(false); }} />}
             <article
-                className="relative h-[180px] flex-col justify-center items-center p-3
+                className="relative min-w-[250px] h-[180px] flex-col justify-center items-center p-3
                 rounded border-2 hover:outline-3
                 hover:outline hover:outline-indigo-50
                 cursor-pointer overflow-y-auto"
-                onClick={() => { setViewModule(true); }}>
+                onClick={() => { navigateToModule() }}>
                 <H size={4}>{module.name}</H>
                 <div className="static flex flex-col max-[150px] justify-between items-center items-end">
                     <P color={TextColor.MEDIUM}>{module.description}</P>

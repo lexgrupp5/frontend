@@ -1,29 +1,36 @@
-import { ReactElement, useState } from "react";
-
+import { ReactElement } from "react";
+import { Path } from "@/constants";
 import { P, TextColor } from "@/components";
-import { IActivityDto } from "@/api";
-import { ActivityModal } from "./ActivityModal";
+import { ActivityDto } from "@/api";
+import { useStudentPageContext, useCurrentCourseContext, useNavigateToPath } from "@/hooks";
 
 interface Props {
-    activity: IActivityDto;
+    activity: ActivityDto;
 }
 
 export const ActivityItem: React.FC<Props> = ({ activity }): ReactElement => {
-    const [viewActivity, setViewActivity] = useState(false);
+    const navigate = useNavigateToPath();
+    const { course, module } = useStudentPageContext();
     const dateNow = new Date();
+    const { updateSelectedCourse, updateSelectedModule, updateSelectedActivity, selectedCourse } = useCurrentCourseContext();
+
+    const navigateToActivity = () => {
+        if (activity.id === null) { return; }
+        updateSelectedCourse(course!);
+        updateSelectedModule(module)
+        updateSelectedActivity(activity);
+        navigate(Path.constructSelectedCoursePath(`${selectedCourse?.id}`))
+    }
 
     return (
         <>
-            {viewActivity && <ActivityModal isOpen={viewActivity}
-                activity={activity}
-                onClose={() => { setViewActivity(false); }} />}
             <article
                 className="flex h-full min-w-[255px] flex-col justify-between p-3
                     rounded border-2 bg-indigo-600
                     outline-offset-2 hover:outline-3
                     hover:outline hover:outline-indigo-50
                     cursor-pointer overflow-y-auto"
-                onClick={() => { setViewActivity(true); }}>
+                onClick={() => { navigateToActivity(); }}>
                 <div className="w-full flex justify-between items-end">
                     <div>
                         {dateNow < activity.startDate! ? (

@@ -1,11 +1,10 @@
-import { H, P, TextColor } from "@/components";
-import { getAPI } from "@/config";
+import { H } from "@/components";
 
-interface Props{
+interface Props {
     username: string;
 }
 
-export const StudentLandingDesk = ({username}: Props): React.ReactElement => {
+export const StudentLandingDesk = ({ username }: Props): React.ReactElement => {
 
     return (
         <>
