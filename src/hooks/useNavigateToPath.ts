@@ -4,12 +4,15 @@ import { useMessageContext } from "./useMessageContext";
 
 export type INaviagteToPathHook = ReturnType<typeof useNavigateToPath>;
 
-export const useNavigateToPath = () => {
+export const useNavigateToPath = (keepMessage: boolean = false) => {
   const navigate = useNavigate();
   const messageContext = useMessageContext();
 
   return (path: PathType) => {
-    messageContext.clearMessages();
+    if (!keepMessage) {
+      messageContext.clearMessages();
+    }
+
     if (path === Path.INDEX) {
       navigate(Path.INDEX);
     } else {
