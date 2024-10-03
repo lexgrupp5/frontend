@@ -12,10 +12,11 @@ export const ActivityItem: React.FC<Props> = ({ activity }): ReactElement => {
     const navigate = useNavigateToPath();
     const { course, module } = useStudentPageContext();
     const dateNow = new Date();
-    const { updateSelectedCourse, updateSelectedModule, updateSelectedActivity, selectedCourse } = useCurrentCourseContext();
+    const { updateSelectedCourse, updateSelectedModule, updateSelectedActivity, selectedCourse, updateSelectedParticipant } = useCurrentCourseContext();
 
     const navigateToActivity = () => {
         if (activity.id === null) { return; }
+        updateSelectedParticipant(null);
         updateSelectedCourse(course!);
         updateSelectedModule(module)
         updateSelectedActivity(activity);

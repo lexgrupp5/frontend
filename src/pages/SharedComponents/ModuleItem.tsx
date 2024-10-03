@@ -11,11 +11,12 @@ interface Props {
 
 export const ModuleItem: React.FC<Props> = ({ module }): ReactElement => {
     const navigate = useNavigateToPath();
-    const { updateSelectedCourse, updateSelectedModule, selectedCourse } = useCurrentCourseContext();
+    const { updateSelectedCourse, updateSelectedModule, selectedCourse, updateSelectedParticipant } = useCurrentCourseContext();
     const { course } = useStudentPageContext();
 
     const navigateToModule = () => {
         if (module.id == null) { return; }
+        updateSelectedParticipant(null);
         updateSelectedCourse(course!)
         updateSelectedModule(module);
         navigate(Path.constructSelectedCoursePath(`${selectedCourse?.id}`))
