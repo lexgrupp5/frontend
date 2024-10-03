@@ -7,16 +7,19 @@ interface Props {
 	to: PathType;
 	children: ReactNode;
   className?: string
+  keepMessage?: boolean;
 }
 
 export const Link: React.FC<Props> = ({
   to,
   children,
-  className
+  className,
+  keepMessage = false
 }): ReactElement => {
   const messageContext = useMessageContext();
 
   const clearGlobalMessages = () => {
+    if (keepMessage) { return; }
     messageContext.clearMessages();
   };
 
