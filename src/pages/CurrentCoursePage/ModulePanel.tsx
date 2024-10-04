@@ -76,7 +76,7 @@ export const ModulePanel: React.FC<Props> = ({
                 <MdSchool />
               </IconContainer>
               <P color={TextColor.MEDIUM_X} className="text-gray-400 group-hover:text-white">
-                {activity.description}
+                {activity.activityTypeName}
               </P>
             </> 
             : <>
@@ -84,7 +84,7 @@ export const ModulePanel: React.FC<Props> = ({
                 className="flex-shrink-0 text-white size-4 group-hover:text-white">
                 <MdSchool />
               </IconContainer>
-              <P color={TextColor.LIGHT}> {activity.description}</P>
+              <P color={TextColor.LIGHT}> {activity.activityTypeName}</P>
             </>}
         </div>
       ))}

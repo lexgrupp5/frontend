@@ -1,5 +1,5 @@
 import { FormEventHandler, ReactElement, useState } from "react";
-import { api, UserForCreationDto } from "@/api";
+import { api, UserCreateDto } from "@/api";
 import { H, Input, SubmitButton, TextColor } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
 import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const CreateUserForm: React.FC<Props> = ({ title }): ReactElement => {
-    const createUser = useApi(api.userPOST);
+    const createUser = useApi(api.usersPOST);
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -21,10 +21,11 @@ export const CreateUserForm: React.FC<Props> = ({ title }): ReactElement => {
 
         // LÄGGER ENDAST TILL USER I DATABASEN. GER INTE USER EN KURS ÄN. USERFORCREATION DTO SAKNAR COURSE ID
         const [err, result] = await createUser.makeAuthRequestWithErrorResponse(
-            new UserForCreationDto({
+            new UserCreateDto({
                 name,
                 username,
-                email
+                email,
+                password: "Qwerty1234"
             })
         );
 

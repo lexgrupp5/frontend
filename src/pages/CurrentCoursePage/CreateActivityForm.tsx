@@ -1,6 +1,6 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 
-import { ActivityCreateModel, api } from "@/api";
+import { ActivityCreateDto, api } from "@/api";
 import { H, Input, SubmitButton, TextColor } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
 import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
@@ -12,7 +12,7 @@ interface Props {
 export const CreateActivityForm: React.FC<Props> = ({
   title
 }): ReactElement => {
-  const createActivity = useApi(api.createactivity);
+  const createActivity = useApi(api.activitiesPOST);
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -24,7 +24,7 @@ export const CreateActivityForm: React.FC<Props> = ({
     createActivity.clearError(); 
     
     const [err, result] = await createActivity.makeAuthRequestWithErrorResponse(
-      new ActivityCreateModel({
+      new ActivityCreateDto({
         moduleId: coursesPageContext.selectedModule?.id,
         description,
         startDate: new Date(startDate),

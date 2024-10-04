@@ -24,8 +24,8 @@ export const CourseDesk: React.FC<Props> = ({
   selectedCourse
 }): ReactElement => {
   const getCourseModules = useApi(api.modulesAll);
-  const getModuleActivities = useApi(api.activities);
-  const getCourseParticipants = useApi(api.course);
+  const getModuleActivities = useApi(api.activitiesAll);
+  const getCourseParticipants = useApi(api.students);
   const [leftMargin, setLeftMargin ] = useState(0);
   const [modules, setModules] = useState<ModuleDto[]>([]);
   const [participants, setParticipants] = useState<UserDto[]>([]);

@@ -15,7 +15,7 @@ export const UpdateActivityForm: React.FC<Props> = ({
   activity,
   onSuccess
 }): ReactElement => {
-  const patchActivity = useApi(api.activity);
+  const patchActivity = useApi(api.activitiesPATCH);
   const [description, setDescription] = useState(activity.description ?? "");
   const [startDate, setStartDate] = useState(formatDateToString(activity.startDate) ?? "");
   const [endDate, setEndDate] = useState(formatDateToString(activity.endDate) ?? "");

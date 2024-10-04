@@ -15,7 +15,7 @@ export const UpdateModuleForm: React.FC<Props> = ({
   module,
   onSuccess
 }): ReactElement => {
-  const patchModule = useApi(api.module);
+  const patchModule = useApi(api.modulesPATCH);
   const [name, setName] = useState(module.name ?? "");
   const [description, setDescription] = useState(module.description ?? "");
   const [startDate, setStartDate] = useState(formatDateToString(module.startDate) ?? "");

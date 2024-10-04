@@ -29,7 +29,7 @@ export const ModuleItem: React.FC<Props> = ({ module }): ReactElement => {
         className="relative h-[180px] flex-col justify-center items-center p-3
                 rounded border-2 hover:outline-3
                 hover:outline hover:outline-indigo-50
-                cursor-pointer overflow-y-auto"
+                cursor-pointer overflow-y-auto custom-scrollbar"
         onClick={handleSelectModule}>
         <H size={4}>{module.name}</H>
         <div className="static flex flex-col max-[150px] justify-between items-center items-end">
