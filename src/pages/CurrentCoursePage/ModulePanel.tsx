@@ -78,7 +78,7 @@ export const ModulePanel: React.FC<Props> = ({
               <P color={TextColor.MEDIUM_X} className="text-gray-400 group-hover:text-white">
                 {activity.description}
               </P>
-            </> 
+            </>
             : <>
               <IconContainer
                 className="flex-shrink-0 text-white size-4 group-hover:text-white">
@@ -99,7 +99,7 @@ export const ModulePanel: React.FC<Props> = ({
             <MdAssignmentAdd />
           </IconContainer>
           <P color={TextColor.MEDIUM_X} className="group-hover:text-white">
-            Create activty 
+            Create activty
           </P>
         </UnstyledButton>
       </div>}
