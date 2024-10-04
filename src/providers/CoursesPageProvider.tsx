@@ -49,7 +49,6 @@ export const CoursesPageProvider = (): React.ReactElement => {
 
   return (
     <>
-      <DefaultToastMessage onClose={clearError}/>
       <Outlet context={constructCoursesPageContext()} />
     </>
   );  

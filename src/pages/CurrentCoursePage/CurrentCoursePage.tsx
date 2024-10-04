@@ -1,17 +1,36 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 
-import { useCurrentCourseContext } from "@/hooks";
+import { useCourseContext, useCurrentCourseContext, useNavigateToPath } from "@/hooks";
 import { CourseDesk } from "./CourseDesk";
-import { NavigateToPath } from "@/components";
+import { FullPageSpinner } from "@/components";
 import { Path } from "@/constants";
 
 export const CurrentCoursePage = (): ReactElement => {
-  const { selectedCourse } = useCurrentCourseContext();
+  const courseContext = useCourseContext();
+  const currentCourseContext = useCurrentCourseContext();
+  const navigate = useNavigateToPath();
+
+  useEffect(() => {
+    (async () => {
+      if (courseContext.course == null) {
+        const courseData = await courseContext.fetchCourseData();
+        if (courseData.course == null) {
+          navigate(Path.INDEX);
+          return;
+        }
+        currentCourseContext.updateSelectedCourse(courseData.course);
+      }
+    })();
+  }, []);
+
+  if (courseContext.isPending() ||
+    currentCourseContext.selectedCourse == null ) {
+    return <FullPageSpinner />;
+  }
   
   return (
-    <>{selectedCourse == null
-      ? <NavigateToPath to={Path.INDEX} />
-      : <CourseDesk selectedCourse={selectedCourse}/>
-    }</>
+    <>
+      <CourseDesk selectedCourse={currentCourseContext.selectedCourse}/>
+    </>
   );
 };
