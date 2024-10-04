@@ -1,6 +1,6 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 import { api, UserCreateDto } from "@/api";
-import { H, Input, SubmitButton, TextColor } from "@/components";
+import { H, Input, SecretInput, SubmitButton, TextColor } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
 import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
 
@@ -13,6 +13,7 @@ export const CreateUserForm: React.FC<Props> = ({ title }): ReactElement => {
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const msgContext = useMessageContext();
 
     const submit: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -25,7 +26,7 @@ export const CreateUserForm: React.FC<Props> = ({ title }): ReactElement => {
                 name,
                 username,
                 email,
-                password: "Qwerty1234"
+                password
             })
         );
 
@@ -41,6 +42,7 @@ export const CreateUserForm: React.FC<Props> = ({ title }): ReactElement => {
         setName("");
         setUsername("");
         setEmail("");
+        setPassword("");
     };
 
     const handleCloseForm = () => {
@@ -76,6 +78,11 @@ export const CreateUserForm: React.FC<Props> = ({ title }): ReactElement => {
                     required
                     value={email}
                     onChange={e => { setEmail(e.target.value); }} />
+                <SecretInput
+                    label="Password"
+                    required
+                    value={password}
+                    onChange={e => { setPassword(e.target.value); }} />
                 <SubmitButton>Add</SubmitButton>
             </fieldset>
         </form>
