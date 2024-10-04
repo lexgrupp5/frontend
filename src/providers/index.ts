@@ -1,5 +1,5 @@
 export * from "./AuthProvider";
 export * from "./CoursesPageProvider";
-export * from "./StudentPageProvider";
+export * from "./CourseProvider";
 export * from "./MessageProvider";
 export * from "./CurrentCourseProvider";

@@ -28,6 +28,7 @@ export const ModulePanel: React.FC<Props> = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
+    context.updateSelectedParticipant(null);
     context.updateSelectedActivity(activity);
     context.updateSelectedModule(module);
   };

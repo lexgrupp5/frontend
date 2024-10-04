@@ -3,16 +3,21 @@ import { Route } from "react-router-dom";
 
 import { AuthGuard, NavigateToPath, TeacherGuard } from "@/components";
 import { Path } from "@/constants";
-import { CoursesPageProvider, CurrentCourseProvider, StudentPageProvider } from "@/providers";
-import { CoursesPage, CurrentCoursePage, MainPage, NewCoursePage, ProfilePage, StudentLandingPage } from "@/pages";
+import { CoursesPageProvider, CurrentCourseProvider, CourseProvider } from "@/providers";
+import { CoursesPage, CurrentCoursePage, MainPage, NewCoursePage, ProfilePage, LandingPage } from "@/pages";
 
 export const MainRoutes: React.FC = (): ReactElement => {
+  const MainElement = () =>
+    <CourseProvider> 
+      <CurrentCourseProvider>
+        <MainPage />
+      </CurrentCourseProvider>
+    </CourseProvider>;
+  
   return (
     <>
-      <Route element={<AuthGuard><CurrentCourseProvider><MainPage /></CurrentCourseProvider></AuthGuard>}>
-        <Route element={<StudentPageProvider />}>
-          <Route index element={<StudentLandingPage />} />
-        </Route>
+      <Route element={<AuthGuard><MainElement/></AuthGuard>}>
+        <Route index element={<LandingPage />} />
         <Route path={Path.COURSES} element={<CoursesPageProvider />} >
           <Route index element={<TeacherGuard><CoursesPage /></TeacherGuard>} />
           <Route path="new" element={<TeacherGuard><NewCoursePage /></TeacherGuard>} />
