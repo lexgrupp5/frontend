@@ -30,11 +30,16 @@ export const CourseSidebar: React.FC<Props> = ({
     [`${context.selectedModule?.id}`]: true
   });
 
-  const toggleModulePanelOpen = (id: string, module: ModuleDto) => {
+  const toggleModulePanelOpen = (
+    id: string,
+    module: ModuleDto,
+    withSelect: boolean = true) => {
     if (id.trim() === "") { return; }
-    context.updateSelectedParticipant(null);
-    context.updateSelectedActivity(null);
-    context.updateSelectedModule(module);
+    if (withSelect) {
+      context.updateSelectedParticipant(null);
+      context.updateSelectedActivity(null);
+      context.updateSelectedModule(module);
+    }
     setOpenPanels(prevState => ({
       ...prevState,
       [id]: prevState[id] == null ? true : !prevState[id]

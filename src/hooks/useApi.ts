@@ -19,7 +19,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   const [data, setData] = useState<ApiReturnType | null>(null);
   const [pending, setPending] = useState<boolean>(false);
   const [error, setError] = useState<CustomApiException | null>(null);
-  const [token, , clearToken ] = useLocalStorage<string | null>(Storage.TOKEN, null);
+  const [token, setToken, clearToken ] = useLocalStorage<string | null>(Storage.TOKEN, null);
   const messageContext = useMessageContext();
 
   const getToken = async () => {
@@ -28,6 +28,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     }
     try {
       const result = await api.refresh(new TokenDto({ accessToken: token }));
+      setToken(result);
       return result;
     } catch {
       throw new RefreshTokenExpiredException();

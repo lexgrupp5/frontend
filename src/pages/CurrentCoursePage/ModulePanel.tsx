@@ -9,7 +9,7 @@ import { MdAssignmentAdd, MdSchool } from "react-icons/md";
 interface Props {
   module: ModuleDto;
   open: boolean;
-  toggleOpen: (id: string, module: ModuleDto) => void;
+  toggleOpen: (id: string, module: ModuleDto, withSelect?: boolean) => void;
   openCreateActivity: () => void;
 }
 
@@ -48,18 +48,20 @@ export const ModulePanel: React.FC<Props> = ({
           </H>
         </div>
         <div>
-          <UnstyledButton onPress={() => { toggleOpen(`${module?.id ?? ""}`, module); }}>{!open
-            ? <IconContainer
-              className="text-white size-10 cursor-pointer 
+          <UnstyledButton
+            onPress={() => { toggleOpen(`${module?.id ?? ""}`, module, false); }}>
+            {!open
+              ? <IconContainer
+                className="text-white size-10 cursor-pointer 
               hover:bg-indigo-500 p-3 rounded-full">
-              <FaChevronRight />
-            </IconContainer>
-            : <IconContainer
-              className="text-white size-10 cursor-pointer
+                <FaChevronRight />
+              </IconContainer>
+              : <IconContainer
+                className="text-white size-10 cursor-pointer
               hover:bg-indigo-500 p-3 rounded-full">
-              <FaChevronDown />
-            </IconContainer>
-          }</UnstyledButton>
+                <FaChevronDown />
+              </IconContainer>
+            }</UnstyledButton>
         </div>
       </div>
       {open && module.activities != null && module.activities.map(activity => (

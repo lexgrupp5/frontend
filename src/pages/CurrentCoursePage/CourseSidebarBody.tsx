@@ -12,7 +12,7 @@ interface Props {
   modules: ModuleDto[];
   openPanels:  Record<string, boolean>;
   participants: UserDto[];
-  toggleModulePanelOpen: (id: string, module: ModuleDto) => void;
+  toggleModulePanelOpen: (id: string, module: ModuleDto, withSelect?: boolean) => void;
   toggleParticipantPanelOpen: (id: string) => void;
   updateCacheTimestamp: () => void;
 }
