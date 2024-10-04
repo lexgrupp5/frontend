@@ -6,7 +6,7 @@ export interface ICoursesPageContext {
   courses: ICourseDto[];
   searchAndFilterDTO: ISearchAndFilterDTO;
   updateSearchAndFilterDTO: (dto: ISearchAndFilterDTO) => void; 
-  fetchCourses: (dto: ISearchAndFilterDTO) => void;
+  fetchCourses: (dto?: ISearchAndFilterDTO) => void;
   clearError: () => void;
 }
 
