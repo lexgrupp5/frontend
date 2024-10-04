@@ -49,7 +49,7 @@ export const ModuleItem: React.FC<Props> = ({ module }): ReactElement => {
           {dateNow > module.startDate! && dateNow < module.endDate! ? (
             <div className="flex mt-4">
               <p className="text-orange-400 absolute top-2 right-4">ONGOING</p>
-              <P color={TextColor.MEDIUM}><br />Module starts: {module.startDate?.toDateString()}</P>
+              <P color={TextColor.MEDIUM}><br />Module ends: {module.startDate?.toDateString()}</P>
             </div>
           ) : (<></>)}
         </div>
