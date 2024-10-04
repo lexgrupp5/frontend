@@ -1,10 +1,8 @@
-import { CourseDto } from "@/apiGenerated";
 import { createContext } from "react";
 
 export interface IAuthContext {
 	isLoggedIn: boolean;
-	username: string | null
-	myCourse: CourseDto | null
+	getUsername: () => string | null;
 	login: (username: string, password: string) => Promise<void>;
 	register: (username: string, password: string) => Promise<void>;
 	logout: () => void;

@@ -14,6 +14,14 @@ export function getUserRolesFromToken (token: string): RoleType {
   return role == null ? Role.student : role;
 };
 
+export function getUsernameFromToken (token: string): string | null {
+  const decoded = getDecodedToken(token);
+  const username = decoded[
+    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+  ];
+  return username == null ? null : username;
+};
+
 export function isExpiredToken (token: string): boolean {
   const decoded = getDecodedToken(token);
   if (decoded.exp == null) return true;

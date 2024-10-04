@@ -9,51 +9,52 @@ interface Props {
     course: CourseDto | null;
 }
 
-
 export function CurrentCourseComponent({ course }: Props): ReactElement {
-    const navigate = useNavigateToPath();
-    const { updateSelectedCourse } = useCurrentCourseContext();
-    if (course != null) {
+  const navigate = useNavigateToPath();
+  const currentCourseContext = useCurrentCourseContext();
+  if (course != null) {
 
-        const navigateToStudentCoursePage = () => {
-            if (course.id == null) { return; }
-            updateSelectedCourse(course);
-            navigate(Path.constructSelectedCoursePath(`${course.id}`));
-        };
+    const navigateToStudentCoursePage = () => {
+      if (course.id == null) { return; }
+      currentCourseContext.updateSelectedCourse(course);
+      currentCourseContext.updateSelectedModule(null);
+      currentCourseContext.updateSelectedActivity(null);
+      navigate(Path.constructSelectedCoursePath(`${course.id}`));
+    };
 
-        return (
-            <article
-                className="relative flex flex-col justify-center items-center 
+    return (
+      <article
+        className="relative flex flex-col justify-center items-center 
                     h-full w-full
                     bg-indigo-600 p-3
                     rounded border-2 border-black
                     outline-offset-2 hover:outline-3
                     hover:outline hover:outline-indigo-50
                     cursor-pointer overflow-y-auto">
-                <UnstyledButton
-                    className="absolute top-2 right-2"
-                    onPress={navigateToStudentCoursePage}>
-                    <IconContainer
-                        className="flex items-end justify-start
+        <UnstyledButton
+          className="absolute top-2 right-2"
+          onPress={navigateToStudentCoursePage}>
+          <IconContainer
+            className="flex items-end justify-start
                             p-2 size-9 text-gray-200
                             rounded-full hover:bg-indigo-950">
-                        <CgMoreVerticalO />
-                    </IconContainer></UnstyledButton>
-                <H size={4}>{course!.name}</H>
-                <div>
-                    <P color={TextColor.MEDIUM}>Start: {course!.startDate?.toDateString()}</P>
-                    <P color={TextColor.MEDIUM}>End: {course!.endDate?.toDateString()}</P>
+            <CgMoreVerticalO />
+          </IconContainer></UnstyledButton>
+        <H size={4}>{course!.name}</H>
+        <div>
+          <P color={TextColor.MEDIUM}>Start: {course!.startDate?.toDateString()}</P>
+          <P color={TextColor.MEDIUM}>End: {course!.endDate?.toDateString()}</P>
 
-                </div>
-            </article>
-        )
-    }
-    else {
-        return (
-            <>
-                <H size={4}>No course was found registered on you</H>
-            </>
-        )
-    }
+        </div>
+      </article>
+    );
+  }
+  else {
+    return (
+      <>
+        <H size={4}>No course was found registered on you</H>
+      </>
+    );
+  }
 
 }
