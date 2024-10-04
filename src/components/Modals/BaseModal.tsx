@@ -23,7 +23,7 @@ export const BaseModal: React.FC<BaseModalProps> = ({
 
   return (
     <article
-      className="fixed inset-0 z-50
+      className="fixed inset-0 z-30
       flex items-center justify-center 
       bg-black bg-opacity-60">
       <div className={`max-h-[80vh] w-[95vw] lg:w-[70vw]

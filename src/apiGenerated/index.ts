@@ -18,10 +18,10 @@ export interface IClient {
      */
     login(body?: UserAuthModel | undefined): Promise<string>;
     /**
-     * @param token (optional) 
+     * @param body (optional) 
      * @return OK
      */
-    logout(token?: TokenDto | undefined): Promise<void>;
+    logout(body?: TokenDto | undefined): Promise<void>;
     /**
      * @param body (optional) 
      * @return OK
@@ -90,7 +90,7 @@ export interface IClient {
     /**
      * @return OK
      */
-    userAll(username: string): Promise<CourseDto[]>;
+    userGET(username: string): Promise<CourseDto>;
     /**
      * @param body (optional) 
      * @return OK
@@ -178,18 +178,21 @@ export class Client implements IClient {
     }
 
     /**
-     * @param token (optional) 
+     * @param body (optional) 
      * @return OK
      */
-    logout(token?: TokenDto | undefined, signal?: AbortSignal): Promise<void> {
+    logout(body?: TokenDto | undefined, signal?: AbortSignal): Promise<void> {
         let url_ = this.baseUrl + "/api/auth/logout";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
-                "token": token !== undefined && token !== null ? "" + token : "",
+                "Content-Type": "application/json-patch+json",
             },
             signal
         };
@@ -991,7 +994,7 @@ export class Client implements IClient {
     /**
      * @return OK
      */
-    userAll(username: string, signal?: AbortSignal): Promise<CourseDto[]> {
+    userGET(username: string, signal?: AbortSignal): Promise<CourseDto> {
         let url_ = this.baseUrl + "/api/user/{username}";
         if (username === undefined || username === null)
             throw new Error("The parameter 'username' must be defined.");
@@ -1014,11 +1017,11 @@ export class Client implements IClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processUserAll(_response);
+            return this.processUserGET(_response);
         });
     }
 
-    protected processUserAll(response: AxiosResponse): Promise<CourseDto[]> {
+    protected processUserGET(response: AxiosResponse): Promise<CourseDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1032,21 +1035,14 @@ export class Client implements IClient {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(CourseDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return Promise.resolve<CourseDto[]>(result200);
+            result200 = CourseDto.fromJS(resultData200);
+            return Promise.resolve<CourseDto>(result200);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<CourseDto[]>(null as any);
+        return Promise.resolve<CourseDto>(null as any);
     }
 
     /**

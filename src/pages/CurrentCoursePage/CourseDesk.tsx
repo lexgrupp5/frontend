@@ -5,12 +5,21 @@ import { api, ICourseDto, UserDto, type ModuleDto } from "@/api";
 import { CourseSidebar } from "./CourseSidebar";
 import { CourseArticle } from "./CourseArticle";
 import { FullPageSpinner } from "@/components";
-import { DefaultToastMessage } from "../SharedComponents";
 
 interface Props {
   selectedCourse: ICourseDto 
 }
 
+/**
+ * @TODO Update to use course context users, modules and activities first,
+ * if null then fetch data.
+ * 
+ * @TODO Add debug script.
+ * 
+ * @TODO fix navigate to index issue when reolading from current course page.
+ * 
+ * @TODO Load particpants on landing page also.
+ */
 export const CourseDesk: React.FC<Props> = ({
   selectedCourse
 }): ReactElement => {
@@ -31,7 +40,7 @@ export const CourseDesk: React.FC<Props> = ({
       if (participantsErr != null || participantsResult == null) {
         msgContext.updateErrorMessage("Course data could not be fetched");
       } else {
-        console.log(participantsResult)
+        console.log(participantsResult);
         setParticipants(participantsResult);
       }
 
@@ -68,7 +77,6 @@ export const CourseDesk: React.FC<Props> = ({
 
   return (
     <article className="min-h-screen-header bg-indigo-100">
-      <DefaultToastMessage />
       <CourseSidebar
         participants={participants}
         modules={modules}
