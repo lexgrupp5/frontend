@@ -14,7 +14,7 @@ export function RelevantActivitiesComponent({ activities }: Props): ReactElement
         <article className="flex flex-col items-center max-w-4/5 mx-auto">
           <H size={4}>Activities of the ongoing module:</H>
 
-          <article className="flex overflow-x-auto space-x-4 p-4 w-full">
+          <article className="flex overflow-x-auto space-x-4 p-4 w-full custom-scrollbar">
             {activities!.length === 0 && <div className="w-full flex justify-center p-8">
               <P>No activites were found!</P>
             </div>}

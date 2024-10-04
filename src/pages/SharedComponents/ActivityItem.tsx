@@ -28,11 +28,11 @@ export const ActivityItem: React.FC<Props> = ({ activity }): ReactElement => {
   return (
     <>
       <article
-        className="flex h-full min-w-[255px] flex-col justify-between p-3
+        className="flex h-full min-w-[265px] flex-col justify-between p-3
                     rounded border-2 bg-indigo-600
                     outline-offset-2 hover:outline-3
                     hover:outline hover:outline-indigo-50
-                    cursor-pointer overflow-y-auto"
+                    cursor-pointer"
         onClick={handleSelectActivity}>
         <div className="w-full flex justify-between items-end">
           <div>

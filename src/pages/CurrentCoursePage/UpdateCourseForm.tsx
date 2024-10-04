@@ -16,8 +16,8 @@ export const UpdateCourseForm: React.FC<Props> = ({
   course,
   onSuccess
 }): ReactElement => {
-  const patchCourse = useApi(api.courses);
-  const getCourse = useApi(api.getCourse);
+  const patchCourse = useApi(api.coursesPATCH);
+  const getCourse = useApi(api.coursesGET);
   const [name, setName] = useState(course.name ?? "");
   const [description, setDescription] = useState(course.description ?? "");
   const [startDate, setStartDate] = useState(formatDateToString(course.startDate) ?? "");
