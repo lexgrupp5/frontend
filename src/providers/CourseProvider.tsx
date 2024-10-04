@@ -72,9 +72,7 @@ export const CourseProvider: React.FC<Props> = ({
 
   const updateModuleActivities = async (courseModules: ModuleDto[]): Promise<ActivityDto[]> => {
     const activities: ActivityDto[] = [];
-    console.log(courseModules);
     const moduleNow = getCurrentModule(courseModules);
-    console.log(moduleNow);
     if (moduleNow?.id == null) { return []; }
     const [err, result] = await getModuleActivities.makeAuthRequestWithErrorResponse(moduleNow.id);
     if (err != null) {
@@ -96,22 +94,18 @@ export const CourseProvider: React.FC<Props> = ({
 
   const getCurrentModule = (modules: ModuleDto[]) => {
     const dateNow = new Date();
-    console.log("running setCurrentModule with date " + dateNow)
 
     if (dateNow > new Date(modules[modules.length - 1].endDate!)) {
-      console.log("setting final module as focused module, course is over.")
       return modules[modules.length - 1];
     }
 
     if (dateNow < new Date(modules[0].startDate!)) {
-      console.log("setting first module as focused module, course has not started yet.")
       return modules[0];
     }
 
     const activeModule = modules.find(
       (module) => dateNow >= new Date(module.startDate!) && dateNow <= new Date(module.endDate!)
     );
-    console.log("setting focused module to " + activeModule?.id)
     return activeModule;
   }
 
