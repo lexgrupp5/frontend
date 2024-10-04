@@ -12,10 +12,13 @@ export const StudentPageProvider = (): ReactElement => {
     const { pending: participantsPending, error: participantsError, data: participantsData, makeAuthRequest: fetchParticipantData, clearError: clearParticipantError } = useApi(api.course);
     //STARTS OFF AS -1, GETS ASSIGNED AFTER MODULES HAVE BEEN FETCHED FROM API OR IS LEFT -1 IF NO MODULES WERE FOUND
     const [moduleId, setModuleId] = useState<number | null>(-1);
-    const [courseId, setCourseId] = useState<number | null>(-1);
+    // const [courseId, setCourseId] = useState<number | null>(-1);
 
-    //PLACEHOLDER ID, SHOULD BE FETCHED FROM THE LOGGED IN USERS REGISTERED COURSE
-    const { username } = useAuthContext();
+    const courseId = 3;
+    const { myCourse } = useAuthContext();
+    console.log(myCourse);
+    // setCourseId(myCourse!.id!);
+    // console.log(courseId)
 
     const setCurrentModule = async (modules: IModuleDto[]) => {
         const dateNow = new Date();
@@ -44,47 +47,37 @@ export const StudentPageProvider = (): ReactElement => {
         return activeModuleId;
     }
 
-    const setCurrentCourse = async (courses: CourseDto[]) => {
-        console.log("setting course ID function running")
-        const course = courses[0];
-        console.log(courses);
-        console.log(course);
-        setCourseId(course.id!);
-        console.log(courseId);
-        console.log("setting course ID has finished running")
-        return course.id!
-    }
-
+    // const setCurrentCourse = async (courses: CourseDto[]) => {
+    //     console.log("setting course ID function running")
+    //     const course = courses[0];
+    //     console.log(courses);
+    //     console.log(course);
+    //     setCourseId(course.id!);
+    //     console.log(courseId);
+    //     console.log("setting course ID has finished running")
+    //     return course.id!
+    // }
 
     useEffect(() => {
+        if (!courseId) return;
+
         (async () => {
             try {
-                console.log(username)
-                const usersCourse = await api.userAll(username!)
-                let newCourseId = courseId;
-                if (courseId === -1) {
-                    console.log("About to run setCurrentCourse function")
-                    newCourseId = await setCurrentCourse(usersCourse);
-                    console.log("Finished running setCurrentCourse function")
+                await fetchCourseData(courseId);
+                const fetchedModules = await fetchModuleData(courseId!);
+                let newModuleId = moduleId;
+                if (moduleId === 0) {
+                    newModuleId = await setCurrentModule(fetchedModules!)
                 }
-
-                if (newCourseId !== -1) {
-                    await fetchCourseData(courseId!);
-                    const fetchedModules = await fetchModuleData(courseId!);
-                    let newModuleId = moduleId;
-                    if (moduleId === 0) {
-                        newModuleId = await setCurrentModule(fetchedModules!)
-                    }
-                    if (newModuleId !== -1) {
-                        await fetchActivityData(newModuleId!);
-                        await fetchParticipantData(courseId!);
-                    }
+                if (newModuleId !== -1) {
+                    await fetchActivityData(newModuleId!);
+                    await fetchParticipantData(courseId!);
                 }
             } catch (e) {
                 console.log(e);
             }
         })();
-    }, [moduleId, courseId]);
+    }, [moduleId]);
 
     const constructStudentPageContext = (): IStudentPageContext => ({
         course: courseData,
