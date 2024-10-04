@@ -86,9 +86,9 @@ export const CourseArticle: React.FC<Props> = ({
     activity
   }): ReactElement => {
     const section = new CourseSectionBuilder()
-      .setTitle(`Activity: ${activity.description}`, 2)
+      .setTitle(`Activity: ${activity.activityTypeName}`, 2)
       .withSubtitle(`${activity.startDate?.toDateString()} - ${activity.endDate?.toDateString()}`)
-      .withDescription(`${activity.description}`);
+      .withDescription(`${activity.description} - ${activity.activityTypeDescription}`);
 
     if (isTeacher()) {
       section
