@@ -1,10 +1,10 @@
-import { ReactElement, ReactNode, useState } from "react";
+import { ReactElement, ReactNode } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 import { AuthContext, IAuthContext } from "@/contexts";
 import { Role, Storage } from "@/constants";
 import { useApi } from "@/hooks";
-import { api, CourseDto, TokenDto, UserAuthModel } from "@/api";
+import { api, TokenDto, UserAuthModel } from "@/api";
 import * as Service from "@/services";
 
 interface Props {
@@ -16,10 +16,7 @@ export const AuthProvider: React.FC<Props> = ({
 }): ReactElement => {
   const loginApi = useApi(api.login);
   const logoutApi = useApi(api.logout);
-  const userCourse = useApi(api.userAll);
-  const [ myCourse, setMyCourse ] = useState<CourseDto | null>(null);
-  const [ username, setUsername ] = useState<string | null>(null);
-  
+
   const [
     token, setToken, clearTokens
   ] = useLocalStorage<string | null>(Storage.TOKEN, null);
@@ -30,17 +27,15 @@ export const AuthProvider: React.FC<Props> = ({
       userName,
       password
     })));
-    setUsername(userName);
-    const [err, result] = await userCourse.makeAuthRequestWithErrorResponse(userName);
-    if (err == null && result != null) {
-      setMyCourse(result[0]);
-    } else {
-      setMyCourse(null);
-    };
+  };
+
+  const getUsername = () => {
+    if (token == null) { return null; }
+    return Service.getUsernameFromToken(token);
   };
 
   const isTeacher = () => {
-    if (token == null) {return false; }
+    if (token == null) { return false; }
     const role = Service.getUserRolesFromToken(token);
     return role === Role.teacher;
   };
@@ -71,8 +66,7 @@ export const AuthProvider: React.FC<Props> = ({
   const constructAuthContext = (): IAuthContext => {
     return {
       isLoggedIn,
-      myCourse,
-      username,
+      getUsername,
       login,
       register,
       logout,

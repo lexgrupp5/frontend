@@ -11,9 +11,15 @@ export function isProduction (): boolean {
 }
 
 export function getDefaultUsername() {
-  return isDevelopment() ? import.meta.env.VITE_USERNAME : "";
+  if (isProduction()) { return ""; }
+  return import.meta.env.VITE_USERNAME != null
+    ? import.meta.env.VITE_USERNAME
+    : "";
 }
 
 export function getDefaultPwd() {
-  return isDevelopment() ? import.meta.env.VITE_PWD : "";
+  if (isProduction()) { return ""; }
+  return import.meta.env.VITE_PWD != null
+    ? import.meta.env.VITE_PWD
+    : "";
 }

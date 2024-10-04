@@ -5,7 +5,6 @@ import { api } from "@/api";
 import { ICoursesPageContext, ISearchAndFilterDTO } from "@/contexts";
 import { useApi } from "@/hooks/useApi";
 import { useMessageContext } from "@/hooks";
-import { DefaultToastMessage } from "@/pages/SharedComponents";
 
 export const CoursesPageProvider = (): React.ReactElement => {
   const { data, pending, error, makeAuthRequestWithErrorResponse, clearError } = useApi(api.coursesAll);
@@ -39,7 +38,6 @@ export const CoursesPageProvider = (): React.ReactElement => {
 
   return (
     <>
-      <DefaultToastMessage onClose={clearError}/>
       <Outlet context={constructCoursesPageContext()} />
     </>
   );  

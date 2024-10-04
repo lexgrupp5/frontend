@@ -4,5 +4,5 @@ export * from "./MainPage";
 export * from "./CoursesPage";
 export * from "./CurrentCoursePage";
 export * from "./ProfilePage";
-export * from "./StudentLandingPage";
+export * from "./LandingPage";
 export * from "./NewCoursePage";

@@ -13,4 +13,4 @@ export interface ICurrentCourseContext {
   updateSelectedParticipant: (participant: UserDto | null) => void;
 }
 
-export const CurrentCourseContext = createContext<ICurrentCourseContext>({} as ICurrentCourseContext);
+export const CurrentCourseContext = createContext<ICurrentCourseContext | null>(null);
