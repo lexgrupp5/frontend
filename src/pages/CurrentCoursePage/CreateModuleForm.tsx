@@ -1,6 +1,6 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 
-import { api, ModuleCreateModel } from "@/api";
+import { api, ModuleCreateDto } from "@/api";
 import { H, Input, SubmitButton, TextColor } from "@/components";
 import { DefaultToastMessage } from "../SharedComponents";
 import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
@@ -14,7 +14,7 @@ export const CreateModuleForm: React.FC<Props> = ({
   title,
   hasModules
 }): ReactElement => {
-  const createModule = useApi(api.modules);
+  const createModule = useApi(api.modulesPOST);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -24,18 +24,18 @@ export const CreateModuleForm: React.FC<Props> = ({
 
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    createModule.clearError(); 
-    
+    createModule.clearError();
+
     const [err, result] = await createModule.makeAuthRequestWithErrorResponse(
-      new ModuleCreateModel({
-        courseId: coursesPageContext.selectedCourse?.id,
+      new ModuleCreateDto({
+        courseId: coursesPageContext.selectedCourse?.id!,
         name,
         description,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
+        // startDate: new Date(startDate),
+        // endDate: new Date(endDate),
       })
     );
-    
+
     if (err == null && result != null) {
       msgContext.updateMessage(`Module '${result.name}' have been created`);
       clearInputs();
@@ -46,7 +46,7 @@ export const CreateModuleForm: React.FC<Props> = ({
   };
 
   const clearInputs = () => {
-    setName("");  
+    setName("");
     setDescription("");
     setStartDate("");
     setEndDate("");

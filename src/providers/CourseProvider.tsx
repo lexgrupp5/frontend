@@ -12,10 +12,10 @@ interface Props {
 export const CourseProvider: React.FC<Props> = ({
   children
 }): ReactElement => {
-  const getCourse = useApi(api.userGET);
-  const getCourseParticipants = useApi(api.course);
+  const getCourse = useApi(api.course);
+  const getCourseParticipants = useApi(api.students);
   const getModules = useApi(api.modulesAll);
-  const getModuleActivities = useApi(api.activities);
+  const getModuleActivities = useApi(api.activitiesAll);
   const messageContext = useMessageContext();
   const authContext = useAuthContext();
   const [course, setCourse] = useState<CourseDto | null>(null);

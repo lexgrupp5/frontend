@@ -10,11 +10,9 @@ import { useMessageContext } from "@/hooks";
 export const CreateCourseForm = (): ReactElement => {
   const { updateSelectedCourse } = useCurrentCourseContext();
   const navigate = useNavigateToPath();
-  const createCourse = useApi(api.createCourse);
+  const createCourse = useApi(api.coursesPOST);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const msgContext = useMessageContext();
 
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -23,8 +21,6 @@ export const CreateCourseForm = (): ReactElement => {
     const [err, result] = await createCourse.makeAuthRequestWithErrorResponse(new CourseCreateDto({
       name,
       description,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate)
     }));
     if (err == null) {
       msgContext.updateMessage(
@@ -37,10 +33,8 @@ export const CreateCourseForm = (): ReactElement => {
   };
 
   const clearInputs = () => {
-    setName("");  
+    setName("");
     setDescription("");
-    setStartDate("");
-    setEndDate("");
   };
 
   const handleNavigateToNewCourse = (course: CourseDto | null) => {
@@ -86,18 +80,6 @@ export const CreateCourseForm = (): ReactElement => {
           required
           value={description}
           onChange={e => { setDescription(e.target.value); }} />
-        <Input
-          label="Start date"
-          type="date"
-          required
-          value={startDate}
-          onChange={e => { setStartDate(e.target.value); }} />
-        <Input
-          label="End date"
-          type="date"
-          required
-          value={endDate}
-          onChange={e => { setEndDate(e.target.value); }} />
         <SubmitButton>Create</SubmitButton>
       </fieldset>
     </form>

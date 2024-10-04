@@ -29,7 +29,7 @@ export const ModuleItem: React.FC<Props> = ({ module }): ReactElement => {
         className="relative h-[180px] flex-col justify-center items-center p-3
                 rounded border-2 hover:outline-3
                 hover:outline hover:outline-indigo-50
-                cursor-pointer overflow-y-auto"
+                cursor-pointer overflow-y-auto custom-scrollbar"
         onClick={handleSelectModule}>
         <H size={4}>{module.name}</H>
         <div className="static flex flex-col max-[150px] justify-between items-center items-end">
@@ -49,7 +49,7 @@ export const ModuleItem: React.FC<Props> = ({ module }): ReactElement => {
           {dateNow > module.startDate! && dateNow < module.endDate! ? (
             <div className="flex mt-4">
               <p className="text-orange-400 absolute top-2 right-4">ONGOING</p>
-              <P color={TextColor.MEDIUM}><br />Module starts: {module.startDate?.toDateString()}</P>
+              <P color={TextColor.MEDIUM}><br />Module ends: {module.startDate?.toDateString()}</P>
             </div>
           ) : (<></>)}
         </div>
