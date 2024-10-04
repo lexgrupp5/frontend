@@ -35,22 +35,22 @@ export const CourseProvider: React.FC<Props> = ({
       return course;
     }
 
-    const [courseErr, courseResult]  = await getCourse.makeAuthRequestWithErrorResponse(username);
+    const [courseErr, courseResult] = await getCourse.makeAuthRequestWithErrorResponse(username);
     setCourse(courseResult);
     if (courseErr != null) { messageContext.updateErrorMessage(courseErr?.message); }
     if (courseResult?.id == null) {
       setUnknownErrorMessage();
       return { ...course, course: courseResult };
     }
-    
+
     const [modulesErr, modulesResult] = await getModules.makeAuthRequestWithErrorResponse(courseResult.id);
     if (modulesErr != null) { messageContext.updateErrorMessage(modulesErr?.message); }
     setModules(modulesResult ?? []);
     const activities = await updateModuleActivities(modulesResult ?? []);
-    
+
     const [participantsErr, participantsResult] = await getCourseParticipants.makeAuthRequestWithErrorResponse(courseResult.id);
     if (participantsErr != null) { messageContext.updateErrorMessage(participantsErr.message); }
-    setParticipants(participantsResult ?? []); 
+    setParticipants(participantsResult ?? []);
     return {
       course: courseResult,
       participants: participantsResult ?? [],
@@ -67,32 +67,53 @@ export const CourseProvider: React.FC<Props> = ({
   });
 
   const setUnknownErrorMessage = () => {
-    messageContext.updateErrorMessage("Could not fetch valid course data from server, please try login again."); 
+    messageContext.updateErrorMessage("Could not fetch valid course data from server, please try login again.");
   };
 
   const updateModuleActivities = async (courseModules: ModuleDto[]): Promise<ActivityDto[]> => {
     const activities: ActivityDto[] = [];
-    for (const module of courseModules) {
-      if (module.id == null) { continue; }
-      const [err, result] = await getModuleActivities.makeAuthRequestWithErrorResponse(module.id);
-      if (err != null) { 
-        messageContext.updateErrorMessage(err?.message);
-        continue;
-      }
-      if (result != null) {
-        activities.push(...result); 
-      }
-    };
+    console.log(courseModules);
+    const moduleNow = getCurrentModule(courseModules);
+    console.log(moduleNow);
+    if (moduleNow?.id == null) { return []; }
+    const [err, result] = await getModuleActivities.makeAuthRequestWithErrorResponse(moduleNow.id);
+    if (err != null) {
+      messageContext.updateErrorMessage(err?.message);
+    }
+    if (result != null) {
+      activities.push(...result);
+    }
     updateActivities(activities);
     return activities;
   };
 
   const isPending = () => {
     return (
-      getCourse.pending || 
-      getModules.pending || 
+      getCourse.pending ||
+      getModules.pending ||
       getModuleActivities.pending);
   };
+
+  const getCurrentModule = (modules: ModuleDto[]) => {
+    const dateNow = new Date();
+    console.log("running setCurrentModule with date " + dateNow)
+
+    if (dateNow > new Date(modules[modules.length - 1].endDate!)) {
+      console.log("setting final module as focused module, course is over.")
+      return modules[modules.length - 1];
+    }
+
+    if (dateNow < new Date(modules[0].startDate!)) {
+      console.log("setting first module as focused module, course has not started yet.")
+      return modules[0];
+    }
+
+    const activeModule = modules.find(
+      (module) => dateNow >= new Date(module.startDate!) && dateNow <= new Date(module.endDate!)
+    );
+    console.log("setting focused module to " + activeModule?.id)
+    return activeModule;
+  }
 
   const constructCourseContext = (): ICourseContext => ({
     course,
@@ -105,7 +126,7 @@ export const CourseProvider: React.FC<Props> = ({
 
   return (
     <>
-      <CourseContext.Provider value={constructCourseContext()}>  
+      <CourseContext.Provider value={constructCourseContext()}>
         {children}
       </CourseContext.Provider>
     </>
