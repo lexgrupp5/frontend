@@ -2,7 +2,6 @@ import { FormEventHandler, ReactElement, useState } from "react";
 
 import { api, ModuleCreateDto } from "@/api";
 import { H, Input, SubmitButton, TextColor } from "@/components";
-import { DefaultToastMessage } from "../SharedComponents";
 import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
 
 interface Props {
@@ -17,8 +16,6 @@ export const CreateModuleForm: React.FC<Props> = ({
   const createModule = useApi(api.modulesPOST);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const msgContext = useMessageContext();
   const coursesPageContext = useCurrentCourseContext();
 
@@ -26,13 +23,14 @@ export const CreateModuleForm: React.FC<Props> = ({
     e.preventDefault();
     createModule.clearError();
 
-    const [err, result] = await createModule.makeAuthRequestWithErrorResponse(
+    if (coursesPageContext.selectedCourse?.id == null) {
+      return;
+    }
+    const [err, result] = await createModule.makeAuthRequestWithErrorResponse( 
       new ModuleCreateDto({
-        courseId: coursesPageContext.selectedCourse?.id!,
+        courseId: coursesPageContext.selectedCourse.id,
         name,
-        description,
-        // startDate: new Date(startDate),
-        // endDate: new Date(endDate),
+        description
       })
     );
 
@@ -48,8 +46,6 @@ export const CreateModuleForm: React.FC<Props> = ({
   const clearInputs = () => {
     setName("");
     setDescription("");
-    setStartDate("");
-    setEndDate("");
   };
 
   const handleCloseForm = () => {
@@ -61,7 +57,6 @@ export const CreateModuleForm: React.FC<Props> = ({
       className="w-full
       bg-indigo-100
       rounded-lg max-w-lg">
-      <DefaultToastMessage onClose={handleCloseForm} />
       <H size={3} color={TextColor.DARK_X} className="mb-2">
         {title}
       </H>
@@ -78,18 +73,6 @@ export const CreateModuleForm: React.FC<Props> = ({
           required
           value={description}
           onChange={e => { setDescription(e.target.value); }} />
-        <Input
-          label="Start date"
-          type="date"
-          required
-          value={startDate}
-          onChange={e => { setStartDate(e.target.value); }} />
-        <Input
-          label="End date"
-          type="date"
-          required
-          value={endDate}
-          onChange={e => { setEndDate(e.target.value); }} />
         <SubmitButton>Create Module</SubmitButton>
       </fieldset>
     </form>

@@ -1,9 +1,9 @@
-import { createContext } from "react";
+import { createContext, ReactNode } from "react";
 
 interface IMessageContextProps {
-  message: string | null;
+  message: ReactNode;
   errorMessage: string | null;
-  updateMessage: (msg: string | null) => void;
+  updateMessage: (msg: ReactNode) => void;
   updateErrorMessage: (err: string | null) => void;
   clearMessages: () => void;
 }

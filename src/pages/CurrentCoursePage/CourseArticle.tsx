@@ -38,8 +38,11 @@ export const CourseArticle: React.FC<Props> = ({
   }): ReactElement => {
     const section = new CourseSectionBuilder()
       .setTitle(`Course: ${course.name}`, 2)
-      .withSubtitle(`${course.startDate?.toDateString()} - ${course.endDate?.toDateString()}`)
       .withDescription(`${course.description}`);
+
+    if (course.startDate != null && course.endDate != null) {
+      section.withSubtitle(`${course.startDate?.toDateString()} - ${course.endDate?.toDateString()}`)
+    }
 
     if (isTeacher()) {
       section
@@ -62,8 +65,11 @@ export const CourseArticle: React.FC<Props> = ({
   }): ReactElement => {
     const section = new CourseSectionBuilder()
       .setTitle(`Module: ${module.name}`, 2)
-      .withSubtitle(`${module.startDate?.toDateString()} - ${module.endDate?.toDateString()}`)
       .withDescription(`${module.description}`);
+
+    if (module.startDate != null && module.endDate != null) {
+      section.withSubtitle(`${module.startDate?.toDateString()} - ${module.endDate?.toDateString()}`)
+    }
 
     if (isTeacher()) {
       section
@@ -87,8 +93,11 @@ export const CourseArticle: React.FC<Props> = ({
   }): ReactElement => {
     const section = new CourseSectionBuilder()
       .setTitle(`Activity: ${activity.activityTypeName}`, 2)
-      .withSubtitle(`${activity.startDate?.toDateString()} - ${activity.endDate?.toDateString()}`)
       .withDescription(`${activity.description} - ${activity.activityTypeDescription}`);
+
+    if (activity.startDate != null && activity.endDate != null) {
+      section.withSubtitle(`${activity.startDate?.toDateString()} - ${activity.endDate?.toDateString()}`)
+    }
 
     if (isTeacher()) {
       section

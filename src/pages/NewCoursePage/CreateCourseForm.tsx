@@ -1,15 +1,14 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 
-import { api, CourseCreateDto, type CourseDto } from "@/api";
-import { H, Input, P, SubmitButton, TextColor, UnstyledButton, OkTopToast, ErrorTopToast, FullPageSpinner } from "@/components";
+import { api, CourseCreateDto } from "@/api";
+import { H, Input, P, SubmitButton, TextColor, FullPageSpinner, Link } from "@/components";
 import { Path } from "@/constants";
-import { useCurrentCourseContext, useNavigateToPath } from "@/hooks";
+import { useCurrentCourseContext } from "@/hooks";
 import { useApi } from "@/hooks/useApi";
 import { useMessageContext } from "@/hooks";
 
 export const CreateCourseForm = (): ReactElement => {
-  const { updateSelectedCourse } = useCurrentCourseContext();
-  const navigate = useNavigateToPath();
+  const currentCourseContext = useCurrentCourseContext();
   const createCourse = useApi(api.coursesPOST);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -23,12 +22,17 @@ export const CreateCourseForm = (): ReactElement => {
       description,
     }));
     if (err == null) {
+      currentCourseContext.updateSelectedModule(null);
+      currentCourseContext.updateSelectedActivity(null);
+      currentCourseContext.updateSelectedCourse(result);
       msgContext.updateMessage(
-        `New course '${result?.name}' created`
-      );
+        <Link className="underline underline-offset-4 hover:text-indigo-700" 
+          to={Path.constructSelectedCoursePath(`${result?.id}`)}>
+          Course {result?.name} have been created
+        </Link>);
       clearInputs();
     } else {
-      msgContext.updateErrorMessage("Course could not be created, please try to update your submited form");
+      msgContext.updateErrorMessage(err.message);
     }
   };
 
@@ -37,32 +41,12 @@ export const CreateCourseForm = (): ReactElement => {
     setDescription("");
   };
 
-  const handleNavigateToNewCourse = (course: CourseDto | null) => {
-    if (course == null) { return; }
-    updateSelectedCourse(course);
-    msgContext.clearMessages();
-    navigate(Path.constructSelectedCoursePath(`${course.id}`));
-  };
-
   return (
     <form onSubmit={submit}
       className="w-full p-8 
         bg-indigo-100
         rounded-lg shadow-lg max-w-lg">
       {createCourse.pending && <FullPageSpinner />}
-      {msgContext.message != null &&
-        <OkTopToast onClose={msgContext.clearMessages} keepOpen={true}>
-          <UnstyledButton className="underline underline-offset-4 max-w-full"
-            onPress={() => { handleNavigateToNewCourse(createCourse.data); }}>
-            {msgContext.message}
-          </UnstyledButton>
-        </OkTopToast>
-      }
-      {msgContext.errorMessage != null &&
-        <ErrorTopToast onClose={msgContext.clearMessages} keepOpen={true}>
-          {msgContext.errorMessage}
-        </ErrorTopToast>
-      }
       <H size={1} color={TextColor.DARK_X} className="mb-2">Create new course</H>
       <P color={TextColor.DARK} className="mb-6">
         Please enter course details below

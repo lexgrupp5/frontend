@@ -5,10 +5,9 @@ import { CourseList } from "./CourseList";
 import { Breadcrumb, BreadcrumbItemType, Spinner } from "@/components";
 import { CoursesController } from "./CoursesController";
 import { Path } from "@/constants";
-import { DefaultToastMessage } from "../SharedComponents";
 
 export const CoursesPage = (): ReactElement => {
-  const { courses, pending, clearError, fetchCourses } = useCoursesPageContext();
+  const { courses, pending, fetchCourses } = useCoursesPageContext();
 
   const breadcrumbItems: BreadcrumbItemType[] = [
     { label: "Home", path: Path.INDEX },
@@ -27,7 +26,6 @@ export const CoursesPage = (): ReactElement => {
 
   return (
     <>
-      <DefaultToastMessage onClose={clearError} />
       <article className="min-h-screen-header bg-gradient-indigo">
         <div className="p-4">
           <Breadcrumb items={breadcrumbItems} />

@@ -15,7 +15,7 @@ export const CurrentCourseProvider: React.FC<Props> = ({
   const [selectedActivity, setSelectedActivity] = useState<ActivityDto | null>(null);
   const [selectedParticipant, setSelectedParticipant] = useState<UserDto | null>(null);
 
-  const updateSelectedCourse = (course: ICourseDto) => {
+  const updateSelectedCourse = (course: ICourseDto | null) => {
     setSelectedCourse(course);
   };
 

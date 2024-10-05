@@ -55,9 +55,9 @@ export const AuthProvider: React.FC<Props> = ({
     // TODO Implement Register logic
   };
 
-  const logout = () => {
+  const logout = async () => {
     if (token != null) {
-      logoutApi.makeAuthRequest(new TokenDto({ accessToken: token }));
+      await logoutApi.makeAuthRequest(new TokenDto({ accessToken: token }));
     }
     clearTokens();
     loginApi.clearData();

@@ -8,7 +8,7 @@ import { useAuthContext } from "@/hooks";
 
 export const NavigationHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { logout, isTeacher } = useAuthContext();
+  const { isTeacher } = useAuthContext();
   const linkClass = `text-gray-300 cursor-pointer
     hover:text-white
     hover:underline
@@ -45,8 +45,7 @@ export const NavigationHeader = () => {
               <FaUser />
             </IconContainer>
             <ProfileMenu open={menuOpen}
-              updateOpen={updateMenuOpen}
-              logout={logout} />
+              updateOpen={updateMenuOpen} />
           </Button>
         </nav>
       </div>
