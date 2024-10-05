@@ -2117,8 +2117,8 @@ export class CourseDto implements ICourseDto {
     id?: number;
     name?: string | undefined;
     description?: string | undefined;
-    startDate?: Date;
-    endDate?: Date;
+    startDate?: Date | undefined;
+    endDate?: Date | undefined;
     teacherId?: string | undefined;
 
     constructor(data?: ICourseDto) {
@@ -2164,8 +2164,8 @@ export interface ICourseDto {
     id?: number;
     name?: string | undefined;
     description?: string | undefined;
-    startDate?: Date;
-    endDate?: Date;
+    startDate?: Date | undefined;
+    endDate?: Date | undefined;
     teacherId?: string | undefined;
 }
 
@@ -2266,8 +2266,8 @@ export class ModuleDto implements IModuleDto {
     courseId?: number;
     name?: string | undefined;
     description?: string | undefined;
-    startDate?: Date;
-    endDate?: Date;
+    startDate?: Date | undefined;
+    endDate?: Date | undefined;
     activities?: ActivityDto[] | undefined;
 
     constructor(data?: IModuleDto) {
@@ -2324,8 +2324,8 @@ export interface IModuleDto {
     courseId?: number;
     name?: string | undefined;
     description?: string | undefined;
-    startDate?: Date;
-    endDate?: Date;
+    startDate?: Date | undefined;
+    endDate?: Date | undefined;
     activities?: ActivityDto[] | undefined;
 }
 

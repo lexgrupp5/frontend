@@ -19,8 +19,6 @@ export const UpdateCourseForm: React.FC<Props> = ({
   const getCourse = useApi(api.coursesGET);
   const [name, setName] = useState(course.name ?? "");
   const [description, setDescription] = useState(course.description ?? "");
-  const [startDate, setStartDate] = useState(formatDateToString(course.startDate) ?? "");
-  const [endDate, setEndDate] = useState(formatDateToString(course.endDate) ?? "");
   const { selectedCourse, updateSelectedCourse } = useCurrentCourseContext();
   const msgContext = useMessageContext();
 
@@ -33,9 +31,7 @@ export const UpdateCourseForm: React.FC<Props> = ({
       course.id,
       createPatchOperations<CourseDto>([
         { key: "name", value: name },
-        { key: "description", value: description },
-        { key: "startDate", value: startDate },
-        { key: "endDate", value: endDate },
+        { key: "description", value: description }
       ]));
     if (err == null) {
       await updateCourse();
@@ -80,18 +76,6 @@ export const UpdateCourseForm: React.FC<Props> = ({
           required
           value={description}
           onChange={e => { setDescription(e.target.value); }} />
-        <Input
-          label="Start date"
-          type="date"
-          required
-          value={startDate}
-          onChange={e => { setStartDate(e.target.value); }} />
-        <Input
-          label="End date"
-          type="date"
-          required
-          value={endDate}
-          onChange={e => { setEndDate(e.target.value); }} />
         <SubmitButton>Update Course</SubmitButton>
       </fieldset>
     </form>

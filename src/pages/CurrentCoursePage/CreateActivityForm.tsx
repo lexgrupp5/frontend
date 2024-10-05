@@ -1,8 +1,9 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 
 import { ActivityCreateDto, api } from "@/api";
-import { H, Input, SubmitButton, TextColor } from "@/components";
+import { H, Input, SelectMenu, SubmitButton, TextColor } from "@/components";
 import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
+import { activityTypes } from "@/constants";
 
 interface Props {
   title?: string
@@ -15,6 +16,7 @@ export const CreateActivityForm: React.FC<Props> = ({
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [type, setType] = useState(activityTypes[0].name);
   const msgContext = useMessageContext();
   const coursesPageContext = useCurrentCourseContext();
 
@@ -45,10 +47,6 @@ export const CreateActivityForm: React.FC<Props> = ({
     setEndDate("");
   };
 
-  const handleCloseForm = () => {
-    createActivity.clearError();
-  };
-
   return (
     <form onSubmit={submit}
       className="w-full
@@ -76,6 +74,11 @@ export const CreateActivityForm: React.FC<Props> = ({
           required
           value={endDate}
           onChange={e => { setEndDate(e.target.value); }} />
+        <SelectMenu
+          label="Type"
+          required
+          options={activityTypes.map(type => type.name)}
+          onChange={e => { setType(e.target.value); }} />
         <SubmitButton>Create Activity</SubmitButton>
       </fieldset>
     </form>

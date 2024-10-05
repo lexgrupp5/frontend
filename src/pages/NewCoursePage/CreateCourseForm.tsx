@@ -8,7 +8,7 @@ import { useApi } from "@/hooks/useApi";
 import { useMessageContext } from "@/hooks";
 
 export const CreateCourseForm = (): ReactElement => {
-  const { updateSelectedCourse } = useCurrentCourseContext();
+  const currentCourseContext = useCurrentCourseContext();
   const createCourse = useApi(api.coursesPOST);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -22,7 +22,9 @@ export const CreateCourseForm = (): ReactElement => {
       description,
     }));
     if (err == null) {
-      updateSelectedCourse(result);
+      currentCourseContext.updateSelectedModule(null);
+      currentCourseContext.updateSelectedActivity(null);
+      currentCourseContext.updateSelectedCourse(result);
       msgContext.updateMessage(
         <Link className="underline underline-offset-4 hover:text-indigo-700" 
           to={Path.constructSelectedCoursePath(`${result?.id}`)}>

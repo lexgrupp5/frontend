@@ -27,62 +27,63 @@ export const CourseProvider: React.FC<Props> = ({
   };
 
   const fetchCourseData = async (): Promise<ICourseData> => {
-    const course = getDefaultCourse();
     const username = authContext.getUsername();
     if (username == null) {
       setUnknownErrorMessage();
-      return course;
+      return getDefaultCourseData();
     }
 
-    const [courseErr, courseResult] = await getCourse.makeAuthRequestWithErrorResponse(username);
-    setCourse(courseResult);
+    const [courseErr, course] = await getCourse.makeAuthRequestWithErrorResponse(username);
     if (courseErr != null) { messageContext.updateErrorMessage(courseErr?.message); }
-    if (courseResult?.id == null) {
+    if (course?.id == null) {
       setUnknownErrorMessage();
-      return { ...course, course: courseResult };
+      return getDefaultCourseData();
     }
 
-    const [modulesErr, modulesResult] = await getModules.makeAuthRequestWithErrorResponse(courseResult.id);
-    if (modulesErr != null) { messageContext.updateErrorMessage(modulesErr?.message); }
-    setModules(modulesResult ?? []);
-    const activities = await updateModuleActivities(modulesResult ?? []);
+    const [modulesErr, modulesResult] = await getModules.makeAuthRequestWithErrorResponse(
+      course.id
+    );
+    if (modulesErr != null) { 
+      messageContext.updateErrorMessage(modulesErr?.message);
+    }
+    const modules = modulesResult ?? [];
+    
+    const moduleNow = getCurrentModule(modules);
+    const activities = moduleNow?.activities ?? []; 
 
-    const [participantsErr, participantsResult] = await getCourseParticipants.makeAuthRequestWithErrorResponse(courseResult.id);
-    if (participantsErr != null) { messageContext.updateErrorMessage(participantsErr.message); }
-    setParticipants(participantsResult ?? []);
+    const [participantsErr, participantsResult] = await getCourseParticipants.makeAuthRequestWithErrorResponse(
+      course.id
+    );
+    if (participantsErr != null) {
+      messageContext.updateErrorMessage(participantsErr.message);
+    }
+    const participants = participantsResult ?? [];
+    
+    setCourse(course);
+    setModules(modules);
+    updateActivities(activities);
+    setParticipants(participants);
+    
     return {
-      course: courseResult,
-      participants: participantsResult ?? [],
-      modules: modulesResult ?? [],
-      activities
+      course,
+      modules,
+      activities,
+      participants
     };
   };
 
-  const getDefaultCourse = (): ICourseData => ({
-    course: null,
-    modules: [],
-    activities: [],
-    participants: []
+  const getDefaultCourseData = (): ICourseData => ({
+    course,
+    modules,
+    activities,
+    participants
   });
 
   const setUnknownErrorMessage = () => {
-    messageContext.updateErrorMessage("Could not fetch valid course data from server, please try login again.");
+    messageContext.updateErrorMessage("Could not get course information from server, please try login again.");
   };
 
-  const updateModuleActivities = async (courseModules: ModuleDto[]): Promise<ActivityDto[]> => {
-    const activities: ActivityDto[] = [];
-    const moduleNow = getCurrentModule(courseModules);
-    if (moduleNow?.id == null) { return []; }
-    const [err, result] = await getModuleActivities.makeAuthRequestWithErrorResponse(moduleNow.id);
-    if (err != null) {
-      messageContext.updateErrorMessage(err?.message);
-    }
-    if (result != null) {
-      activities.push(...result);
-    }
-    updateActivities(activities);
-    return activities;
-  };
+
 
   const isPending = () => {
     return (

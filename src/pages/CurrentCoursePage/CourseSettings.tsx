@@ -59,7 +59,8 @@ export const CourseSettings: React.FC<Props> = ({
   };
 
   return (
-    <CourseModal isOpen={openSettings}
+    <CourseModal
+      isOpen={openSettings}
       onClose={() => { updateOpenSettings(false); updateCacheTimestamp(); }}>
       <div className="flex flex-col gap-4 items-center">
         <H size={2} color={TextColor.DARK_X}>Settings course {context.selectedCourse?.name}</H>
