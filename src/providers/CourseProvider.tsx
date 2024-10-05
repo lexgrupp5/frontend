@@ -12,11 +12,10 @@ export const CourseProvider: React.FC<Props> = ({
   children
 }): ReactElement => {
   const getCourse = useApi(api.course);
-  const getCourseParticipants = useApi(api.students);
+  const getParticipants = useApi(api.students);
   const getModules = useApi(api.modulesAll);
-  const getModuleActivities = useApi(api.activitiesAll);
-  const messageContext = useMessageContext();
-  const authContext = useAuthContext();
+  const { updateErrorMessage } = useMessageContext();
+  const { getUsername } = useAuthContext();
   const [course, setCourse] = useState<CourseDto | null>(null);
   const [modules, setModules] = useState<ModuleDto[]>([]);
   const [activities, setActivities] = useState<ActivityDto[]>([]);
@@ -27,49 +26,39 @@ export const CourseProvider: React.FC<Props> = ({
   };
 
   const fetchCourseData = async (): Promise<ICourseData> => {
-    const username = authContext.getUsername();
+    // Get username username
+    const username = getUsername();
     if (username == null) {
-      setUnknownErrorMessage();
+      updateErrorMessage(getUnknownErrorMsg());
       return getDefaultCourseData();
     }
 
+    // Fetch course data
     const [courseErr, course] = await getCourse.makeAuthRequestWithErrorResponse(username);
-    if (courseErr != null) { messageContext.updateErrorMessage(courseErr?.message); }
-    if (course?.id == null) {
-      setUnknownErrorMessage();
+    if (courseErr != null || course?.id == null) {
+      updateErrorMessage(courseErr?.message ?? getUnknownErrorMsg());
       return getDefaultCourseData();
     }
 
-    const [modulesErr, modulesResult] = await getModules.makeAuthRequestWithErrorResponse(
-      course.id
-    );
-    if (modulesErr != null) { 
-      messageContext.updateErrorMessage(modulesErr?.message);
-    }
-    const modules = modulesResult ?? [];
+    // Fetch modules data based on course
+    const [modulesErr, modulesRes] = await getModules.makeAuthRequestWithErrorResponse(course.id);
+    if (modulesErr != null) { updateErrorMessage(modulesErr?.message); }
+    const modules = modulesRes ?? [];   
     
+    // Extract current modules activities
     const moduleNow = getCurrentModule(modules);
     const activities = moduleNow?.activities ?? []; 
 
-    const [participantsErr, participantsResult] = await getCourseParticipants.makeAuthRequestWithErrorResponse(
-      course.id
-    );
-    if (participantsErr != null) {
-      messageContext.updateErrorMessage(participantsErr.message);
-    }
-    const participants = participantsResult ?? [];
+    // Fetch participants data
+    const [participantsErr, participantsRes] = await getParticipants.makeAuthRequestWithErrorResponse(course.id);
+    if (participantsErr != null) { updateErrorMessage(participantsErr.message); }
+    const participants = participantsRes ?? [];
     
-    setCourse(course);
-    setModules(modules);
-    updateActivities(activities);
-    setParticipants(participants);
+    // Set all state values
+    setCourseContextState({ course, modules, activities, participants });
     
-    return {
-      course,
-      modules,
-      activities,
-      participants
-    };
+    // Return the complete course data
+    return { course, modules, activities, participants };
   };
 
   const getDefaultCourseData = (): ICourseData => ({
@@ -79,15 +68,8 @@ export const CourseProvider: React.FC<Props> = ({
     participants
   });
 
-  const setUnknownErrorMessage = () => {
-    messageContext.updateErrorMessage("Could not get course information from server, please try login again.");
-  };
-
-  const isPending = () => {
-    return (
-      getCourse.pending ||
-      getModules.pending ||
-      getModuleActivities.pending);
+  const getUnknownErrorMsg = () => {
+    return "Could not get course information from server, please try login again.";
   };
 
   const getCurrentModule = (modules: ModuleDto[]) => {
@@ -105,6 +87,19 @@ export const CourseProvider: React.FC<Props> = ({
       (module) => dateNow >= new Date(module.startDate!) && dateNow <= new Date(module.endDate!)
     );
     return activeModule;
+  };
+
+  const setCourseContextState = ({
+    course, modules, activities, participants
+  } : ICourseData) => {
+    setCourse(course);
+    setModules(modules);
+    updateActivities(activities);
+    setParticipants(participants);
+  };
+
+  const isPending = () => {
+    return (getCourse.pending || getModules.pending);
   };
 
   const constructCourseContext = (): ICourseContext => ({
