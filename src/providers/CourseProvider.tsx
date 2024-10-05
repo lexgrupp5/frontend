@@ -83,8 +83,6 @@ export const CourseProvider: React.FC<Props> = ({
     messageContext.updateErrorMessage("Could not get course information from server, please try login again.");
   };
 
-
-
   const isPending = () => {
     return (
       getCourse.pending ||

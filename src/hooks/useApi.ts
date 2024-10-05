@@ -22,7 +22,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
   const [error, setError] = useState<CustomApiException | null>(null);
   const [token, setToken, clearToken] = useLocalStorage<string | null>(Storage.TOKEN, null);
   const messageContext = useMessageContext();
-  const refreshTokenPromise = useRef<Promise<string | null> | null>(null);
+  const refreshTokenPromise = useRef<Promise<string> | null>(null);
 
   /** Api call used when no authorization is needed */
   const makeRequest = async (
@@ -80,29 +80,32 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     return [resultErr, result];
   };
 
-  const getToken = async () => {
+  const getToken = (): Promise<string | null> => {
     if (token == null || !isExpiredToken(token)) {
-      return token;
+      return Promise.resolve(token);
     }
-    
-    if (refreshTokenPromise.current != null) {
+  
+    if (refreshTokenPromise.current) {
       return refreshTokenPromise.current;
     }
-
+  
     refreshTokenPromise.current = api.refresh(new TokenDto({ accessToken: token }))
       .then(result => {
         setToken(result);
         return result;
       })
       .catch(() => {
+        refreshTokenPromise.current = null;
+        clearToken();
         throw new RefreshTokenExpiredException();
       })
       .finally(() => {
         refreshTokenPromise.current = null;
       });
-
+  
     return refreshTokenPromise.current;
   };
+  
 
   const handleError = (err: unknown) => {
     let resultErr: CustomApiException | null = null;
