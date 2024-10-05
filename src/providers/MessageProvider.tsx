@@ -8,10 +8,10 @@ interface Props {
 export const MessageProvider: React.FC<Props> = ({
   children
 }): ReactElement => {
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<ReactNode>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const updateMessage = (msg: string | null) => {
+  const updateMessage = (msg: ReactNode) => {
     setMessage(msg);
   };
   
