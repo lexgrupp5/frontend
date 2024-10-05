@@ -4,19 +4,19 @@ import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { IconContainer } from "@/components";
 import { NavLink } from "@/components/Links";
 import { Path } from "@/constants";
+import { useAuthContext } from "@/hooks";
 
 interface Props {
   open: boolean;
   updateOpen: (open: boolean) => void;
-  logout: () => void
 }
 
 const ProfileMenu: React.FC<Props> = ({
   open,
-  updateOpen,
-  logout
+  updateOpen
 }): ReactElement => {
   const menuRef = useRef<HTMLDivElement>(null);
+  const { logout } = useAuthContext();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -53,7 +53,7 @@ const ProfileMenu: React.FC<Props> = ({
         <div
           className="flex justify-between items-center 
           p-2 text-indigo-100 hover:bg-indigo-900"
-          onClick={logout}>
+          onClick={async () => {  await logout(); }}>
           <IconContainer><FaSignOutAlt /></IconContainer>
           Logout
         </div>

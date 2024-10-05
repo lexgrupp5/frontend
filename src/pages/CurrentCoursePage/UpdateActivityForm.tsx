@@ -1,10 +1,10 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 
 import { ActivityDto, api } from "@/api";
-import { H, Input, SubmitButton, TextColor } from "@/components";
-import { DefaultToastMessage } from "../SharedComponents";
+import { H, Input, SelectMenu, SubmitButton, TextColor } from "@/components";
 import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
 import { createPatchOperations, formatDateToString } from "@/utils";
+import { activityTypes } from "@/constants";
 
 interface Props {
   activity: ActivityDto;
@@ -19,8 +19,7 @@ export const UpdateActivityForm: React.FC<Props> = ({
   const [description, setDescription] = useState(activity.description ?? "");
   const [startDate, setStartDate] = useState(formatDateToString(activity.startDate) ?? "");
   const [endDate, setEndDate] = useState(formatDateToString(activity.endDate) ?? "");
-  const [activityTypeName, setActivityTypeName] = useState(activity.activityTypeName ?? "");
-  const [activityTypeDescription, setActivityTypeDescription] = useState(activity.activityTypeDescription ?? "");
+  const [type, setType] = useState(activityTypes[0].name);
   const msgContext = useMessageContext();
   const coursesPageContext = useCurrentCourseContext();
 
@@ -33,9 +32,7 @@ export const UpdateActivityForm: React.FC<Props> = ({
       createPatchOperations<ActivityDto>([
         { key: "description", value: description },
         { key: "startDate", value: startDate },
-        { key: "endDate", value: endDate },
-        { key: "activityTypeName", value: activityTypeName },
-        { key: "activityTypeDescription", value: activityTypeDescription }
+        { key: "endDate", value: endDate }
       ]));
     if (err == null) {
       msgContext.updateMessage(`Activty '${description}' have been updated`);
@@ -51,9 +48,7 @@ export const UpdateActivityForm: React.FC<Props> = ({
       id: activity.id,
       description,
       startDate: new Date(startDate),
-      endDate: new Date(endDate),
-      activityTypeName,
-      activityTypeDescription
+      endDate: new Date(endDate)
     }));
   };
 
@@ -68,7 +63,6 @@ export const UpdateActivityForm: React.FC<Props> = ({
       className="w-full
       bg-indigo-100
       rounded-lg max-w-lg">
-      <DefaultToastMessage onClose={handleCloseResult} />
       <H size={3} color={TextColor.DARK_X} className="mb-2">
         {`Update activity '${activity.description}' in module 
         '${coursesPageContext.selectedModule?.name}' for
@@ -93,18 +87,11 @@ export const UpdateActivityForm: React.FC<Props> = ({
           required
           value={endDate}
           onChange={e => { setEndDate(e.target.value); }} />
-        <Input
-          label="Activity type"
-          type="text"
+        <SelectMenu
+          label="Type"
           required
-          value={activityTypeName}
-          onChange={e => { setActivityTypeName(e.target.value); }} />
-        <Input
-          label="Activity type description"
-          type="text"
-          required
-          value={activityTypeDescription}
-          onChange={e => { setActivityTypeDescription(e.target.value); }} />
+          options={activityTypes.map(type => type.name)}
+          onChange={e => { setType(e.target.value); }} />
         <SubmitButton>Update Activity</SubmitButton>
       </fieldset>
     </form>

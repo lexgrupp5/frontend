@@ -1,8 +1,7 @@
 import { FormEventHandler, ReactElement, useState } from "react";
 import { api, UserCreateDto } from "@/api";
 import { H, Input, SecretInput, SubmitButton, TextColor } from "@/components";
-import { DefaultToastMessage } from "../SharedComponents";
-import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
+import { useApi, useMessageContext } from "@/hooks";
 
 interface Props {
     title?: string
@@ -55,7 +54,6 @@ export const CreateUserForm: React.FC<Props> = ({ title }): ReactElement => {
             className="w-full
             bg-indigo-100
             rounded-lg max-w-lg">
-            <DefaultToastMessage onClose={handleCloseForm} />
             <H size={3} color={TextColor.DARK_X} className="mb-2">
                 {title}
             </H>

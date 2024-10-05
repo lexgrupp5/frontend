@@ -5,7 +5,7 @@ export interface IAuthContext {
 	getUsername: () => string | null;
 	login: (username: string, password: string) => Promise<void>;
 	register: (username: string, password: string) => Promise<void>;
-	logout: () => void;
+	logout: () => Promise<void>;
 	isTeacher: () => boolean;
 	isStudent: () => boolean;
 	isExpiredToken: () => boolean;

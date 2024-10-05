@@ -6,7 +6,7 @@ import { Path } from "@/constants";
 import { CoursesPageProvider, CurrentCourseProvider, CourseProvider } from "@/providers";
 import { CoursesPage, CurrentCoursePage, MainPage, NewCoursePage, ProfilePage, LandingPage } from "@/pages";
 
-export const MainRoutes: React.FC = (): ReactElement => {
+export const MainRoutes = (): ReactElement => {
   const MainElement = () =>
     <CourseProvider> 
       <CurrentCourseProvider>
