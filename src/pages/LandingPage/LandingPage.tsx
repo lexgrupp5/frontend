@@ -2,7 +2,7 @@ import { ReactElement, useEffect } from "react";
 import { StudentLandingDesk } from "./StudentLandingDesk.tsx";
 import { useAuthContext, useCourseContext } from "@/hooks";
 import { FullPageSpinner } from "@/components";
-import { CurrentCourseComponent, RelevantActivitiesComponent, CurrentModulesComponent, DefaultToastMessage } from "../SharedComponents/index.ts";
+import { CurrentCourseComponent, RelevantActivitiesComponent, CurrentModulesComponent } from "../SharedComponents/index.ts";
 
 export const LandingPage = (): ReactElement => {
   const courseContext = useCourseContext();
@@ -20,7 +20,6 @@ export const LandingPage = (): ReactElement => {
 
   return (
     <>
-      {<DefaultToastMessage />}
       <StudentLandingDesk username={authContext.getUsername()!} />
       <article
         className="flex m-1">

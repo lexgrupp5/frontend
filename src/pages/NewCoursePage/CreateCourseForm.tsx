@@ -50,7 +50,7 @@ export const CreateCourseForm = (): ReactElement => {
         bg-indigo-100
         rounded-lg shadow-lg max-w-lg">
       {createCourse.pending && <FullPageSpinner />}
-      {msgContext.message != null &&
+      {/* {msgContext.message != null &&
         <OkTopToast onClose={msgContext.clearMessages} keepOpen={true}>
           <UnstyledButton className="underline underline-offset-4 max-w-full"
             onPress={() => { handleNavigateToNewCourse(createCourse.data); }}>
@@ -62,7 +62,7 @@ export const CreateCourseForm = (): ReactElement => {
         <ErrorTopToast onClose={msgContext.clearMessages} keepOpen={true}>
           {msgContext.errorMessage}
         </ErrorTopToast>
-      }
+      } */}
       <H size={1} color={TextColor.DARK_X} className="mb-2">Create new course</H>
       <P color={TextColor.DARK} className="mb-6">
         Please enter course details below

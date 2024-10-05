@@ -4,7 +4,6 @@ import { ActivityDto, api, CourseDto, ModuleDto, UserDto } from "@/api";
 import { CourseContext, ICourseContext, ICourseData } from "@/contexts";
 import { useApi, useAuthContext, useMessageContext } from "@/hooks";
 
-
 interface Props {
   children?: ReactNode;
 }
@@ -107,7 +106,7 @@ export const CourseProvider: React.FC<Props> = ({
       (module) => dateNow >= new Date(module.startDate!) && dateNow <= new Date(module.endDate!)
     );
     return activeModule;
-  }
+  };
 
   const constructCourseContext = (): ICourseContext => ({
     course,

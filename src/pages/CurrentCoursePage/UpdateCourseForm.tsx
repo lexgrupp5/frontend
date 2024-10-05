@@ -5,7 +5,6 @@ import { H, Input, SubmitButton, TextColor, FullPageSpinner } from "@/components
 import { useApi } from "@/hooks/useApi";
 import { createPatchOperations, formatDateToString } from "@/utils";
 import { useCurrentCourseContext, useMessageContext } from "@/hooks";
-import { DefaultToastMessage } from "../SharedComponents";
 
 interface Props {
   course: ICourseDto;
@@ -42,7 +41,7 @@ export const UpdateCourseForm: React.FC<Props> = ({
       await updateCourse();
       onSuccess();
     } else {
-      msgContext.updateErrorMessage("Course could not be updated");
+      msgContext.updateErrorMessage(err.message);
     }
   };
 
@@ -59,19 +58,12 @@ export const UpdateCourseForm: React.FC<Props> = ({
     }
   };
 
-  const handleCloseResult = () => {
-    if (patchCourse.error != null) {
-      patchCourse.clearError();
-    }
-  };
-
   return (
     <form onSubmit={submit}
       className="w-full
       bg-indigo-100
       rounded-lg max-w-lg">
       {patchCourse.pending && <FullPageSpinner />}
-      <DefaultToastMessage onClose={handleCloseResult} />
       <H size={3} color={TextColor.DARK_X} className="mb-2">
         Update course '{course.name}'
       </H>

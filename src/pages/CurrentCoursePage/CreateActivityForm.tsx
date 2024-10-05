@@ -2,7 +2,6 @@ import { FormEventHandler, ReactElement, useState } from "react";
 
 import { ActivityCreateDto, api } from "@/api";
 import { H, Input, SubmitButton, TextColor } from "@/components";
-import { DefaultToastMessage } from "../SharedComponents";
 import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
 
 interface Props {
@@ -55,7 +54,6 @@ export const CreateActivityForm: React.FC<Props> = ({
       className="w-full
       bg-indigo-100
       rounded-lg max-w-lg">
-      <DefaultToastMessage onClose={handleCloseForm} />
       <H size={3} color={TextColor.DARK_X} className="mb-2">
         {title}
       </H>

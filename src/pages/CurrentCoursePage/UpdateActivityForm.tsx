@@ -2,7 +2,6 @@ import { FormEventHandler, ReactElement, useState } from "react";
 
 import { ActivityDto, api } from "@/api";
 import { H, Input, SubmitButton, TextColor } from "@/components";
-import { DefaultToastMessage } from "../SharedComponents";
 import { useApi, useCurrentCourseContext, useMessageContext } from "@/hooks";
 import { createPatchOperations, formatDateToString } from "@/utils";
 
@@ -68,7 +67,6 @@ export const UpdateActivityForm: React.FC<Props> = ({
       className="w-full
       bg-indigo-100
       rounded-lg max-w-lg">
-      <DefaultToastMessage onClose={handleCloseResult} />
       <H size={3} color={TextColor.DARK_X} className="mb-2">
         {`Update activity '${activity.description}' in module 
         '${coursesPageContext.selectedModule?.name}' for
