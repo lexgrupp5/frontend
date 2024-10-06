@@ -9,18 +9,19 @@ import { useCoursesPageContext } from "@/hooks";
 export const SearchFilterInput = (): ReactElement => {
   const filterMenuRef = useRef<HTMLDivElement>(null);
   const inputContainerRef = useRef<HTMLDivElement>(null);
-  const {
-    searchAndFilterDTO,
-    updateSearchAndFilterDTO,
-    fetchCourses
-  } = useCoursesPageContext();
+  const coursesPageContext = useCoursesPageContext();
 
-  const handleSearch = () => {
-    fetchCourses(searchAndFilterDTO);
+  const handleSearch = async () => {
+    coursesPageContext.updatePagination(
+      { ...coursesPageContext.pagination, page: 1 }
+    );
+    await coursesPageContext.fetchCourses();
   };
 
   const updateSearchText = (searchText: string) => {
-    updateSearchAndFilterDTO({ ...searchAndFilterDTO, searchText });
+    coursesPageContext.updateSearchAndFilter({
+      ...coursesPageContext.searchAndFilter, searchText
+    });
   };
 
   const toggleFilterMenu = () => {
@@ -49,7 +50,7 @@ export const SearchFilterInput = (): ReactElement => {
           icon={<MdFilterList className="text-black" />}
           onSelectIcon={toggleFilterMenu}
           onFocus={selectSearchFocus}
-          value={searchAndFilterDTO.searchText ?? ""}
+          value={coursesPageContext.searchAndFilter.searchText ?? ""}
           onChange={e => { updateSearchText(e.target.value); }} />
       </div>
       <UnstyledButton 
@@ -63,9 +64,7 @@ export const SearchFilterInput = (): ReactElement => {
       <div ref={filterMenuRef} className="absolute top-full left-0 right-0 
         rounded-b-lg p-2 bg-white
         z-10 hidden">
-        <FilterMenu
-          searchAndFilterDTO={searchAndFilterDTO}
-          updateSearchAndFilterDTO={updateSearchAndFilterDTO} />
+        <FilterMenu />
       </div>
     </div>
   );

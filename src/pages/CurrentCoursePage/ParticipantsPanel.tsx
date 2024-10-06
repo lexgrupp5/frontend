@@ -9,7 +9,7 @@ interface Props {
   participants: UserDto[];
   panelId: string;
   open: boolean;
-  toggleOpen: (id: string) => void;
+  toggleOpen: (id: string, withSelect?: boolean) => void;
   openCreateParticipant: () => void;
 }
 
@@ -29,6 +29,8 @@ export const ParticipantsPanel: React.FC<Props> = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
+    context.updateSelectedActivity(null);
+    context.updateSelectedModule(null);
     context.updateSelectedParticipant(participant);
   };
 
@@ -41,13 +43,13 @@ export const ParticipantsPanel: React.FC<Props> = ({
         className="flex justify-between items-center p-2 overflow-hidden"
         onClick={() => { toggleOpen(panelId); }}>
         <div>
-          <H size={4} className={`
+          <H size={4} className={`${context.selectedParticipant != null &&
             "underline underline-offset-4"}`}>
             Participants
           </H>
         </div>
         <div>
-          <UnstyledButton onPress={() => { toggleOpen(panelId); }}>{!open
+          <UnstyledButton onPress={() => { toggleOpen(panelId, false); }}>{!open
             ? <IconContainer
               className="text-white size-10 cursor-pointer 
               hover:bg-indigo-500 p-3 rounded-full">

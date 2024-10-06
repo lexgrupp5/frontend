@@ -30,30 +30,61 @@ export const CourseSidebar: React.FC<Props> = ({
     [`${context.selectedModule?.id}`]: true
   });
 
-  const toggleModulePanelOpen = (
-    id: string,
-    module: ModuleDto,
-    withSelect: boolean = true) => {
-    if (id.trim() === "") { return; }
-    if (withSelect) {
-      context.updateSelectedParticipant(null);
-      context.updateSelectedActivity(null);
-      context.updateSelectedModule(module);
-    }
+  const updateOpenPanels = (id: string) => {
     setOpenPanels(prevState => ({
       ...prevState,
       [id]: prevState[id] == null ? true : !prevState[id]
     }));
   };
 
-  const toggleParticipantPanelOpen = (id: string) => {
+  const toggleModulePanelOpen = (
+    id: string,
+    module: ModuleDto,
+    withSelect: boolean = true
+  ) => {
+    if (id.trim() === "") { return; }
+    if (withSelect) {
+      context.updateSelectedParticipant(null);
+      context.updateSelectedActivity(null);
+      context.updateSelectedModule(module);
+
+      const isOpenButNotSelected = openPanels[id] && module.id != context.selectedModule?.id;
+      if (isOpenButNotSelected) {
+        return;
+      }
+  
+      const isClosedAndSelected = !openPanels[id] && module.id == context.selectedModule?.id;
+      if (isClosedAndSelected) {
+        context.updateSelectedModule(null);
+        return;
+      }
+  
+      const isOpenAndSelected = openPanels[id] && module.id == context.selectedModule?.id;
+      if (isOpenAndSelected) {
+        context.updateSelectedModule(null);
+      }
+    }
+
+    updateOpenPanels(id);
+  };
+
+  const toggleParticipantPanelOpen = (
+    id: string,
+    withSelect: boolean = true
+  ) => {
     if (id.trim() === "") { return; }
     context.updateSelectedActivity(null);
     context.updateSelectedModule(null);
-    setOpenPanels(prevState => ({
-      ...prevState,
-      [id]: prevState[id] == null ? true : !prevState[id]
-    }));
+
+    if (withSelect) {
+      context.updateSelectedParticipant(null);
+
+      const isClosedAndSelected = !openPanels[id] && context.selectedParticipant != null;
+      if (isClosedAndSelected) {
+        return;
+      }
+    }
+    updateOpenPanels(id);
   };
 
   useEffect(() => {
@@ -87,7 +118,7 @@ export const CourseSidebar: React.FC<Props> = ({
         toggleModulePanelOpen={toggleModulePanelOpen}
         toggleParticipantPanelOpen={toggleParticipantPanelOpen}
         updateCacheTimestamp={updateCacheTimestamp} />
-      <CourseSettings 
+      <CourseSettings
         openSettings={openSettings}
         modules={modules}
         updateCacheTimestamp={updateCacheTimestamp}
