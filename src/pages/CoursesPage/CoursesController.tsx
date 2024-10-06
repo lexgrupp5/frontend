@@ -16,7 +16,7 @@ export const CoursesController = (): ReactElement => {
 
   return (
     <article className="flex flex-col-reverse justify-center items-center
-      pt-4 gap-6 px-6 flex-grow
+      pt-4 pb-12 gap-6 px-6 flex-grow
       sm:flex-row">
       <div className="rounded-lg outline-offset-2 outline-gray-300
         hover:outline w-full sm:w-auto">

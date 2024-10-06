@@ -85,7 +85,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
       return Promise.resolve(token);
     }
   
-    if (refreshTokenPromise.current) {
+    if (refreshTokenPromise.current != null) {
       return refreshTokenPromise.current;
     }
   

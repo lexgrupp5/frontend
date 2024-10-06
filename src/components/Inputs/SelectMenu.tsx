@@ -13,7 +13,9 @@ export const SelectMenu: React.FC<Props> = ({
   options,
   name,
   id,
-  label
+  label,
+  value,
+  onChange
 }): ReactElement => {
   const [openState, setOpenState] = useState(false);
 
@@ -30,7 +32,9 @@ export const SelectMenu: React.FC<Props> = ({
         focus:ring-indigo-500
         appearance-none"
         name={name}
-        id={id}>
+        id={id}
+        value={value}
+        onChange={onChange}>
         {options.map(option => (
           <option className="text-[1rem]"
             key={option}

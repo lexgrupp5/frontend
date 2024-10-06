@@ -25,13 +25,12 @@ export const CoursesPage = (): ReactElement => {
   }
 
   return (
-    <>
-      <article className="min-h-screen-header bg-gradient-indigo">
-        <div className="p-4">
-          <Breadcrumb items={breadcrumbItems} />
-        </div>
-        <CoursesController />
-        <CourseList courses={courses} />
-      </article></>
+    <article className="min-h-screen-header bg-gradient-indigo pb-12">
+      <div className="p-4">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
+      <CoursesController />
+      <CourseList courses={courses} />
+    </article>
   );
 };
