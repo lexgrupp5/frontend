@@ -1,6 +1,7 @@
 import { isDevelopment } from "@/config";
 import { isPaginationMeta, PaginationEvent } from "@/events";
 import axios from "axios";
+import { customHeaders } from "./customHeaders";
 
 const axiosInstance = axios.create({
   withCredentials: true
@@ -26,11 +27,12 @@ if (isDevelopment()) {
 }
 
 axiosInstance.interceptors.response.use(response => {
-  if (response.headers["x-pagination"] == null) {
+  const paginationHeader = response.headers[customHeaders.PAGINATION];
+  if (paginationHeader == null) {
     return response;
   }
   
-  const paginationData = JSON.parse(response.headers["x-pagination"]);
+  const paginationData = JSON.parse(paginationHeader);
   if (isPaginationMeta(paginationData)) {
     const paginationEvent = new PaginationEvent(paginationData);
     document.dispatchEvent(paginationEvent);
