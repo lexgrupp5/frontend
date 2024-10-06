@@ -3,3 +3,4 @@ export { NavigateToPath } from "./NavigateToPath";
 export { TeacherGuard } from "./TeacherGuard";
 export { StudentGuard } from "./StudentGuard";
 export { Breadcrumb, type BreadcrumbItemType } from "./Breadcrumb";
+export { PageNavigation } from "./PageNavigation";

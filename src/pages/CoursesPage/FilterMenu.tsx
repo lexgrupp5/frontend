@@ -2,31 +2,30 @@ import { ReactElement } from "react";
 
 import { Input, P, TextColor, UnstyledButton } from "@/components";
 import { formatDateToString } from "@/utils";
-import { ISearchAndFilterDTO } from "@/contexts";
+import { useCoursesPageContext } from "@/hooks";
 
-interface Props {
-  searchAndFilterDTO: ISearchAndFilterDTO;
-  updateSearchAndFilterDTO: (dto: ISearchAndFilterDTO) => void;
-}
 
-export const FilterMenu: React.FC<Props> = ({
-  searchAndFilterDTO,
-  updateSearchAndFilterDTO
-}): ReactElement => {
+export const FilterMenu = (): ReactElement => {
+  const coursesPageContext = useCoursesPageContext();
 
   const updateEndDate = (date: string) => {
-    updateSearchAndFilterDTO({ ...searchAndFilterDTO, endDate: new Date(date) });
+    coursesPageContext.updateSearchAndFilter({
+      ...coursesPageContext.searchAndFilter,
+      endDate: new Date(date)
+    });
   };
 
   const updateStartDate = (date: string) => {
-    updateSearchAndFilterDTO({
-      ...searchAndFilterDTO, startDate: new Date(date)
+    coursesPageContext.updateSearchAndFilter({
+      ...coursesPageContext.searchAndFilter,
+      startDate: new Date(date)
     });
   };
 
   const clearFilter = () => {
-    updateSearchAndFilterDTO({
-      ...searchAndFilterDTO, startDate: undefined, endDate: undefined
+    coursesPageContext.updateSearchAndFilter({
+      ...coursesPageContext.searchAndFilter,
+      startDate: undefined, endDate: undefined
     });
   };
 
@@ -38,15 +37,17 @@ export const FilterMenu: React.FC<Props> = ({
         <P color={TextColor.DARK_X}>By start date:</P>
         <Input type="date"
           className="p2 border-none outline-none focus:outline-none"
-          value={formatDateToString(searchAndFilterDTO.startDate)}
+          value={formatDateToString(coursesPageContext.searchAndFilter.startDate)}
           onChange={e => { updateStartDate(e.target.value); }} />
-      </div><div className="flex justify-between items-center w-full p-2">
+      </div>
+      <div className="flex justify-between items-center w-full p-2">
         <P color={TextColor.DARK_X}>By end date:</P>
         <Input type="date"
           className="p2 border-none outline-none focus:outline-none"
-          value={formatDateToString(searchAndFilterDTO.endDate)}
+          value={formatDateToString(coursesPageContext.searchAndFilter.endDate)}
           onChange={e => { updateEndDate(e.target.value); }} />
-      </div><UnstyledButton className="w-full mt-8 p-4 bg-indigo-200"
+      </div>
+      <UnstyledButton className="w-full mt-8 p-4 bg-indigo-200"
         onPress={clearFilter}>
         Clear Filter
       </UnstyledButton>

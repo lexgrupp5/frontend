@@ -56,4 +56,16 @@ body, #root {
   .custom-scrollbar::-webkit-scrollbar-track {
     background-color: rgb(224, 231, 255);
   }
+
+  .bg-ongoing {
+    background-color: rgb(255, 115, 0);
+  }
+
+  .bg-completed {
+    background-color: #28a745;
+  }
+
+  .bg-upcoming {
+    background-color: #6c757d;
+  }
 }
