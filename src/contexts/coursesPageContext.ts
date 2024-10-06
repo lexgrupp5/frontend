@@ -1,4 +1,5 @@
 import { CustomApiException, ICourseDto } from "@/api";
+import { IPaginationMeta } from "@/events";
 
 export interface ICoursesPageContext {
   pending: boolean
@@ -6,9 +7,13 @@ export interface ICoursesPageContext {
   courses: ICourseDto[];
   searchAndFilter: ISearchAndFilterDTO;
   pagination: IPaginationDTO;
-  updateSearchAndFilter: (searchAndFilter: ISearchAndFilterDTO) => void;
-  updatePagination: (pagination: IPaginationDTO) => void;
-  fetchCourses: () => Promise<void>;
+  paginationMeta: IPaginationMeta | null;
+  updateSearchAndFilter: (searchAndFilter: ISearchAndFilterDTO) => ISearchAndFilterDTO;
+  updatePagination: (pagination: IPaginationDTO) => IPaginationDTO;
+  fetchCourses: (
+    searchAndFilter?: ISearchAndFilterDTO,
+    pagination?: IPaginationDTO
+  ) => Promise<void>;
   clearError: () => void;
 }
 
@@ -20,5 +25,5 @@ export interface ISearchAndFilterDTO {
 
 export interface IPaginationDTO {
   page?: number;
-  limit?: number;
+  size?: number;
 }

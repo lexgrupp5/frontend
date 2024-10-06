@@ -19,10 +19,10 @@ export const CourseList: React.FC<Props> = ({
       return;
     }
     const page = ++coursesPageContext.pagination.page;
-    coursesPageContext.updatePagination(
+    const pagination = coursesPageContext.updatePagination(
       { ...coursesPageContext.pagination, page}
     );
-    coursesPageContext.fetchCourses();
+    coursesPageContext.fetchCourses(coursesPageContext.searchAndFilter, pagination);
   };
 
   const prevPage = () => {
@@ -30,17 +30,29 @@ export const CourseList: React.FC<Props> = ({
       return;
     }
     const page = --coursesPageContext.pagination.page;
-    coursesPageContext.updatePagination(
+    const pagination = coursesPageContext.updatePagination(
       { ...coursesPageContext.pagination, page }
     );
-    coursesPageContext.fetchCourses();
+    coursesPageContext.fetchCourses(coursesPageContext.searchAndFilter, pagination);
+  };
+
+  const updatePage = (page: number) => {
+    if (coursesPageContext?.pagination.page == null) {
+      return;
+    }
+    const pagination = coursesPageContext.updatePagination(
+      { ...coursesPageContext.pagination, page }
+    );
+    coursesPageContext.fetchCourses(coursesPageContext.searchAndFilter, pagination);
   };
 
   return (
     <PageNavigation
       page={coursesPageContext.pagination.page ?? 1}
+      nrOfPages={coursesPageContext.paginationMeta?.TotalPageCount}
       onNext={nextPage}
-      onPrev={prevPage}>
+      onPrev={prevPage}
+      updatePage={updatePage}>
       {courses.length == 0 && <div className="w-full flex justify-center p-8">
         <H size={2}>No courses were found!</H>
       </div>}  

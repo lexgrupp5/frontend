@@ -1,4 +1,5 @@
 import { isDevelopment } from "@/config";
+import { isPaginationMeta, PaginationEvent } from "@/events";
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -23,5 +24,22 @@ if (isDevelopment()) {
     return Promise.reject(error);
   });
 }
+
+axiosInstance.interceptors.response.use(response => {
+  if (response.headers["x-pagination"] == null) {
+    return response;
+  }
+  
+  const paginationData = JSON.parse(response.headers["x-pagination"]);
+  if (isPaginationMeta(paginationData)) {
+    const paginationEvent = new PaginationEvent(paginationData);
+    document.dispatchEvent(paginationEvent);
+  }
+  
+  return response;
+}, (error) => {
+  console.error("Response Error:", error);
+  return Promise.reject(error);
+});
 
 export { axiosInstance };
