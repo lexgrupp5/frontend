@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode } from "react";
-import { H, P } from "../Text";
+import { H } from "../Text";
 import { IconContainer } from "../Icons";
 import { LuChevronLeft, LuChevronRight, LuChevronLast, LuChevronFirst } from "react-icons/lu";
 import { TransparentSelectMenu } from "../Inputs";
@@ -85,7 +85,8 @@ const InnerPageNavigation: React.FC<Props> = ({
   };
 
   return (
-    <article className="w-full flex justify-center items-center gap-0 sm:gap-6">
+    <article className={`w-full flex justify-center items-center gap-0 sm:gap-6
+    ${nrOfPages === 0 && "hidden"}`}>
       {nrOfPages != null && <PaginationButton
         disabled={isFirstPage()}
         onSelect={() => { updatePage(1); }}>
@@ -135,10 +136,12 @@ const PaginationButton: React.FC<{
   onSelect
 }): ReactElement => {
   return (
-    <button className="p-2 rounded-lg hover:border-white hover:ring-2 hover:ring-white"
-      disabled={disabled}
-      type="button"
-      onClick={onSelect}>
+    <button className={`p-2 rounded-lg ${disabled
+      ? "opacity-50"
+      : "hover:border-white hover:ring-2 hover:ring-white cursor-pointer" }`}
+    disabled={disabled}
+    type="button"
+    onClick={onSelect}>
       {children}
     </button>
   );

@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 
 import { CourseItem } from "./CourseItem";
-import { H, P, PageNavigation } from "@/components";
+import { H, PageNavigation } from "@/components";
 import { ICourseDto } from "@/apiGenerated";
 import { useCoursesPageContext } from "@/hooks";
 
@@ -53,7 +53,7 @@ export const CourseList: React.FC<Props> = ({
       onNext={nextPage}
       onPrev={prevPage}
       updatePage={updatePage}>
-      {courses.length == 0 && <div className="w-full flex justify-center p-8">
+      {courses.length === 0 && <div className="w-full flex justify-center p-8">
         <H size={2}>No courses were found!</H>
       </div>}  
       <article className="flex flex-wrap p-4 max-w-7xl m-auto">
