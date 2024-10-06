@@ -1,4 +1,4 @@
-import { ReactElement, useRef } from "react";
+import { ReactElement, useRef, useState } from "react";
 import { MdFilterList } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 
@@ -10,18 +10,16 @@ export const SearchFilterInput = (): ReactElement => {
   const filterMenuRef = useRef<HTMLDivElement>(null);
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const coursesPageContext = useCoursesPageContext();
+  const [currentSearchText, setCurrentSearchText] = useState(coursesPageContext.searchAndFilter.searchText ?? "");
 
   const handleSearch = async () => {
     const pagination = coursesPageContext.updatePagination(
       { ...coursesPageContext.pagination, page: 1 }
     );
-    await coursesPageContext.fetchCourses(coursesPageContext.searchAndFilter, pagination);
-  };
-
-  const updateSearchText = (searchText: string) => {
-    coursesPageContext.updateSearchAndFilter({
-      ...coursesPageContext.searchAndFilter, searchText
+    const searchAndFilter = coursesPageContext.updateSearchAndFilter({
+      ...coursesPageContext.searchAndFilter, searchText: currentSearchText
     });
+    await coursesPageContext.fetchCourses(searchAndFilter, pagination);
   };
 
   const toggleFilterMenu = () => {
@@ -50,8 +48,8 @@ export const SearchFilterInput = (): ReactElement => {
           icon={<MdFilterList className="text-black" />}
           onSelectIcon={toggleFilterMenu}
           onFocus={selectSearchFocus}
-          value={coursesPageContext.searchAndFilter.searchText ?? ""}
-          onChange={e => { updateSearchText(e.target.value); }} />
+          value={currentSearchText}
+          onChange={e => { setCurrentSearchText(e.target.value); }} />
       </div>
       <UnstyledButton 
         className="flex-shrink-0 

@@ -22,7 +22,6 @@ export const CoursesPageProvider = (): React.ReactElement => {
     const handlePaginationData = (event: Event) => {
       const paginationEvent = event as CustomEvent<IPaginationMeta>;
       if (isPaginationMeta(paginationEvent.detail)) {
-        console.log(paginationEvent.detail);
         setPaginationMeta(paginationEvent.detail);
       }
     };
@@ -48,8 +47,6 @@ export const CoursesPageProvider = (): React.ReactElement => {
     searchAndFilterQuery?: ISearchAndFilterDTO,
     paginationQuery?: IPaginationDTO
   ) => {
-    // const searchParam = searchAndFilter.searchText || undefined;
-
     const searchAndFilterData = searchAndFilterQuery ?? searchAndFilter;
     const paginationData = paginationQuery ?? pagination;
     
