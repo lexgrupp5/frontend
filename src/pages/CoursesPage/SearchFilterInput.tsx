@@ -12,10 +12,10 @@ export const SearchFilterInput = (): ReactElement => {
   const coursesPageContext = useCoursesPageContext();
 
   const handleSearch = async () => {
-    coursesPageContext.updatePagination(
+    const pagination = coursesPageContext.updatePagination(
       { ...coursesPageContext.pagination, page: 1 }
     );
-    await coursesPageContext.fetchCourses();
+    await coursesPageContext.fetchCourses(coursesPageContext.searchAndFilter, pagination);
   };
 
   const updateSearchText = (searchText: string) => {
