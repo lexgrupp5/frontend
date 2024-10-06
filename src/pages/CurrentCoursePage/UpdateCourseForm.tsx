@@ -3,7 +3,7 @@ import { FormEventHandler, ReactElement, useState } from "react";
 import { api, CourseDto, ICourseDto } from "@/api";
 import { H, Input, SubmitButton, TextColor, FullPageSpinner } from "@/components";
 import { useApi } from "@/hooks/useApi";
-import { createPatchOperations, formatDateToString } from "@/utils";
+import { createPatchOperations } from "@/utils";
 import { useCurrentCourseContext, useMessageContext } from "@/hooks";
 
 interface Props {

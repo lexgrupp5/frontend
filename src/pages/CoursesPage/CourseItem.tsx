@@ -13,7 +13,6 @@ interface Props {
 export const CourseItem: React.FC<Props> = ({ course }): ReactElement => {
   const { updateSelectedCourse } = useCurrentCourseContext();
   const navigate = useNavigateToPath();
-  const dateNow = new Date();
 
   const navigateToSelectedCoursePage = () => {
     if (course.id == null) { return; }

@@ -48,10 +48,6 @@ export const CreateModuleForm: React.FC<Props> = ({
     setDescription("");
   };
 
-  const handleCloseForm = () => {
-    createModule.clearError();
-  };
-
   return (
     <form onSubmit={submit}
       className="w-full
