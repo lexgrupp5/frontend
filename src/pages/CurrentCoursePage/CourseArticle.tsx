@@ -41,7 +41,7 @@ export const CourseArticle: React.FC<Props> = ({
       .withDescription(`${course.description}`);
 
     if (course.startDate != null && course.endDate != null) {
-      section.withSubtitle(`${course.startDate?.toDateString()} - ${course.endDate?.toDateString()}`)
+      section.withSubtitle(`${course.startDate?.toDateString()} - ${course.endDate?.toDateString()}`);
     }
 
     if (isTeacher()) {
@@ -68,7 +68,7 @@ export const CourseArticle: React.FC<Props> = ({
       .withDescription(`${module.description}`);
 
     if (module.startDate != null && module.endDate != null) {
-      section.withSubtitle(`${module.startDate?.toDateString()} - ${module.endDate?.toDateString()}`)
+      section.withSubtitle(`${module.startDate?.toDateString()} - ${module.endDate?.toDateString()}`);
     }
 
     if (isTeacher()) {
@@ -96,7 +96,7 @@ export const CourseArticle: React.FC<Props> = ({
       .withDescription(`${activity.description} - ${activity.activityTypeDescription}`);
 
     if (activity.startDate != null && activity.endDate != null) {
-      section.withSubtitle(`${activity.startDate?.toDateString()} - ${activity.endDate?.toDateString()}`)
+      section.withSubtitle(`${activity.startDate?.toDateString()} - ${activity.endDate?.toDateString()}`);
     }
 
     if (isTeacher()) {
