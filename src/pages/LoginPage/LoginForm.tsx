@@ -2,7 +2,7 @@ import { FormEventHandler, ReactElement, useState } from "react";
 
 import { Input, SubmitButton, NavLink, NavigateToPath, H, TextColor, P, SecretInput } from "@/components";
 import { Path } from "@/constants";
-import { useAuthContext, useNavigateToPath } from "@/hooks";
+import { useAuthContext, useMessageContext, useNavigateToPath } from "@/hooks";
 import { getDefaultPwd, getDefaultUsername } from "@/config";
 
 export const LoginForm = (): ReactElement => {
@@ -10,6 +10,7 @@ export const LoginForm = (): ReactElement => {
   const [password, setPassword] = useState(getDefaultPwd());
   const { isLoggedIn, login } = useAuthContext();
   const navigate = useNavigateToPath();
+  const msgContext = useMessageContext();
 
   if (isLoggedIn) {
     return <NavigateToPath to={Path.INDEX} replace />;
@@ -19,8 +20,10 @@ export const LoginForm = (): ReactElement => {
     e.preventDefault();
     const res = await login(username, password);
     if (res == null) {
+      msgContext.updateErrorMessage("Invalid login, please try again with updated credentials");
       return;
     }
+
     navigate(Path.INDEX);
   };
 

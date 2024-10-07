@@ -22,7 +22,7 @@ export const CreateActivityForm: React.FC<Props> = ({
 
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    createActivity.clearError(); 
+    msgContext.clearMessages();
     
     const [err, result] = await createActivity.makeAuthRequestWithErrorResponse(
       new ActivityCreateDto({

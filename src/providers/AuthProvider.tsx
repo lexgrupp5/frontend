@@ -3,7 +3,7 @@ import { useLocalStorage } from "usehooks-ts";
 
 import { AuthContext, IAuthContext } from "@/contexts";
 import { Role, Storage } from "@/constants";
-import { useApi, useMessageContext } from "@/hooks";
+import { useApi } from "@/hooks";
 import { api, TokenDto, UserAuthModel } from "@/api";
 import * as Service from "@/services";
 
@@ -16,7 +16,6 @@ export const AuthProvider: React.FC<Props> = ({
 }): ReactElement => {
   const loginApi = useApi(api.login);
   const logoutApi = useApi(api.logout);
-  const msgContext = useMessageContext();
 
   const [
     token, setToken, clearTokens
@@ -24,17 +23,11 @@ export const AuthProvider: React.FC<Props> = ({
   const isLoggedIn = token != null;
 
   const login = async (userName: string, password: string) => {
-    const [err, token] = await loginApi.makeRequestWithErrorResponse(new UserAuthModel({
+    const token = await loginApi.makeRequest(new UserAuthModel({
       userName,
       password
     }));
-
-    if (err != null || token === null) {
-      msgContext.updateErrorMessage("Invalid login, please try again with updated credentials");
-      return null;
-    } else {
-      setToken(token); 
-    }
+    setToken(token);
     return token;
   };
 
