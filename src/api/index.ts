@@ -57,7 +57,8 @@ function createApiProxy<ApiTarget extends object>(target: ApiTarget): ApiTarget 
           if (err instanceof ApiException) {
             throw new CustomApiException(err.message);
           } else {
-            throw new CustomApiException("Unknown error");
+            throw new CustomApiException(
+              (err as ApiException)?.message ?? "Unknown error");
           }
         }
       };

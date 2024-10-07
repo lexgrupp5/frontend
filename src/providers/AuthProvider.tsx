@@ -23,10 +23,12 @@ export const AuthProvider: React.FC<Props> = ({
   const isLoggedIn = token != null;
 
   const login = async (userName: string, password: string) => {
-    setToken(await loginApi.makeRequest(new UserAuthModel({
+    const token = await loginApi.makeRequest(new UserAuthModel({
       userName,
       password
-    })));
+    }));
+    setToken(token);
+    return token;
   };
 
   const getUsername = () => {
