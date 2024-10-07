@@ -28,6 +28,7 @@ export const CreateActivityForm: React.FC<Props> = ({
       new ActivityCreateDto({
         moduleId: coursesPageContext.selectedModule?.id,
         description,
+        activityTypeName: type,
         startDate: new Date(startDate),
         endDate: new Date(endDate),
       })
@@ -45,6 +46,7 @@ export const CreateActivityForm: React.FC<Props> = ({
     setDescription("");
     setStartDate("");
     setEndDate("");
+    setType("");
   };
 
   return (
@@ -77,6 +79,7 @@ export const CreateActivityForm: React.FC<Props> = ({
         <SelectMenu
           label="Type"
           required
+          value={type}
           options={activityTypes.map(type => type.name)}
           onChange={e => { setType(e.target.value); }} />
         <SubmitButton>Create Activity</SubmitButton>

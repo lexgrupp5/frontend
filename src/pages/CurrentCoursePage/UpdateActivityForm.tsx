@@ -32,7 +32,8 @@ export const UpdateActivityForm: React.FC<Props> = ({
       createPatchOperations<ActivityDto>([
         { key: "description", value: description },
         { key: "startDate", value: startDate },
-        { key: "endDate", value: endDate }
+        { key: "endDate", value: endDate },
+        { key: "activityTypeName", value: type }
       ]));
     if (err == null) {
       msgContext.updateMessage(`Activty '${description}' have been updated`);
@@ -90,6 +91,7 @@ export const UpdateActivityForm: React.FC<Props> = ({
         <SelectMenu
           label="Type"
           required
+          value={type}
           options={activityTypes.map(type => type.name)}
           onChange={e => { setType(e.target.value); }} />
         <SubmitButton>Update Activity</SubmitButton>
