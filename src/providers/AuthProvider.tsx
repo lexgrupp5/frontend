@@ -30,8 +30,7 @@ export const AuthProvider: React.FC<Props> = ({
     }));
 
     if (err != null || token === null) {
-      console.log(err)
-      msgContext.updateErrorMessage(err?.message ?? "unknown error");
+      msgContext.updateErrorMessage("Invalid login, please try again with updated credentials");
       return null;
     } else {
       setToken(token); 
