@@ -13,7 +13,7 @@ export const AuthGuard: React.FC<Props> = ({
   const navigate = useNavigateToPath();
 
   if (!isLoggedIn) {
-    navigate(Path.LOGIN, true);
+    navigate(Path.LOGIN);
   }
 
   return children;
