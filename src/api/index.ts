@@ -54,10 +54,13 @@ function createApiProxy<ApiTarget extends object>(target: ApiTarget): ApiTarget 
           const boundTargetFunction = targetProperty.bind(target);
           return await boundTargetFunction(...args);  
         } catch (err) {
+          console.log("err", err)
+          console.log("err instanceof ApiException", err instanceof ApiException)
           if (err instanceof ApiException) {
             throw new CustomApiException(err.message);
           } else {
-            throw new CustomApiException("Unknown error");
+            throw new CustomApiException(
+              (err as ApiException)?.message ?? "Unknown error");
           }
         }
       };

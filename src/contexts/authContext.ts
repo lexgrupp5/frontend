@@ -3,7 +3,7 @@ import { createContext } from "react";
 export interface IAuthContext {
 	isLoggedIn: boolean;
 	getUsername: () => string | null;
-	login: (username: string, password: string) => Promise<void>;
+	login: (username: string, password: string) => Promise<string | null>;
 	register: (username: string, password: string) => Promise<void>;
 	logout: () => Promise<void>;
 	isTeacher: () => boolean;

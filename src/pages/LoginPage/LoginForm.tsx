@@ -17,7 +17,10 @@ export const LoginForm = (): ReactElement => {
 
   const submit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    await login(username, password);
+    const res = await login(username, password);
+    if (res == null) {
+      return;
+    }
     navigate(Path.INDEX);
   };
 
