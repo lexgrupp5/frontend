@@ -32,6 +32,12 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     return resultWithError[1];
   };
 
+  const makeRequestWithErrorResponse = async (
+    ...args: [...ApiArgs, AbortSignal?]
+  ) => {
+    return await makeAuthRequestBase(false, ...args);
+  };
+
   /** Api call used when authorization is needed */
   const makeAuthRequest = async (
     ...args: [...ApiArgs, AbortSignal?]
@@ -143,6 +149,7 @@ export const useApi = <ApiReturnType, ApiArgs extends unknown[]>(
     pending,
     error,
     makeRequest,
+    makeRequestWithErrorResponse,
     makeAuthRequest,
     makeAuthRequestWithErrorResponse,
     clearError,

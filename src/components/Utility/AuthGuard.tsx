@@ -1,6 +1,5 @@
 import { ReactElement } from "react";
-import { useAuthContext } from "@/hooks";
-import { NavigateToPath } from "./NavigateToPath";
+import { useAuthContext, useNavigateToPath } from "@/hooks";
 import { Path } from "@/constants";
 
 interface Props {
@@ -11,9 +10,10 @@ export const AuthGuard: React.FC<Props> = ({
   children
 }): ReactElement => {
   const { isLoggedIn } = useAuthContext();
+  const navigate = useNavigateToPath();
 
   if (!isLoggedIn) {
-    return <NavigateToPath to={Path.LOGIN} />;
+    navigate(Path.LOGIN, true);
   }
 
   return children;
